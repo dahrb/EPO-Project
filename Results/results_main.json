@@ -1,0 +1,6176 @@
+[
+  {
+    "timestamp_utc": "2026-04-06T09:53:29.202971+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": true
+    },
+    "best_score_cv": 0.8419088049396125,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        4,
+        4
+      ],
+      "vect__min_df": 10,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": true,
+      "clf__C": 1
+    },
+    "time_seconds": 755.0471804141998,
+    "test_metrics": {
+      "accuracy": 0.8565169769989047,
+      "f1": 0.8892645815722738,
+      "precision": 0.9006849315068494,
+      "recall": 0.8781302170283807,
+      "mcc": 0.6860697137291226,
+      "auc": 0.9163773486596558
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T10:01:32.580290+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7059408422878861,
+    "best_params": {
+      "clf__C": 1
+    },
+    "time_seconds": 3.329420328140259,
+    "test_metrics": {
+      "accuracy": 0.6851040525739321,
+      "f1": 0.7503256621797655,
+      "precision": 0.7819004524886878,
+      "recall": 0.7212020033388982,
+      "mcc": 0.32791495483367,
+      "auc": 0.7428370532628692
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T10:09:23.384776+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6784461588105241,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 2.1466567516326904,
+    "test_metrics": {
+      "accuracy": 0.7086527929901424,
+      "f1": 0.7766582703610412,
+      "precision": 0.78125,
+      "recall": 0.7721202003338898,
+      "mcc": 0.3578533473489674,
+      "auc": 0.7610401624788661
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T10:14:06.934149+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.8418816014283719,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        3,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__C": 100
+    },
+    "time_seconds": 781.6638495922089,
+    "test_metrics": {
+      "accuracy": 0.8521358159912377,
+      "f1": 0.8853989813242784,
+      "precision": 0.9006908462867013,
+      "recall": 0.8706176961602671,
+      "mcc": 0.6780103497128734,
+      "auc": 0.9239962038641898
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T10:17:26.544031+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7163326179092384,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 3.767179250717163,
+    "test_metrics": {
+      "accuracy": 0.7409638554216867,
+      "f1": 0.8052696582955949,
+      "precision": 0.7944760357432982,
+      "recall": 0.8163606010016694,
+      "mcc": 0.4190736075803292,
+      "auc": 0.7938536095190498
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T10:22:06.025075+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6986592252640755,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 1.6658024787902832,
+    "test_metrics": {
+      "accuracy": 0.7343921139101862,
+      "f1": 0.7986716479867165,
+      "precision": 0.7943848059454995,
+      "recall": 0.8030050083472454,
+      "mcc": 0.40857134524282007,
+      "auc": 0.7840243292961729
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T10:30:48.393037+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": false,
+      "lemma": false
+    },
+    "best_score_cv": 0.849220412793079,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        3,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": false,
+      "prep__lemmatisation": false,
+      "clf__C": 100
+    },
+    "time_seconds": 2933.5459275245667,
+    "test_metrics": {
+      "accuracy": 0.8530973451327434,
+      "f1": 0.8952813525107242,
+      "precision": 0.949678800856531,
+      "recall": 0.8467780429594272,
+      "mcc": 0.6641101043390164,
+      "auc": 0.9271468270834016
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T10:39:40.898304+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7001633538790415,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 11.555207967758179,
+    "test_metrics": {
+      "accuracy": 0.7093805309734513,
+      "f1": 0.7821703369594056,
+      "precision": 0.8805256869772998,
+      "recall": 0.7035799522673031,
+      "mcc": 0.38274520406272744,
+      "auc": 0.7861542485369601
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T10:47:03.490231+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.8399663342764042,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": null,
+      "vect__ngram_range": [
+        2,
+        4
+      ],
+      "vect__min_df": 10,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 500,
+      "clf__C": 1
+    },
+    "time_seconds": 1038.9852981567383,
+    "test_metrics": {
+      "accuracy": 0.8417305585980285,
+      "f1": 0.8762312633832976,
+      "precision": 0.899736147757256,
+      "recall": 0.8539232053422371,
+      "mcc": 0.6589349871683157,
+      "auc": 0.9127101432323513
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T10:48:26.719898+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6927109139515127,
+    "best_params": {
+      "clf__C": 10
+    },
+    "time_seconds": 7.563616037368774,
+    "test_metrics": {
+      "accuracy": 0.6976991150442478,
+      "f1": 0.7747890295358649,
+      "precision": 0.8656452563347083,
+      "recall": 0.7011933174224344,
+      "mcc": 0.34758123860504864,
+      "auc": 0.77013764017393
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T10:56:31.270710+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7060220500003713,
+    "best_params": {
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 1
+    },
+    "time_seconds": 92.81343841552734,
+    "test_metrics": {
+      "accuracy": 0.6883899233296824,
+      "f1": 0.753359341135674,
+      "precision": 0.7835888187556357,
+      "recall": 0.7253756260434057,
+      "mcc": 0.33384343458598204,
+      "auc": 0.7418135852748211
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T10:57:27.134187+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7224065181696706,
+    "best_params": {
+      "clf__C": 100
+    },
+    "time_seconds": 12.329871892929077,
+    "test_metrics": {
+      "accuracy": 0.7391150442477876,
+      "f1": 0.8081228846654517,
+      "precision": 0.8888888888888888,
+      "recall": 0.7408114558472554,
+      "mcc": 0.4280231572826036,
+      "auc": 0.8208526498185504
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T11:04:51.659981+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6807239097138135,
+    "best_params": {
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 41.075413942337036,
+    "test_metrics": {
+      "accuracy": 0.708105147864184,
+      "f1": 0.7757677745056795,
+      "precision": 0.7820186598812553,
+      "recall": 0.7696160267111853,
+      "mcc": 0.3578988478346227,
+      "auc": 0.7606307752836469
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T11:06:17.916730+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7077716459976933,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 5.389294385910034,
+    "test_metrics": {
+      "accuracy": 0.7249557522123894,
+      "f1": 0.7953647616539373,
+      "precision": 0.8871915393654524,
+      "recall": 0.720763723150358,
+      "mcc": 0.4094606428569967,
+      "auc": 0.781832150913787
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T11:09:35.579335+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.8434021668381426,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        3,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__solver": "sag",
+      "clf__penalty": null,
+      "clf__max_iter": 250,
+      "clf__C": 100
+    },
+    "time_seconds": 892.0431778430939,
+    "test_metrics": {
+      "accuracy": 0.8570646221248631,
+      "f1": 0.8895471857807872,
+      "precision": 0.9021459227467811,
+      "recall": 0.8772954924874792,
+      "mcc": 0.6877146228948637,
+      "auc": 0.9258637006475762
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T11:14:20.397240+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7237943089345258,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 96.73202204704285,
+    "test_metrics": {
+      "accuracy": 0.7332968236582694,
+      "f1": 0.798343685300207,
+      "precision": 0.7921117502054231,
+      "recall": 0.8046744574290484,
+      "mcc": 0.4048303906464569,
+      "auc": 0.7950578458790127
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T11:18:42.680511+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7039650942650035,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 71.19344139099121,
+    "test_metrics": {
+      "accuracy": 0.7343921139101862,
+      "f1": 0.798504362276693,
+      "precision": 0.7948717948717948,
+      "recall": 0.8021702838063439,
+      "mcc": 0.40900674229832024,
+      "auc": 0.7846995523324436
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T11:28:41.349766+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.845019624516344,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        3,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__C": 100
+    },
+    "time_seconds": 2973.317618370056,
+    "test_metrics": {
+      "accuracy": 0.8502654867256637,
+      "f1": 0.89266683582847,
+      "precision": 0.9528710725893824,
+      "recall": 0.839618138424821,
+      "mcc": 0.6627414000833215,
+      "auc": 0.9278536633210188
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T11:45:26.734858+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.8223420547475256,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": null,
+      "vect__ngram_range": [
+        2,
+        4
+      ],
+      "vect__min_df": 5,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 200,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": null
+    },
+    "time_seconds": 1151.233776807785,
+    "test_metrics": {
+      "accuracy": 0.8340635268346112,
+      "f1": 0.8716645489199492,
+      "precision": 0.884780739466896,
+      "recall": 0.8589315525876461,
+      "mcc": 0.6376690924128297,
+      "auc": 0.9069913497017322
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T11:59:30.518905+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.5843644320081328,
+    "best_params": {
+      "clf__n_estimators": 100,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 373.91411900520325,
+    "test_metrics": {
+      "accuracy": 0.6670317634173056,
+      "f1": 0.7379310344827587,
+      "precision": 0.7629233511586453,
+      "recall": 0.7145242070116862,
+      "mcc": 0.28395843414374616,
+      "auc": 0.7008276798911137
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T12:12:32.543189+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.5756753765692237,
+    "best_params": {
+      "clf__n_estimators": 200,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 322.94821524620056,
+    "test_metrics": {
+      "accuracy": 0.6872946330777656,
+      "f1": 0.7558785805899957,
+      "precision": 0.7747589833479404,
+      "recall": 0.7378964941569283,
+      "mcc": 0.3224542196448021,
+      "auc": 0.7322680848122667
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T12:15:31.217923+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.8284274620585528,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        2,
+        3
+      ],
+      "vect__min_df": 10,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 100
+    },
+    "time_seconds": 1351.5818824768066,
+    "test_metrics": {
+      "accuracy": 0.8433734939759037,
+      "f1": 0.8790186125211505,
+      "precision": 0.8910806174957119,
+      "recall": 0.8672787979966611,
+      "mcc": 0.6575684358165901,
+      "auc": 0.9177909307444466
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T12:27:21.004570+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6079694235378349,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 382.59381914138794,
+    "test_metrics": {
+      "accuracy": 0.6955093099671413,
+      "f1": 0.7694859038142621,
+      "precision": 0.7644151565074135,
+      "recall": 0.7746243739565943,
+      "mcc": 0.3212182088422273,
+      "auc": 0.7428264198292271
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T12:29:30.268913+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.643436366600445,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 364.51396441459656,
+    "test_metrics": {
+      "accuracy": 0.7135815991237678,
+      "f1": 0.7794179671024885,
+      "precision": 0.7877237851662404,
+      "recall": 0.7712854757929883,
+      "mcc": 0.37144034730257136,
+      "auc": 0.7652516667907233
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T12:42:30.868079+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.8491223121577368,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": null,
+      "vect__ngram_range": [
+        3,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 250,
+      "clf__C": 0.1
+    },
+    "time_seconds": 3928.747346162796,
+    "test_metrics": {
+      "accuracy": 0.8424778761061947,
+      "f1": 0.8865085437388421,
+      "precision": 0.9518072289156626,
+      "recall": 0.8295942720763723,
+      "mcc": 0.6492245358404828,
+      "auc": 0.9199136888220486
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T12:57:26.264402+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6999561702392882,
+    "best_params": {
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 268.1247763633728,
+    "test_metrics": {
+      "accuracy": 0.7097345132743362,
+      "f1": 0.782608695652174,
+      "precision": 0.8801431127012522,
+      "recall": 0.7045346062052505,
+      "mcc": 0.3825319627034554,
+      "auc": 0.7866250367803314
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T13:09:13.250484+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6937576407731948,
+    "best_params": {
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 189.71221542358398,
+    "test_metrics": {
+      "accuracy": 0.6984070796460177,
+      "f1": 0.7750791974656811,
+      "precision": 0.8670998227997637,
+      "recall": 0.7007159904534607,
+      "mcc": 0.35062096866548,
+      "auc": 0.7710190603851309
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T13:24:29.749627+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7235891764983626,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 387.7137498855591,
+    "test_metrics": {
+      "accuracy": 0.7398230088495575,
+      "f1": 0.8087431693989071,
+      "precision": 0.8890160183066361,
+      "recall": 0.7417661097852029,
+      "mcc": 0.42903567323619574,
+      "auc": 0.8215921796841795
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T13:37:42.958630+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7094623447841064,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 271.16129636764526,
+    "test_metrics": {
+      "accuracy": 0.7253097345132743,
+      "f1": 0.7960042060988434,
+      "precision": 0.8858981860737273,
+      "recall": 0.722673031026253,
+      "mcc": 0.4079304470709625,
+      "auc": 0.782222512832249
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T13:48:00.151059+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": false,
+      "lemma": false
+    },
+    "best_score_cv": 0.8447567275960999,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        4,
+        4
+      ],
+      "vect__min_df": 5,
+      "prep__stopwords": false,
+      "prep__numbers": false,
+      "prep__lemmatisation": false,
+      "clf__solver": "lbfgs",
+      "clf__penalty": null,
+      "clf__max_iter": 250,
+      "clf__C": 10
+    },
+    "time_seconds": 3366.9081540107727,
+    "test_metrics": {
+      "accuracy": 0.8545132743362832,
+      "f1": 0.8963952609024451,
+      "precision": 0.9497863247863247,
+      "recall": 0.8486873508353222,
+      "mcc": 0.6665587706178846,
+      "auc": 0.9288370876516168
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T15:11:02.512339+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.834070937021544,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        2,
+        3
+      ],
+      "vect__min_df": 10,
+      "prep__stopwords": false,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 100
+    },
+    "time_seconds": 4463.327787876129,
+    "test_metrics": {
+      "accuracy": 0.8223008849557523,
+      "f1": 0.8706852138073158,
+      "precision": 0.9457190822607723,
+      "recall": 0.8066825775656324,
+      "mcc": 0.6118250829310836,
+      "auc": 0.9156821525484682
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T15:14:31.823747+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": false,
+      "lemma": false
+    },
+    "best_score_cv": 0.8472461785460844,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        2,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": false,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 6,
+      "clf__learning_rate": 0.1,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 9443.284280538559,
+    "test_metrics": {
+      "accuracy": 0.8587075575027382,
+      "f1": 0.8889845094664371,
+      "precision": 0.9174067495559503,
+      "recall": 0.8622704507512521,
+      "mcc": 0.6977478022601717,
+      "auc": 0.9315618919005135
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T15:38:50.139890+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6604611910803888,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 3,
+      "clf__learning_rate": 0.1,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 974.7457435131073,
+    "test_metrics": {
+      "accuracy": 0.6916757940854327,
+      "f1": 0.7633459436738125,
+      "precision": 0.768839966130398,
+      "recall": 0.7579298831385642,
+      "mcc": 0.3212158432734227,
+      "auc": 0.7395779058515785
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T15:44:01.152530+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6598869666927878,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 1442.0486328601837,
+    "test_metrics": {
+      "accuracy": 0.6424778761061947,
+      "f1": 0.7194444444444444,
+      "precision": 0.8604651162790697,
+      "recall": 0.6181384248210023,
+      "mcc": 0.289952313510098,
+      "auc": 0.7336855526857814
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T15:57:12.133374+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6579531145717136,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 3,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 633.4797575473785,
+    "test_metrics": {
+      "accuracy": 0.696604600219058,
+      "f1": 0.7636518771331058,
+      "precision": 0.7809773123909249,
+      "recall": 0.7470784641068448,
+      "mcc": 0.34134020795236625,
+      "auc": 0.7497062513956382
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T16:13:04.929706+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6607814538808904,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 1231.1539916992188,
+    "test_metrics": {
+      "accuracy": 0.6509734513274337,
+      "f1": 0.7262631871182677,
+      "precision": 0.8679495686794957,
+      "recall": 0.6243436754176611,
+      "mcc": 0.3086469764946602,
+      "auc": 0.7389171870402459
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T16:21:51.068167+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.689788229052299,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 990.9041233062744,
+    "test_metrics": {
+      "accuracy": 0.7168674698795181,
+      "f1": 0.7864518793886823,
+      "precision": 0.7784137367130008,
+      "recall": 0.7946577629382304,
+      "mcc": 0.366773035993065,
+      "auc": 0.7731875312357113
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T16:45:27.090440+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6705147415372195,
+    "best_params": {
+      "clf__n_estimators": 200,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 1413.277897119522,
+    "test_metrics": {
+      "accuracy": 0.6605309734513274,
+      "f1": 0.7357398732433177,
+      "precision": 0.8702737940026075,
+      "recall": 0.6372315035799523,
+      "mcc": 0.3204266046651949,
+      "auc": 0.7556017262235589
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T16:47:15.475417+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.8387484366127688,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        2,
+        3
+      ],
+      "vect__min_df": 10,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 100
+    },
+    "time_seconds": 5259.144540071487,
+    "test_metrics": {
+      "accuracy": 0.8353982300884956,
+      "f1": 0.8816492746245864,
+      "precision": 0.9443838604143948,
+      "recall": 0.8267303102625299,
+      "mcc": 0.630197092712623,
+      "auc": 0.9154980874227614
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T16:48:39.471239+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7053609951714641,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 3,
+      "clf__learning_rate": 0.1,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 1128.487988948822,
+    "test_metrics": {
+      "accuracy": 0.7289156626506024,
+      "f1": 0.7919293820933165,
+      "precision": 0.7976291278577476,
+      "recall": 0.7863105175292153,
+      "mcc": 0.4032258133099698,
+      "auc": 0.7763243941601182
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T17:17:14.941712+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.692454726046087,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 1379.994973897934,
+    "test_metrics": {
+      "accuracy": 0.6984070796460177,
+      "f1": 0.770102536427415,
+      "precision": 0.8857852265673495,
+      "recall": 0.681145584725537,
+      "mcc": 0.37944210703554415,
+      "auc": 0.7730895478471246
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T19:33:03.064618+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": false
+    },
+    "best_score_cv": 0.8448758414735796,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        2,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.1,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 15048.420801401138,
+    "test_metrics": {
+      "accuracy": 0.8548740416210295,
+      "f1": 0.8868971404182672,
+      "precision": 0.9074235807860263,
+      "recall": 0.8672787979966611,
+      "mcc": 0.686106440254036,
+      "auc": 0.9316748721329605
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T20:19:41.541323+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.7002455619053487,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        3,
+        3
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__C": 1
+    },
+    "time_seconds": 1745.6061327457428,
+    "test_metrics": {
+      "accuracy": 0.6920626493230687,
+      "f1": 0.6179183135704874,
+      "precision": 0.5936708860759494,
+      "recall": 0.6442307692307693,
+      "mcc": 0.36159091106164365,
+      "auc": 0.7407424358419599
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T20:38:35.789298+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6018407704658824,
+    "best_params": {
+      "clf__C": 10
+    },
+    "time_seconds": 3.1694414615631104,
+    "test_metrics": {
+      "accuracy": 0.6477302893549244,
+      "f1": 0.533567662565905,
+      "precision": 0.5464362850971922,
+      "recall": 0.5212912087912088,
+      "mcc": 0.25099662057124755,
+      "auc": 0.6762075548856163
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T20:56:21.468406+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6049152236301603,
+    "best_params": {
+      "clf__C": 10
+    },
+    "time_seconds": 1.537621259689331,
+    "test_metrics": {
+      "accuracy": 0.6485266790549509,
+      "f1": 0.5018811136192626,
+      "precision": 0.5549084858569051,
+      "recall": 0.4581043956043956,
+      "mcc": 0.23672829436410436,
+      "auc": 0.6800544219951403
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T21:07:07.435393+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": false
+    },
+    "best_score_cv": 0.6784380949047017,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        3,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": false,
+      "clf__C": 100
+    },
+    "time_seconds": 1792.832124710083,
+    "test_metrics": {
+      "accuracy": 0.6814441199893815,
+      "f1": 0.6129032258064516,
+      "precision": 0.5778588807785888,
+      "recall": 0.6524725274725275,
+      "mcc": 0.34578540260086776,
+      "auc": 0.7305864570306371
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T21:14:52.436348+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6124065953819525,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 3.310577630996704,
+    "test_metrics": {
+      "accuracy": 0.6543668701884789,
+      "f1": 0.5412262156448203,
+      "precision": 0.5557163531114327,
+      "recall": 0.5274725274725275,
+      "mcc": 0.2645026257868546,
+      "auc": 0.6912716772625903
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T21:25:26.969419+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6031306120760013,
+    "best_params": {
+      "clf__C": 1
+    },
+    "time_seconds": 2.237522602081299,
+    "test_metrics": {
+      "accuracy": 0.6477302893549244,
+      "f1": 0.5542492442055761,
+      "precision": 0.5424063116370809,
+      "recall": 0.5666208791208791,
+      "mcc": 0.2634499284496041,
+      "auc": 0.6712260046314568
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T22:20:47.399946+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.6932797079048235,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": null,
+      "vect__num__ngram_range": [
+        4,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 250,
+      "clf__C": 1
+    },
+    "time_seconds": 2274.6388053894043,
+    "test_metrics": {
+      "accuracy": 0.6851606052561721,
+      "f1": 0.6119109947643979,
+      "precision": 0.584375,
+      "recall": 0.6421703296703297,
+      "mcc": 0.3491440687509952,
+      "auc": 0.7384873348200912
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T22:39:52.607446+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6068057257196547,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 48.942002296447754,
+    "test_metrics": {
+      "accuracy": 0.6490576055216353,
+      "f1": 0.5341789992952783,
+      "precision": 0.548480463096961,
+      "recall": 0.5206043956043956,
+      "mcc": 0.25319121572424463,
+      "auc": 0.6765103946248472
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T22:58:05.252273+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6046207282913165,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 1
+    },
+    "time_seconds": 23.791221380233765,
+    "test_metrics": {
+      "accuracy": 0.6437483408547916,
+      "f1": 0.49510910458991725,
+      "precision": 0.5474209650582362,
+      "recall": 0.4519230769230769,
+      "mcc": 0.22620233834992134,
+      "auc": 0.6782237126784941
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T23:13:36.706205+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.6826942018561079,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        3,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__solver": "sag",
+      "clf__penalty": null,
+      "clf__max_iter": 250,
+      "clf__C": 100
+    },
+    "time_seconds": 2117.3693749904633,
+    "test_metrics": {
+      "accuracy": 0.6957791345898593,
+      "f1": 0.6202783300198808,
+      "precision": 0.5992317541613317,
+      "recall": 0.6428571428571429,
+      "mcc": 0.36766641632233266,
+      "auc": 0.7464241729711223
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T23:18:17.960630+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6152549346932166,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 1
+    },
+    "time_seconds": 113.73519921302795,
+    "test_metrics": {
+      "accuracy": 0.6522431643217415,
+      "f1": 0.5380818053596615,
+      "precision": 0.5528985507246377,
+      "recall": 0.5240384615384616,
+      "mcc": 0.25980055297978205,
+      "auc": 0.6888638190022872
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-06T23:32:46.443355+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6041040127375475,
+    "best_params": {
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 57.74342918395996,
+    "test_metrics": {
+      "accuracy": 0.6482612158216087,
+      "f1": 0.5561139028475712,
+      "precision": 0.5428384565075213,
+      "recall": 0.570054945054945,
+      "mcc": 0.265347065786815,
+      "auc": 0.6709246508575804
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T00:29:36.752945+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": true,
+      "lemma": true
+    },
+    "best_score_cv": 0.7071243415915475,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": null,
+      "vect__num__ngram_range": [
+        3,
+        3
+      ],
+      "vect__num__min_df": 10,
+      "prep__stopwords": true,
+      "prep__numbers": true,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 2364.22905087471,
+    "test_metrics": {
+      "accuracy": 0.7475444650915848,
+      "f1": 0.662885501595179,
+      "precision": 0.684981684981685,
+      "recall": 0.6421703296703297,
+      "mcc": 0.46205260233146656,
+      "auc": 0.8010684685284425
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T00:56:57.154217+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6125362125580645,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 10
+    },
+    "time_seconds": 547.4473795890808,
+    "test_metrics": {
+      "accuracy": 0.6702946641890098,
+      "f1": 0.5252293577981652,
+      "precision": 0.5922413793103448,
+      "recall": 0.47184065934065933,
+      "mcc": 0.2818152855524956,
+      "auc": 0.7279384667690596
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T01:22:39.065645+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6176935639307053,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 472.8910496234894,
+    "test_metrics": {
+      "accuracy": 0.6687018847889568,
+      "f1": 0.5233002291825821,
+      "precision": 0.5895008605851979,
+      "recall": 0.47046703296703296,
+      "mcc": 0.27840759980394586,
+      "auc": 0.7217296577286842
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T01:34:52.311745+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.7180445293500317,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        2,
+        3
+      ],
+      "vect__num__min_df": 10,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 100
+    },
+    "time_seconds": 2873.4929819107056,
+    "test_metrics": {
+      "accuracy": 0.7640031855588001,
+      "f1": 0.6681597611048898,
+      "precision": 0.731807031888798,
+      "recall": 0.6146978021978022,
+      "mcc": 0.4916509254060126,
+      "auc": 0.8249298029966572
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T01:50:35.133693+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6121239257622834,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 555.2103018760681,
+    "test_metrics": {
+      "accuracy": 0.6756039288558535,
+      "f1": 0.5346534653465347,
+      "precision": 0.6,
+      "recall": 0.48214285714285715,
+      "mcc": 0.2942661888603413,
+      "auc": 0.7215950292675737
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T02:01:46.535696+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6292845694067021,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 510.92006731033325,
+    "test_metrics": {
+      "accuracy": 0.7071940536235731,
+      "f1": 0.596709323583181,
+      "precision": 0.6379984362783424,
+      "recall": 0.5604395604395604,
+      "mcc": 0.370284343385611,
+      "auc": 0.7669741822435463
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T03:02:35.772447+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.8600959864790154,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": null,
+      "vect__ngram_range": [
+        1,
+        3
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": true,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 6,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 34617.98677659035,
+    "test_metrics": {
+      "accuracy": 0.8527433628318584,
+      "f1": 0.8954248366013072,
+      "precision": 0.9458311205523101,
+      "recall": 0.8501193317422434,
+      "mcc": 0.659631963269276,
+      "auc": 0.9348703697649328
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T04:17:06.223951+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6960391988436644,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 3,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.1
+    },
+    "time_seconds": 3844.4579989910126,
+    "test_metrics": {
+      "accuracy": 0.6831858407079646,
+      "f1": 0.7603748326639893,
+      "precision": 0.8658536585365854,
+      "recall": 0.6778042959427207,
+      "mcc": 0.3339348049632632,
+      "auc": 0.7681969464151437
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T05:06:15.304432+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6877495189649291,
+    "best_params": {
+      "clf__n_estimators": 200,
+      "clf__max_depth": 6,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.1
+    },
+    "time_seconds": 2422.662033557892,
+    "test_metrics": {
+      "accuracy": 0.6913274336283186,
+      "f1": 0.7678381256656017,
+      "precision": 0.868151715833835,
+      "recall": 0.6883054892601432,
+      "mcc": 0.3453549357937054,
+      "auc": 0.7677621211625854
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T06:17:40.938722+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7130452777597367,
+    "best_params": {
+      "clf__n_estimators": 200,
+      "clf__max_depth": 6,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 3755.6364829540253,
+    "test_metrics": {
+      "accuracy": 0.7214159292035398,
+      "f1": 0.791633571617686,
+      "precision": 0.8888228299643282,
+      "recall": 0.7136038186157518,
+      "mcc": 0.40799133018929534,
+      "auc": 0.8083061431327034
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T07:35:41.614416+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7194616904458102,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 6,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 4146.951288461685,
+    "test_metrics": {
+      "accuracy": 0.7253097345132743,
+      "f1": 0.7937267410951622,
+      "precision": 0.8956208758248351,
+      "recall": 0.7126491646778043,
+      "mcc": 0.4221609703415564,
+      "auc": 0.8100192892405271
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T07:55:38.454837+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.7695746761930469,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        1,
+        2
+      ],
+      "vect__num__min_df": 5,
+      "prep__stopwords": true,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.1,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 20186.040792942047,
+    "test_metrics": {
+      "accuracy": 0.8003716485266791,
+      "f1": 0.7447386286490156,
+      "precision": 0.736241610738255,
+      "recall": 0.7534340659340659,
+      "mcc": 0.5809729590040651,
+      "auc": 0.8697349275562171
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T08:33:56.058319+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6502807537677157,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 1160.0005195140839,
+    "test_metrics": {
+      "accuracy": 0.7008229360233608,
+      "f1": 0.5882352941176471,
+      "precision": 0.6284153005464481,
+      "recall": 0.5528846153846154,
+      "mcc": 0.35659588415242927,
+      "auc": 0.7606579379080459
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T09:04:00.025376+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6402171157258038,
+    "best_params": {
+      "clf__n_estimators": 100,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.1
+    },
+    "time_seconds": 732.716924905777,
+    "test_metrics": {
+      "accuracy": 0.683567825856119,
+      "f1": 0.5640087783467447,
+      "precision": 0.6032863849765259,
+      "recall": 0.529532967032967,
+      "mcc": 0.318985511279329,
+      "auc": 0.7435859791441791
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T09:41:04.354337+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6662393074649308,
+    "best_params": {
+      "clf__n_estimators": 100,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.02,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 1115.443606376648,
+    "test_metrics": {
+      "accuracy": 0.6888770905229625,
+      "f1": 0.5672082717872969,
+      "precision": 0.6134185303514377,
+      "recall": 0.5274725274725275,
+      "mcc": 0.3287686523905166,
+      "auc": 0.7385390464144249
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T10:21:38.976973+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6745809381874955,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.02,
+      "clf__gamma": 0.1
+    },
+    "time_seconds": 1339.180532693863,
+    "test_metrics": {
+      "accuracy": 0.715688877090523,
+      "f1": 0.61763655837201,
+      "precision": 0.6431226765799256,
+      "recall": 0.5940934065934066,
+      "mcc": 0.39269880344576774,
+      "auc": 0.7877401022819673
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T17:49:00.018635+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.7591269570445611,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        1,
+        3
+      ],
+      "vect__num__min_df": 5,
+      "prep__stopwords": true,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 200,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 34543.68582820892,
+    "test_metrics": {
+      "accuracy": 0.7873639500929122,
+      "f1": 0.7300303336703741,
+      "precision": 0.7167438782263402,
+      "recall": 0.7438186813186813,
+      "mcc": 0.5550005247323024,
+      "auc": 0.8543394349052073
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T19:08:07.034049+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": true
+    },
+    "best_score_cv": 0.7618211605093596,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        4,
+        4
+      ],
+      "vect__num__min_df": 10,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": true,
+      "clf__C": 1
+    },
+    "time_seconds": 3089.273673772812,
+    "test_metrics": {
+      "accuracy": 0.7280529232969783,
+      "f1": 0.7083413231064237,
+      "precision": 0.7212026552128075,
+      "recall": 0.6959306706857573,
+      "mcc": 0.4540151423477841,
+      "auc": 0.8013075719740219
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T19:37:07.378399+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6539010639543047,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 6.580245494842529,
+    "test_metrics": {
+      "accuracy": 0.6524226711961381,
+      "f1": 0.6182246661429693,
+      "precision": 0.645611156685808,
+      "recall": 0.5930670685757348,
+      "mcc": 0.3011860987841017,
+      "auc": 0.701985973011136
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T20:08:45.748406+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": true
+    },
+    "best_score_cv": 0.8419088049396125,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        4,
+        4
+      ],
+      "vect__min_df": 10,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": true,
+      "clf__C": 1
+    },
+    "time_seconds": 756.9108066558838,
+    "test_metrics": {
+      "accuracy": 0.8565169769989047,
+      "f1": 0.8892645815722738,
+      "precision": 0.9006849315068494,
+      "recall": 0.8781302170283807,
+      "mcc": 0.6860697137291226,
+      "auc": 0.9163773486596558
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T20:13:04.238111+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": false,
+      "lemma": false
+    },
+    "best_score_cv": 0.8480093611072803,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        3,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": false,
+      "prep__lemmatisation": false,
+      "clf__C": 100
+    },
+    "time_seconds": 987.5875818729401,
+    "test_metrics": {
+      "accuracy": 0.8530973451327434,
+      "f1": 0.8952813525107242,
+      "precision": 0.949678800856531,
+      "recall": 0.8467780429594272,
+      "mcc": 0.6641101043390164,
+      "auc": 0.9271468270834016
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T20:16:37.167438+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6784461588105241,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 2.1922285556793213,
+    "test_metrics": {
+      "accuracy": 0.7086527929901424,
+      "f1": 0.7766582703610412,
+      "precision": 0.78125,
+      "recall": 0.7721202003338898,
+      "mcc": 0.3578533473489674,
+      "auc": 0.7610401624788661
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T20:16:44.357896+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7059408422878861,
+    "best_params": {
+      "clf__C": 1
+    },
+    "time_seconds": 3.4090638160705566,
+    "test_metrics": {
+      "accuracy": 0.6851040525739321,
+      "f1": 0.7503256621797655,
+      "precision": 0.7819004524886878,
+      "recall": 0.7212020033388982,
+      "mcc": 0.32791495483367,
+      "auc": 0.7428370532628692
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T20:21:41.712830+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6953681925298397,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 3.0044777393341064,
+    "test_metrics": {
+      "accuracy": 0.6976991150442478,
+      "f1": 0.7746701846965699,
+      "precision": 0.8660766961651918,
+      "recall": 0.7007159904534607,
+      "mcc": 0.348275873975146,
+      "auc": 0.7701938732141106
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T20:21:46.545752+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6977849024082191,
+    "best_params": {
+      "clf__C": 1
+    },
+    "time_seconds": 4.096572399139404,
+    "test_metrics": {
+      "accuracy": 0.7083185840707965,
+      "f1": 0.7813163481953291,
+      "precision": 0.8798565451285116,
+      "recall": 0.7026252983293556,
+      "mcc": 0.3806226930364216,
+      "auc": 0.7860627063785268
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T20:24:45.505089+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6966894657920756,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 1.7568080425262451,
+    "test_metrics": {
+      "accuracy": 0.7322015334063526,
+      "f1": 0.7971795935296557,
+      "precision": 0.7922506183017313,
+      "recall": 0.8021702838063439,
+      "mcc": 0.40325498786547254,
+      "auc": 0.7840455961634571
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T20:24:52.095388+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7163326179092384,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 4.826192378997803,
+    "test_metrics": {
+      "accuracy": 0.7409638554216867,
+      "f1": 0.8052696582955949,
+      "precision": 0.7944760357432982,
+      "recall": 0.8163606010016694,
+      "mcc": 0.4190736075803292,
+      "auc": 0.7938536095190498
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T20:29:30.377444+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.8418816014283719,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        3,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__C": 100
+    },
+    "time_seconds": 788.4907937049866,
+    "test_metrics": {
+      "accuracy": 0.8521358159912377,
+      "f1": 0.8853989813242784,
+      "precision": 0.9006908462867013,
+      "recall": 0.8706176961602671,
+      "mcc": 0.6780103497128734,
+      "auc": 0.9239962038641898
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T20:30:32.684768+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7230778849581906,
+    "best_params": {
+      "clf__C": 100
+    },
+    "time_seconds": 4.93222975730896,
+    "test_metrics": {
+      "accuracy": 0.7391150442477876,
+      "f1": 0.8081228846654517,
+      "precision": 0.8888888888888888,
+      "recall": 0.7408114558472554,
+      "mcc": 0.4280231572826036,
+      "auc": 0.8208526498185504
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T20:30:34.723244+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7100919098416306,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 2.000788450241089,
+    "test_metrics": {
+      "accuracy": 0.7221238938053097,
+      "f1": 0.7930398101766412,
+      "precision": 0.8857479387514723,
+      "recall": 0.7178997613365156,
+      "mcc": 0.4042049793600212,
+      "auc": 0.7818426128747509
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T20:38:10.521089+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.8414105663109434,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        3,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__C": 100
+    },
+    "time_seconds": 1003.3769807815552,
+    "test_metrics": {
+      "accuracy": 0.8502654867256637,
+      "f1": 0.89266683582847,
+      "precision": 0.9528710725893824,
+      "recall": 0.839618138424821,
+      "mcc": 0.6627414000833215,
+      "auc": 0.9278536633210188
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T20:56:43.547082+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.8399663342764042,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": null,
+      "vect__ngram_range": [
+        2,
+        4
+      ],
+      "vect__min_df": 10,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 500,
+      "clf__C": 1
+    },
+    "time_seconds": 1176.0285186767578,
+    "test_metrics": {
+      "accuracy": 0.8417305585980285,
+      "f1": 0.8762312633832976,
+      "precision": 0.899736147757256,
+      "recall": 0.8539232053422371,
+      "mcc": 0.6589349871683157,
+      "auc": 0.9127101432323513
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T21:07:46.079784+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6807239097138135,
+    "best_params": {
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 198.99140644073486,
+    "test_metrics": {
+      "accuracy": 0.708105147864184,
+      "f1": 0.7757677745056795,
+      "precision": 0.7820186598812553,
+      "recall": 0.7696160267111853,
+      "mcc": 0.3578988478346227,
+      "auc": 0.7606307752836469
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T21:09:26.929945+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7060220500003713,
+    "best_params": {
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 1
+    },
+    "time_seconds": 290.33456468582153,
+    "test_metrics": {
+      "accuracy": 0.6883899233296824,
+      "f1": 0.753359341135674,
+      "precision": 0.7835888187556357,
+      "recall": 0.7253756260434057,
+      "mcc": 0.33384343458598204,
+      "auc": 0.7418135852748211
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T21:10:13.483705+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": false,
+      "lemma": false
+    },
+    "best_score_cv": 0.8462048258065438,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": null,
+      "vect__ngram_range": [
+        3,
+        4
+      ],
+      "vect__min_df": 5,
+      "prep__stopwords": false,
+      "prep__numbers": false,
+      "prep__lemmatisation": false,
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 500,
+      "clf__C": 1
+    },
+    "time_seconds": 1423.0237936973572,
+    "test_metrics": {
+      "accuracy": 0.8414159292035398,
+      "f1": 0.8855975485188968,
+      "precision": 0.9522240527182867,
+      "recall": 0.8276849642004773,
+      "mcc": 0.6480010170254172,
+      "auc": 0.9188387223330174
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T21:20:06.110829+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7237943089345258,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 266.41151309013367,
+    "test_metrics": {
+      "accuracy": 0.7332968236582694,
+      "f1": 0.798343685300207,
+      "precision": 0.7921117502054231,
+      "recall": 0.8046744574290484,
+      "mcc": 0.4048303906464569,
+      "auc": 0.7950578458790127
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T21:20:43.100957+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.70393808773245,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 250,
+      "clf__C": 0.1
+    },
+    "time_seconds": 200.6316466331482,
+    "test_metrics": {
+      "accuracy": 0.7338444687842278,
+      "f1": 0.7981727574750831,
+      "precision": 0.7942148760330578,
+      "recall": 0.8021702838063439,
+      "mcc": 0.4075696110632891,
+      "auc": 0.7846224599385389
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T21:20:57.087831+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.8434021668381426,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        3,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__solver": "sag",
+      "clf__penalty": null,
+      "clf__max_iter": 250,
+      "clf__C": 100
+    },
+    "time_seconds": 994.1734023094177,
+    "test_metrics": {
+      "accuracy": 0.8570646221248631,
+      "f1": 0.8895471857807872,
+      "precision": 0.9021459227467811,
+      "recall": 0.8772954924874792,
+      "mcc": 0.6877146228948637,
+      "auc": 0.9258637006475762
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T21:22:02.263254+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6957585767143765,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 195.1624252796173,
+    "test_metrics": {
+      "accuracy": 0.6987610619469027,
+      "f1": 0.7754024808656638,
+      "precision": 0.8671782762691853,
+      "recall": 0.7011933174224344,
+      "mcc": 0.3510988522242144,
+      "auc": 0.7709942132278418
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T21:23:06.384015+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6995235842258012,
+    "best_params": {
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 251.8784945011139,
+    "test_metrics": {
+      "accuracy": 0.7097345132743362,
+      "f1": 0.782608695652174,
+      "precision": 0.8801431127012522,
+      "recall": 0.7045346062052505,
+      "mcc": 0.3825319627034554,
+      "auc": 0.7866250367803314
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T21:35:32.171861+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7096489695474467,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 224.41207456588745,
+    "test_metrics": {
+      "accuracy": 0.7260176991150442,
+      "f1": 0.7965299684542587,
+      "precision": 0.8864833235810415,
+      "recall": 0.7231503579952268,
+      "mcc": 0.40958454752090895,
+      "auc": 0.7823297479321281
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T21:36:52.025241+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7259725257676193,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 370.9153666496277,
+    "test_metrics": {
+      "accuracy": 0.7398230088495575,
+      "f1": 0.8087431693989071,
+      "precision": 0.8890160183066361,
+      "recall": 0.7417661097852029,
+      "mcc": 0.42903567323619574,
+      "auc": 0.8215921796841795
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T21:38:46.590317+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": false,
+      "lemma": false
+    },
+    "best_score_cv": 0.8435588277373229,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        4,
+        4
+      ],
+      "vect__min_df": 5,
+      "prep__stopwords": false,
+      "prep__numbers": false,
+      "prep__lemmatisation": false,
+      "clf__solver": "lbfgs",
+      "clf__penalty": null,
+      "clf__max_iter": 250,
+      "clf__C": 10
+    },
+    "time_seconds": 1214.0741083621979,
+    "test_metrics": {
+      "accuracy": 0.8545132743362832,
+      "f1": 0.8963952609024451,
+      "precision": 0.9497863247863247,
+      "recall": 0.8486873508353222,
+      "mcc": 0.6665587706178846,
+      "auc": 0.9288370876516168
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T21:47:34.787310+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.8223420547475256,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": null,
+      "vect__ngram_range": [
+        2,
+        4
+      ],
+      "vect__min_df": 5,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 200,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": null
+    },
+    "time_seconds": 1143.9607770442963,
+    "test_metrics": {
+      "accuracy": 0.8340635268346112,
+      "f1": 0.8716645489199492,
+      "precision": 0.884780739466896,
+      "recall": 0.8589315525876461,
+      "mcc": 0.6376690924128297,
+      "auc": 0.9069913497017322
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T22:00:40.454319+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.5756753765692237,
+    "best_params": {
+      "clf__n_estimators": 200,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 322.78513741493225,
+    "test_metrics": {
+      "accuracy": 0.6872946330777656,
+      "f1": 0.7558785805899957,
+      "precision": 0.7747589833479404,
+      "recall": 0.7378964941569283,
+      "mcc": 0.3224542196448021,
+      "auc": 0.7322680848122667
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T22:01:41.500845+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.5843644320081328,
+    "best_params": {
+      "clf__n_estimators": 100,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 375.2774615287781,
+    "test_metrics": {
+      "accuracy": 0.6670317634173056,
+      "f1": 0.7379310344827587,
+      "precision": 0.7629233511586453,
+      "recall": 0.7145242070116862,
+      "mcc": 0.28395843414374616,
+      "auc": 0.7008276798911137
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T22:12:03.294795+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": true,
+      "lemma": true
+    },
+    "best_score_cv": 0.8343128133281194,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": null,
+      "vect__ngram_range": [
+        2,
+        2
+      ],
+      "vect__min_df": 5,
+      "prep__stopwords": true,
+      "prep__numbers": true,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 100,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": null
+    },
+    "time_seconds": 1498.7486643791199,
+    "test_metrics": {
+      "accuracy": 0.8311504424778761,
+      "f1": 0.8789032749428789,
+      "precision": 0.9387201735357917,
+      "recall": 0.8262529832935561,
+      "mcc": 0.6173872174673202,
+      "auc": 0.9078536633210188
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T22:14:55.447529+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6079694235378349,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 382.80105662345886,
+    "test_metrics": {
+      "accuracy": 0.6955093099671413,
+      "f1": 0.7694859038142621,
+      "precision": 0.7644151565074135,
+      "recall": 0.7746243739565943,
+      "mcc": 0.3212182088422273,
+      "auc": 0.7428264198292271
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T22:15:45.858384+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6347139094165556,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 365.0075452327728,
+    "test_metrics": {
+      "accuracy": 0.7108433734939759,
+      "f1": 0.7772151898734178,
+      "precision": 0.7858361774744027,
+      "recall": 0.7687813021702838,
+      "mcc": 0.36567841812785956,
+      "auc": 0.760360287315377
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T22:17:54.142291+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.8284274620585528,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        2,
+        3
+      ],
+      "vect__min_df": 10,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 100
+    },
+    "time_seconds": 1362.6104674339294,
+    "test_metrics": {
+      "accuracy": 0.8433734939759037,
+      "f1": 0.8790186125211505,
+      "precision": 0.8910806174957119,
+      "recall": 0.8672787979966611,
+      "mcc": 0.6575684358165901,
+      "auc": 0.9177909307444466
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T22:27:21.948840+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6630892623684277,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "log2",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 412.32495403289795,
+    "test_metrics": {
+      "accuracy": 0.6516814159292036,
+      "f1": 0.726514730405781,
+      "precision": 0.8695941450432468,
+      "recall": 0.6238663484486874,
+      "mcc": 0.31177615449055507,
+      "auc": 0.7403485140746068
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T22:29:00.401023+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6608939296070188,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 494.1939070224762,
+    "test_metrics": {
+      "accuracy": 0.6424778761061947,
+      "f1": 0.7194444444444444,
+      "precision": 0.8604651162790697,
+      "recall": 0.6181384248210023,
+      "mcc": 0.289952313510098,
+      "auc": 0.7336855526857814
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T22:44:03.217628+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6685470562106685,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "log2",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 476.5859479904175,
+    "test_metrics": {
+      "accuracy": 0.6601769911504425,
+      "f1": 0.73568281938326,
+      "precision": 0.8692257644762524,
+      "recall": 0.637708830548926,
+      "mcc": 0.3184978152958282,
+      "auc": 0.7539722758034458
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T22:45:36.155438+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6876842479602631,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 471.6166572570801,
+    "test_metrics": {
+      "accuracy": 0.6913274336283186,
+      "f1": 0.7629146275149538,
+      "precision": 0.8862918509159823,
+      "recall": 0.669689737470167,
+      "mcc": 0.3731728070025748,
+      "auc": 0.7766116323928467
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T22:50:02.651685+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.8362465777128554,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        2,
+        3
+      ],
+      "vect__min_df": 10,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 100
+    },
+    "time_seconds": 1777.9166791439056,
+    "test_metrics": {
+      "accuracy": 0.8353982300884956,
+      "f1": 0.8816492746245864,
+      "precision": 0.9443838604143948,
+      "recall": 0.8267303102625299,
+      "mcc": 0.630197092712623,
+      "auc": 0.9154980874227614
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T23:17:31.997341+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": false,
+      "lemma": false
+    },
+    "best_score_cv": 0.8472461785460844,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        2,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": false,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 6,
+      "clf__learning_rate": 0.1,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 3117.5700199604034,
+    "test_metrics": {
+      "accuracy": 0.8587075575027382,
+      "f1": 0.8889845094664371,
+      "precision": 0.9174067495559503,
+      "recall": 0.8622704507512521,
+      "mcc": 0.6977478022601717,
+      "auc": 0.9315618919005135
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T23:29:06.880713+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6579531145717136,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 3,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 189.83134198188782,
+    "test_metrics": {
+      "accuracy": 0.696604600219058,
+      "f1": 0.7636518771331058,
+      "precision": 0.7809773123909249,
+      "recall": 0.7470784641068448,
+      "mcc": 0.34134020795236625,
+      "auc": 0.7497062513956382
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T23:30:41.535380+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6604611910803888,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 3,
+      "clf__learning_rate": 0.1,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 277.61374044418335,
+    "test_metrics": {
+      "accuracy": 0.6916757940854327,
+      "f1": 0.7633459436738125,
+      "precision": 0.768839966130398,
+      "recall": 0.7579298831385642,
+      "mcc": 0.3212158432734227,
+      "auc": 0.7395779058515785
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T23:41:57.678597+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.689788229052299,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 293.6160349845886,
+    "test_metrics": {
+      "accuracy": 0.7168674698795181,
+      "f1": 0.7864518793886823,
+      "precision": 0.7784137367130008,
+      "recall": 0.7946577629382304,
+      "mcc": 0.366773035993065,
+      "auc": 0.7731875312357113
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-07T23:43:42.425737+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7031678368733191,
+    "best_params": {
+      "clf__n_estimators": 200,
+      "clf__max_depth": 6,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 300.4929759502411,
+    "test_metrics": {
+      "accuracy": 0.7261774370208105,
+      "f1": 0.7895622895622896,
+      "precision": 0.7962648556876061,
+      "recall": 0.7829716193656093,
+      "mcc": 0.397907671657149,
+      "auc": 0.779041236455664
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T00:03:28.063907+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.8599240329215682,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": null,
+      "vect__ngram_range": [
+        1,
+        3
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": true,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 6,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 3904.1852991580963,
+    "test_metrics": {
+      "accuracy": 0.8527433628318584,
+      "f1": 0.8954248366013072,
+      "precision": 0.9458311205523101,
+      "recall": 0.8501193317422434,
+      "mcc": 0.659631963269276,
+      "auc": 0.9348703697649328
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T00:16:05.857863+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6906639053653235,
+    "best_params": {
+      "clf__n_estimators": 200,
+      "clf__max_depth": 6,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 233.36799836158752,
+    "test_metrics": {
+      "accuracy": 0.6899115044247788,
+      "f1": 0.7659005879208979,
+      "precision": 0.8700667880995749,
+      "recall": 0.6840095465393795,
+      "mcc": 0.347019565512926,
+      "auc": 0.7692745283944159
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T00:18:12.329631+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6967273970096773,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 3,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.1
+    },
+    "time_seconds": 353.20076751708984,
+    "test_metrics": {
+      "accuracy": 0.6831858407079646,
+      "f1": 0.7603748326639893,
+      "precision": 0.8658536585365854,
+      "recall": 0.6778042959427207,
+      "mcc": 0.3339348049632632,
+      "auc": 0.7681969464151437
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T00:30:37.182588+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7139147077049546,
+    "best_params": {
+      "clf__n_estimators": 200,
+      "clf__max_depth": 6,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 346.5192904472351,
+    "test_metrics": {
+      "accuracy": 0.7214159292035398,
+      "f1": 0.791633571617686,
+      "precision": 0.8888228299643282,
+      "recall": 0.7136038186157518,
+      "mcc": 0.40799133018929534,
+      "auc": 0.8083061431327034
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T00:32:45.153201+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7195081645698416,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 6,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.1
+    },
+    "time_seconds": 348.06769037246704,
+    "test_metrics": {
+      "accuracy": 0.7164601769911504,
+      "f1": 0.7871379218708477,
+      "precision": 0.8878896882494005,
+      "recall": 0.7069212410501193,
+      "mcc": 0.40126481812476456,
+      "auc": 0.8037578056036878
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T00:42:06.788051+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": false
+    },
+    "best_score_cv": 0.8448758414735796,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        2,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.1,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 4583.333456277847,
+    "test_metrics": {
+      "accuracy": 0.8548740416210295,
+      "f1": 0.8868971404182672,
+      "precision": 0.9074235807860263,
+      "recall": 0.8672787979966611,
+      "mcc": 0.686106440254036,
+      "auc": 0.9316748721329605
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T01:29:02.369851+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.7002455619053487,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        3,
+        3
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__C": 1
+    },
+    "time_seconds": 1763.656504869461,
+    "test_metrics": {
+      "accuracy": 0.6920626493230687,
+      "f1": 0.6179183135704874,
+      "precision": 0.5936708860759494,
+      "recall": 0.6442307692307693,
+      "mcc": 0.36159091106164365,
+      "auc": 0.7407424358419599
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T01:46:51.306855+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6049152236301603,
+    "best_params": {
+      "clf__C": 10
+    },
+    "time_seconds": 1.5593516826629639,
+    "test_metrics": {
+      "accuracy": 0.6485266790549509,
+      "f1": 0.5018811136192626,
+      "precision": 0.5549084858569051,
+      "recall": 0.4581043956043956,
+      "mcc": 0.23672829436410436,
+      "auc": 0.6800544219951403
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T01:47:22.140356+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6018407704658824,
+    "best_params": {
+      "clf__C": 10
+    },
+    "time_seconds": 3.0879411697387695,
+    "test_metrics": {
+      "accuracy": 0.6477302893549244,
+      "f1": 0.533567662565905,
+      "precision": 0.5464362850971922,
+      "recall": 0.5212912087912088,
+      "mcc": 0.25099662057124755,
+      "auc": 0.6762075548856163
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T01:59:09.956295+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": false,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.8559135281551576,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        1,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 6425.785500049591,
+    "test_metrics": {
+      "accuracy": 0.8633628318584071,
+      "f1": 0.9025744573447754,
+      "precision": 0.9576861274772362,
+      "recall": 0.8534606205250597,
+      "mcc": 0.6891210687425091,
+      "auc": 0.9369228757315199
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T02:05:28.600356+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6124065953819525,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 3.3220245838165283,
+    "test_metrics": {
+      "accuracy": 0.6543668701884789,
+      "f1": 0.5412262156448203,
+      "precision": 0.5557163531114327,
+      "recall": 0.5274725274725275,
+      "mcc": 0.2645026257868546,
+      "auc": 0.6912716772625903
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T02:05:43.432202+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6030248756054473,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 2.314471483230591,
+    "test_metrics": {
+      "accuracy": 0.6477302893549244,
+      "f1": 0.5542492442055761,
+      "precision": 0.5424063116370809,
+      "recall": 0.5666208791208791,
+      "mcc": 0.2634499284496041,
+      "auc": 0.6713505285281572
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T02:16:50.365057+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": false
+    },
+    "best_score_cv": 0.6784380949047017,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        3,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": false,
+      "clf__C": 100
+    },
+    "time_seconds": 1821.911873102188,
+    "test_metrics": {
+      "accuracy": 0.6814441199893815,
+      "f1": 0.6129032258064516,
+      "precision": 0.5778588807785888,
+      "recall": 0.6524725274725275,
+      "mcc": 0.34578540260086776,
+      "auc": 0.7305864570306371
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T03:02:07.971928+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": true
+    },
+    "best_score_cv": 0.7200734085592982,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        4,
+        4
+      ],
+      "vect__num__min_df": 5,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": true,
+      "clf__C": 0.1
+    },
+    "time_seconds": 2617.6327271461487,
+    "test_metrics": {
+      "accuracy": 0.7082208588957055,
+      "f1": 0.5668488160291439,
+      "precision": 0.4647550776583035,
+      "recall": 0.7264239028944911,
+      "mcc": 0.3830644416065024,
+      "auc": 0.7831932151466889
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T03:16:07.783789+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.6932797079048235,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": null,
+      "vect__num__ngram_range": [
+        4,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 250,
+      "clf__C": 1
+    },
+    "time_seconds": 2507.2458171844482,
+    "test_metrics": {
+      "accuracy": 0.6851606052561721,
+      "f1": 0.6119109947643979,
+      "precision": 0.584375,
+      "recall": 0.6421703296703297,
+      "mcc": 0.3491440687509952,
+      "auc": 0.7384873348200912
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T03:22:48.881437+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6231283979349728,
+    "best_params": {
+      "clf__C": 10
+    },
+    "time_seconds": 3.1325511932373047,
+    "test_metrics": {
+      "accuracy": 0.6559509202453988,
+      "f1": 0.49422799422799424,
+      "precision": 0.4027042915931805,
+      "recall": 0.6395891690009337,
+      "mcc": 0.269003038004403,
+      "auc": 0.7069664972069609
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T03:23:30.307361+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6294496597011487,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 4.174703359603882,
+    "test_metrics": {
+      "accuracy": 0.652760736196319,
+      "f1": 0.4937388193202147,
+      "precision": 0.40023201856148494,
+      "recall": 0.6442577030812325,
+      "mcc": 0.26732732736087783,
+      "auc": 0.6948870538006592
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T03:36:27.582813+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6046207282913165,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 1
+    },
+    "time_seconds": 147.78759741783142,
+    "test_metrics": {
+      "accuracy": 0.6437483408547916,
+      "f1": 0.49510910458991725,
+      "precision": 0.5474209650582362,
+      "recall": 0.4519230769230769,
+      "mcc": 0.22620233834992134,
+      "auc": 0.6782237126784941
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T03:38:14.746132+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6068057257196547,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 229.41525983810425,
+    "test_metrics": {
+      "accuracy": 0.6490576055216353,
+      "f1": 0.5341789992952783,
+      "precision": 0.548480463096961,
+      "recall": 0.5206043956043956,
+      "mcc": 0.25319121572424463,
+      "auc": 0.6765103946248472
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T03:43:13.578616+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6354556353743087,
+    "best_params": {
+      "clf__C": 1
+    },
+    "time_seconds": 4.270785331726074,
+    "test_metrics": {
+      "accuracy": 0.6503067484662577,
+      "f1": 0.4897959183673469,
+      "precision": 0.397212543554007,
+      "recall": 0.6386554621848739,
+      "mcc": 0.26119024717908745,
+      "auc": 0.7051192869513541
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T03:43:40.071958+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6373165380596268,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 3.3225109577178955,
+    "test_metrics": {
+      "accuracy": 0.6507975460122699,
+      "f1": 0.49735075944895796,
+      "precision": 0.4,
+      "recall": 0.6573295985060691,
+      "mcc": 0.2717364794765132,
+      "auc": 0.6934056800705192
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T03:59:20.062188+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6040943985521902,
+    "best_params": {
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 170.7642846107483,
+    "test_metrics": {
+      "accuracy": 0.6485266790549509,
+      "f1": 0.5568942436412316,
+      "precision": 0.5430809399477807,
+      "recall": 0.5714285714285714,
+      "mcc": 0.26619772829791977,
+      "auc": 0.6710034070213646
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T03:59:30.343354+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6152549346932166,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 1
+    },
+    "time_seconds": 279.47913885116577,
+    "test_metrics": {
+      "accuracy": 0.6522431643217415,
+      "f1": 0.5380818053596615,
+      "precision": 0.5528985507246377,
+      "recall": 0.5240384615384616,
+      "mcc": 0.25980055297978205,
+      "auc": 0.6888638190022872
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T04:06:48.189959+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.7087772186357805,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        3,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__C": 100
+    },
+    "time_seconds": 2658.7290589809418,
+    "test_metrics": {
+      "accuracy": 0.6927607361963191,
+      "f1": 0.5512544802867384,
+      "precision": 0.44735311227457825,
+      "recall": 0.7180205415499533,
+      "mcc": 0.3580985859880931,
+      "auc": 0.7735095813736058
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T04:13:23.801406+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.6826942018561079,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        3,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__solver": "sag",
+      "clf__penalty": null,
+      "clf__max_iter": 250,
+      "clf__C": 100
+    },
+    "time_seconds": 2382.8772585392,
+    "test_metrics": {
+      "accuracy": 0.6957791345898593,
+      "f1": 0.6202783300198808,
+      "precision": 0.5992317541613317,
+      "recall": 0.6428571428571429,
+      "mcc": 0.36766641632233266,
+      "auc": 0.7464241729711223
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T05:10:45.060242+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": true,
+      "lemma": true
+    },
+    "best_score_cv": 0.7071243415915475,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": null,
+      "vect__num__ngram_range": [
+        3,
+        3
+      ],
+      "vect__num__min_df": 10,
+      "prep__stopwords": true,
+      "prep__numbers": true,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 2396.8228187561035,
+    "test_metrics": {
+      "accuracy": 0.7475444650915848,
+      "f1": 0.662885501595179,
+      "precision": 0.684981684981685,
+      "recall": 0.6421703296703297,
+      "mcc": 0.46205260233146656,
+      "auc": 0.8010684685284425
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T05:29:51.604285+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.7074478764076301,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": null,
+      "vect__num__ngram_range": [
+        3,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 250,
+      "clf__C": 0.1
+    },
+    "time_seconds": 3820.869092941284,
+    "test_metrics": {
+      "accuracy": 0.7001226993865031,
+      "f1": 0.560431654676259,
+      "precision": 0.45582211819777646,
+      "recall": 0.7273576097105509,
+      "mcc": 0.37265242904305984,
+      "auc": 0.778242455437568
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T05:36:26.484618+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6176935639307053,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 473.72207522392273,
+    "test_metrics": {
+      "accuracy": 0.6687018847889568,
+      "f1": 0.5233002291825821,
+      "precision": 0.5895008605851979,
+      "recall": 0.47046703296703296,
+      "mcc": 0.27840759980394586,
+      "auc": 0.7217296577286842
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T05:38:10.116406+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6125362125580645,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 10
+    },
+    "time_seconds": 548.0919458866119,
+    "test_metrics": {
+      "accuracy": 0.6702946641890098,
+      "f1": 0.5252293577981652,
+      "precision": 0.5922413793103448,
+      "recall": 0.47184065934065933,
+      "mcc": 0.2818152855524956,
+      "auc": 0.7279384667690596
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T05:52:05.795276+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6212423853758425,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 151.00890016555786,
+    "test_metrics": {
+      "accuracy": 0.6576687116564417,
+      "f1": 0.49765934461649264,
+      "precision": 0.40504103165298944,
+      "recall": 0.6451914098972923,
+      "mcc": 0.27418731046526246,
+      "auc": 0.7069832815505253
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T05:53:49.954343+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6288971961112823,
+    "best_params": {
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 10
+    },
+    "time_seconds": 219.46183061599731,
+    "test_metrics": {
+      "accuracy": 0.6534969325153375,
+      "f1": 0.49318018664752333,
+      "precision": 0.40058309037900874,
+      "recall": 0.6414565826330533,
+      "mcc": 0.2667996619647836,
+      "auc": 0.6947064666967542
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T06:03:59.420045+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6121239257622834,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 555.7520794868469,
+    "test_metrics": {
+      "accuracy": 0.6756039288558535,
+      "f1": 0.5346534653465347,
+      "precision": 0.6,
+      "recall": 0.48214285714285715,
+      "mcc": 0.2942661888603413,
+      "auc": 0.7215950292675737
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T06:04:58.330243+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6312594426343853,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 513.9430072307587,
+    "test_metrics": {
+      "accuracy": 0.7024157154234139,
+      "f1": 0.5936933671620153,
+      "precision": 0.6285495011511896,
+      "recall": 0.5625,
+      "mcc": 0.36144735303228454,
+      "auc": 0.7647798572046733
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T06:16:42.919163+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.7180445293500317,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        2,
+        3
+      ],
+      "vect__num__min_df": 10,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 100
+    },
+    "time_seconds": 2912.304900407791,
+    "test_metrics": {
+      "accuracy": 0.7640031855588001,
+      "f1": 0.6681597611048898,
+      "precision": 0.731807031888798,
+      "recall": 0.6146978021978022,
+      "mcc": 0.4916509254060126,
+      "auc": 0.8249298029966572
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T06:16:50.901916+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6367753120911016,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 275.3310761451721,
+    "test_metrics": {
+      "accuracy": 0.6520245398773006,
+      "f1": 0.4910265613783202,
+      "precision": 0.3988338192419825,
+      "recall": 0.6386554621848739,
+      "mcc": 0.2634118749072413,
+      "auc": 0.7048933199555898
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T06:17:38.358590+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6349925326068764,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 1
+    },
+    "time_seconds": 222.40689182281494,
+    "test_metrics": {
+      "accuracy": 0.649079754601227,
+      "f1": 0.4929078014184397,
+      "precision": 0.39736992567181245,
+      "recall": 0.6489262371615313,
+      "mcc": 0.26506335606265086,
+      "auc": 0.6924729057179907
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T06:47:39.768291+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.7103944706810292,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        3,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__solver": "sag",
+      "clf__penalty": null,
+      "clf__max_iter": 250,
+      "clf__C": 100
+    },
+    "time_seconds": 3496.5701711177826,
+    "test_metrics": {
+      "accuracy": 0.701840490797546,
+      "f1": 0.5621621621621622,
+      "precision": 0.45774647887323944,
+      "recall": 0.7282913165266106,
+      "mcc": 0.3754206196392921,
+      "auc": 0.7774507938994506
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T08:08:18.147107+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": true,
+      "lemma": true
+    },
+    "best_score_cv": 0.7662995429172673,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        2,
+        2
+      ],
+      "vect__num__min_df": 10,
+      "prep__stopwords": true,
+      "prep__numbers": true,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 200,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": null
+    },
+    "time_seconds": 3681.964152574539,
+    "test_metrics": {
+      "accuracy": 0.7658895705521472,
+      "f1": 0.6353211009174312,
+      "precision": 0.537864077669903,
+      "recall": 0.7759103641456583,
+      "mcc": 0.4882990722988237,
+      "auc": 0.8451875867968137
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T08:29:23.295835+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.7695746761930469,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        1,
+        2
+      ],
+      "vect__num__min_df": 5,
+      "prep__stopwords": true,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.1,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 6911.753745555878,
+    "test_metrics": {
+      "accuracy": 0.8003716485266791,
+      "f1": 0.7447386286490156,
+      "precision": 0.736241610738255,
+      "recall": 0.7534340659340659,
+      "mcc": 0.5809729590040651,
+      "auc": 0.8697349275562171
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T08:39:45.869069+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6729496931384782,
+    "best_params": {
+      "clf__n_estimators": 200,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 10
+    },
+    "time_seconds": 705.3790352344513,
+    "test_metrics": {
+      "accuracy": 0.6574233128834356,
+      "f1": 0.5108619481429573,
+      "precision": 0.40886146943353896,
+      "recall": 0.680672268907563,
+      "mcc": 0.2926316320829947,
+      "auc": 0.7328401844537193
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T08:47:44.492959+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6832509643844125,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 10
+    },
+    "time_seconds": 839.0493276119232,
+    "test_metrics": {
+      "accuracy": 0.6598773006134969,
+      "f1": 0.5266393442622951,
+      "precision": 0.41518578352180935,
+      "recall": 0.7198879551820728,
+      "mcc": 0.316730289860535,
+      "auc": 0.7404795473449033
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T08:50:44.276978+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6402171157258038,
+    "best_params": {
+      "clf__n_estimators": 100,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.1
+    },
+    "time_seconds": 207.39002585411072,
+    "test_metrics": {
+      "accuracy": 0.683567825856119,
+      "f1": 0.5640087783467447,
+      "precision": 0.6032863849765259,
+      "recall": 0.529532967032967,
+      "mcc": 0.318985511279329,
+      "auc": 0.7435859791441791
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T08:52:55.577701+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6502807537677157,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 293.35552072525024,
+    "test_metrics": {
+      "accuracy": 0.7008229360233608,
+      "f1": 0.5882352941176471,
+      "precision": 0.6284153005464481,
+      "recall": 0.5528846153846154,
+      "mcc": 0.35659588415242927,
+      "auc": 0.7606579379080459
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T09:14:06.306847+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6804774902872675,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 847.5613758563995,
+    "test_metrics": {
+      "accuracy": 0.6716564417177914,
+      "f1": 0.5334728033472803,
+      "precision": 0.4257095158597663,
+      "recall": 0.7142857142857143,
+      "mcc": 0.32867575048358877,
+      "auc": 0.751597931671559
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T09:14:24.843784+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6662393074649308,
+    "best_params": {
+      "clf__n_estimators": 100,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.02,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 312.63972210884094,
+    "test_metrics": {
+      "accuracy": 0.6888770905229625,
+      "f1": 0.5672082717872969,
+      "precision": 0.6134185303514377,
+      "recall": 0.5274725274725275,
+      "mcc": 0.3287686523905166,
+      "auc": 0.7385390464144249
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T09:16:42.856276+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6753949334559195,
+    "best_params": {
+      "clf__n_estimators": 100,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.1,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 326.77334094047546,
+    "test_metrics": {
+      "accuracy": 0.715688877090523,
+      "f1": 0.6198083067092651,
+      "precision": 0.6414401175606171,
+      "recall": 0.5995879120879121,
+      "mcc": 0.39374018959827356,
+      "auc": 0.7797157407715607
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T09:20:22.451543+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7099253332583086,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 10
+    },
+    "time_seconds": 748.9398813247681,
+    "test_metrics": {
+      "accuracy": 0.6640490797546013,
+      "f1": 0.5542168674698795,
+      "precision": 0.4255,
+      "recall": 0.7945845004668534,
+      "mcc": 0.36284191965260837,
+      "auc": 0.7833548421587899
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T09:41:19.928692+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.7660160133653632,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        2,
+        3
+      ],
+      "vect__num__min_df": 10,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 100
+    },
+    "time_seconds": 4419.904597759247,
+    "test_metrics": {
+      "accuracy": 0.7590184049079755,
+      "f1": 0.6271829916476841,
+      "precision": 0.5284708893154191,
+      "recall": 0.7712418300653595,
+      "mcc": 0.4760586371749275,
+      "auc": 0.842303166273167
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T11:33:55.979500+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.7591269570445611,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        1,
+        3
+      ],
+      "vect__num__min_df": 5,
+      "prep__stopwords": true,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 200,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 10015.474554777145,
+    "test_metrics": {
+      "accuracy": 0.7873639500929122,
+      "f1": 0.7300303336703741,
+      "precision": 0.7167438782263402,
+      "recall": 0.7438186813186813,
+      "mcc": 0.5550005247323024,
+      "auc": 0.8543394349052073
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T12:54:25.689270+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": true
+    },
+    "best_score_cv": 0.7618211605093596,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        4,
+        4
+      ],
+      "vect__num__min_df": 10,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": true,
+      "clf__C": 1
+    },
+    "time_seconds": 3163.6998422145844,
+    "test_metrics": {
+      "accuracy": 0.7280529232969783,
+      "f1": 0.7083413231064237,
+      "precision": 0.7212026552128075,
+      "recall": 0.6959306706857573,
+      "mcc": 0.4540151423477841,
+      "auc": 0.8013075719740219
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T12:55:53.224585+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.7946793786348755,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": null,
+      "vect__num__ngram_range": [
+        1,
+        3
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": true,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 6,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 10517.01531791687,
+    "test_metrics": {
+      "accuracy": 0.7933742331288344,
+      "f1": 0.6733902249806051,
+      "precision": 0.5759787657597877,
+      "recall": 0.8104575163398693,
+      "mcc": 0.545009045011596,
+      "auc": 0.8817110954457238
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T13:19:41.127525+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6785577519343264,
+    "best_params": {
+      "clf__n_estimators": 200,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.02,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 246.87155604362488,
+    "test_metrics": {
+      "accuracy": 0.6596319018404908,
+      "f1": 0.5135040336723956,
+      "precision": 0.41123595505617977,
+      "recall": 0.6834733893557423,
+      "mcc": 0.2969450274076003,
+      "auc": 0.7464406312902436
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T13:21:53.880398+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6341495022741487,
+    "best_params": {
+      "clf__C": 1
+    },
+    "time_seconds": 3.999030590057373,
+    "test_metrics": {
+      "accuracy": 0.6484891829072055,
+      "f1": 0.612534489554592,
+      "precision": 0.6421487603305785,
+      "recall": 0.5855312735493594,
+      "mcc": 0.2931644340900557,
+      "auc": 0.6985410198271665
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T13:22:49.633697+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6902732660343647,
+    "best_params": {
+      "clf__n_estimators": 200,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.02,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 363.2271959781647,
+    "test_metrics": {
+      "accuracy": 0.6755828220858896,
+      "f1": 0.5396935933147632,
+      "precision": 0.4303164908384231,
+      "recall": 0.7236227824463118,
+      "mcc": 0.33864513742650715,
+      "auc": 0.7531486185241962
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T13:23:05.584484+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6539010639543047,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 6.6048314571380615,
+    "test_metrics": {
+      "accuracy": 0.6524226711961381,
+      "f1": 0.6182246661429693,
+      "precision": 0.645611156685808,
+      "recall": 0.5930670685757348,
+      "mcc": 0.3011860987841017,
+      "auc": 0.701985973011136
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T13:46:35.007396+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6970193245380819,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 375.07563757896423,
+    "test_metrics": {
+      "accuracy": 0.6714110429447853,
+      "f1": 0.536838464199239,
+      "precision": 0.42637362637362636,
+      "recall": 0.7245564892623716,
+      "mcc": 0.33381048476551384,
+      "auc": 0.764660191639905
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T13:50:11.350797+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.7089880944763397,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 426.0415644645691,
+    "test_metrics": {
+      "accuracy": 0.6974233128834356,
+      "f1": 0.5693328676213761,
+      "precision": 0.45479910714285715,
+      "recall": 0.7609710550887021,
+      "mcc": 0.3864098684212059,
+      "auc": 0.7944368604077228
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T13:50:18.187296+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6644103511868565,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 7.777903318405151,
+    "test_metrics": {
+      "accuracy": 0.655819774718398,
+      "f1": 0.6328437917222964,
+      "precision": 0.6407879490150638,
+      "recall": 0.6250941974378297,
+      "mcc": 0.3091111462910199,
+      "auc": 0.7095951003742771
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T13:51:13.573227+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6391055043119007,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 5.615079402923584,
+    "test_metrics": {
+      "accuracy": 0.6382978723404256,
+      "f1": 0.6364779874213836,
+      "precision": 0.6083819993129509,
+      "recall": 0.6672946495855313,
+      "mcc": 0.2792788183212144,
+      "auc": 0.6820573976815187
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T14:14:55.704433+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": true
+    },
+    "best_score_cv": 0.7542454908913455,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        4,
+        4
+      ],
+      "vect__num__min_df": 5,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": true,
+      "clf__C": 10
+    },
+    "time_seconds": 3211.112192630768,
+    "test_metrics": {
+      "accuracy": 0.7248346146969427,
+      "f1": 0.7072474795510748,
+      "precision": 0.7141759508259701,
+      "recall": 0.7004521477015825,
+      "mcc": 0.44779697019206344,
+      "auc": 0.7937571617616479
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T15:56:56.790801+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.7543472789156752,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": null,
+      "vect__num__ngram_range": [
+        4,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 250,
+      "clf__C": 1
+    },
+    "time_seconds": 4512.738656997681,
+    "test_metrics": {
+      "accuracy": 0.7162524584301806,
+      "f1": 0.6933333333333334,
+      "precision": 0.7116223720745736,
+      "recall": 0.6759608138658628,
+      "mcc": 0.4301333594200886,
+      "auc": 0.7823470604117432
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T16:28:22.595223+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6357967415342235,
+    "best_params": {
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 100
+    },
+    "time_seconds": 183.07666945457458,
+    "test_metrics": {
+      "accuracy": 0.6461648489182907,
+      "f1": 0.6109691370159229,
+      "precision": 0.6387176325524044,
+      "recall": 0.5855312735493594,
+      "mcc": 0.28852563958678634,
+      "auc": 0.6966851476120965
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T16:30:09.096301+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6559095969476131,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 237.3521022796631,
+    "test_metrics": {
+      "accuracy": 0.6527802610405864,
+      "f1": 0.6199608610567515,
+      "precision": 0.6449511400651465,
+      "recall": 0.5968349660889224,
+      "mcc": 0.3019924225413644,
+      "auc": 0.7012431625929186
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T17:01:05.256986+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6404371001224669,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 173.65549087524414,
+    "test_metrics": {
+      "accuracy": 0.6372251028070802,
+      "f1": 0.6335560772981759,
+      "precision": 0.608394033992369,
+      "recall": 0.6608892238131123,
+      "mcc": 0.2765177417323785,
+      "auc": 0.6812958695689519
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T17:03:00.501994+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6648975404104133,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 1
+    },
+    "time_seconds": 365.2264552116394,
+    "test_metrics": {
+      "accuracy": 0.6526014661183622,
+      "f1": 0.630678578217069,
+      "precision": 0.6363636363636364,
+      "recall": 0.6250941974378297,
+      "mcc": 0.3028385677514041,
+      "auc": 0.7086874204017228
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T17:58:21.495474+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.7531010364449194,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        3,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__solver": "sag",
+      "clf__penalty": null,
+      "clf__max_iter": 250,
+      "clf__C": 100
+    },
+    "time_seconds": 5593.913867235184,
+    "test_metrics": {
+      "accuracy": 0.7221526908635795,
+      "f1": 0.7072343632253203,
+      "precision": 0.7072343632253203,
+      "recall": 0.7072343632253203,
+      "mcc": 0.4428587252532209,
+      "auc": 0.8001588696358741
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T18:02:11.998026+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": true
+    },
+    "best_score_cv": 0.7902453419026839,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        1,
+        3
+      ],
+      "vect__num__min_df": 5,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 200,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.1,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 17211.70010328293,
+    "test_metrics": {
+      "accuracy": 0.7842944785276074,
+      "f1": 0.6643757159221076,
+      "precision": 0.562015503875969,
+      "recall": 0.8123249299719888,
+      "mcc": 0.5320075625390642,
+      "auc": 0.8775056849193295
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T19:44:45.141778+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.7446456973985819,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": null,
+      "vect__num__ngram_range": [
+        3,
+        4
+      ],
+      "vect__num__min_df": 5,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 200,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 100
+    },
+    "time_seconds": 4764.703020095825,
+    "test_metrics": {
+      "accuracy": 0.7579116753084213,
+      "f1": 0.7299561228560032,
+      "precision": 0.7754237288135594,
+      "recall": 0.6895252449133383,
+      "mcc": 0.5148406122764857,
+      "auc": 0.8322971508335912
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T19:48:19.701619+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.7604325860572928,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        3,
+        3
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__C": 1
+    },
+    "time_seconds": 4734.402066707611,
+    "test_metrics": {
+      "accuracy": 0.7654294803817603,
+      "f1": 0.7382867960246096,
+      "precision": 0.724907063197026,
+      "recall": 0.7521697203471552,
+      "mcc": 0.5261833490181921,
+      "auc": 0.8404398848073752
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T20:16:11.514535+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6483207954089454,
+    "best_params": {
+      "clf__C": 10
+    },
+    "time_seconds": 6.06926417350769,
+    "test_metrics": {
+      "accuracy": 0.6559915164369035,
+      "f1": 0.613441372735939,
+      "precision": 0.6065032987747409,
+      "recall": 0.6205400192864031,
+      "mcc": 0.3036820940392154,
+      "auc": 0.7094685212090186
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T20:17:07.776628+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6615418794965452,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 10.346654891967773,
+    "test_metrics": {
+      "accuracy": 0.6591728525980912,
+      "f1": 0.6161929782660616,
+      "precision": 0.6105063890203503,
+      "recall": 0.6219864995178399,
+      "mcc": 0.30978036310975976,
+      "auc": 0.7181275027686321
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T20:29:04.786489+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.5509796443287459,
+    "best_params": {
+      "clf__n_estimators": 100,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 974.5178301334381,
+    "test_metrics": {
+      "accuracy": 0.6679778294296442,
+      "f1": 0.6074825618262524,
+      "precision": 0.6918632643235436,
+      "recall": 0.5414468726450641,
+      "mcc": 0.33452695971989216,
+      "auc": 0.7278786339570257
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T20:33:36.865183+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.5557252975186002,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 1204.042643070221,
+    "test_metrics": {
+      "accuracy": 0.6742356517074916,
+      "f1": 0.6160977665402444,
+      "precision": 0.6988527724665392,
+      "recall": 0.5508666164280331,
+      "mcc": 0.3472711767453198,
+      "auc": 0.738114199986513
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T20:45:18.578634+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6618066925676197,
+    "best_params": {
+      "clf__C": 0.1
+    },
+    "time_seconds": 12.558718919754028,
+    "test_metrics": {
+      "accuracy": 0.6663838812301166,
+      "f1": 0.6208724993974452,
+      "precision": 0.620722891566265,
+      "recall": 0.6210221793635486,
+      "mcc": 0.3230123064702614,
+      "auc": 0.724397044309434
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T20:45:45.241969+00:00",
+    "mode": "embedding",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6473672408135945,
+    "best_params": {
+      "clf__C": 1
+    },
+    "time_seconds": 9.455630779266357,
+    "test_metrics": {
+      "accuracy": 0.6226935312831389,
+      "f1": 0.5970554926387316,
+      "precision": 0.5630072618539086,
+      "recall": 0.6354869816779171,
+      "mcc": 0.24633905733375866,
+      "auc": 0.6772795436695358
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T21:16:42.420680+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.5750992009795758,
+    "best_params": {
+      "clf__n_estimators": 200,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 1168.232223033905,
+    "test_metrics": {
+      "accuracy": 0.6733416770963705,
+      "f1": 0.6259979529170931,
+      "precision": 0.685342895562528,
+      "recall": 0.5761115297663904,
+      "mcc": 0.34392181252133724,
+      "auc": 0.7374158761432216
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T21:20:16.940797+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.5905447126221163,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 1115.758024930954,
+    "test_metrics": {
+      "accuracy": 0.7014124798855712,
+      "f1": 0.6605691056910569,
+      "precision": 0.7171226831421006,
+      "recall": 0.6122833458929917,
+      "mcc": 0.4009503839151658,
+      "auc": 0.7739685204277993
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T21:36:21.032366+00:00",
+    "mode": "sparse",
+    "algo": "LinearSVC",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.7509612443403454,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        3,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__C": 100
+    },
+    "time_seconds": 4831.165296792984,
+    "test_metrics": {
+      "accuracy": 0.7546129374337222,
+      "f1": 0.7230069427819009,
+      "precision": 0.7180218735140276,
+      "recall": 0.7280617164898746,
+      "mcc": 0.5028099596823902,
+      "auc": 0.8344717617775037
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T21:47:50.393454+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.7587079069004726,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        2,
+        3
+      ],
+      "vect__num__min_df": 10,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 100
+    },
+    "time_seconds": 5731.747074365616,
+    "test_metrics": {
+      "accuracy": 0.774897192919721,
+      "f1": 0.7365557648043524,
+      "precision": 0.8282352941176471,
+      "recall": 0.6631499623210249,
+      "mcc": 0.5544804164806177,
+      "auc": 0.8536523734421045
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-08T23:50:33.171329+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.7535750015726687,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": null,
+      "vect__num__ngram_range": [
+        3,
+        4
+      ],
+      "vect__num__min_df": 5,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__solver": "sag",
+      "clf__penalty": null,
+      "clf__max_iter": 100,
+      "clf__C": 1
+    },
+    "time_seconds": 6416.294316291809,
+    "test_metrics": {
+      "accuracy": 0.7628844114528102,
+      "f1": 0.7338095238095238,
+      "precision": 0.7248353715898401,
+      "recall": 0.7430086788813887,
+      "mcc": 0.5202314795707323,
+      "auc": 0.8341455141221237
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T00:22:31.889472+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.647083397872594,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 230.17859554290771,
+    "test_metrics": {
+      "accuracy": 0.6534464475079533,
+      "f1": 0.6105815061963775,
+      "precision": 0.6036757775683318,
+      "recall": 0.6176470588235294,
+      "mcc": 0.29852897206094353,
+      "auc": 0.7078272417339944
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T00:23:49.968022+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6608631176573496,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 1
+    },
+    "time_seconds": 262.8575026988983,
+    "test_metrics": {
+      "accuracy": 0.6629904559915164,
+      "f1": 0.6213962354062426,
+      "precision": 0.6142251530852567,
+      "recall": 0.6287367405978785,
+      "mcc": 0.31789124344652975,
+      "auc": 0.7175746891701479
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T00:56:30.522723+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6480391515809366,
+    "best_params": {
+      "clf__solver": "lbfgs",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 252.25204801559448,
+    "test_metrics": {
+      "accuracy": 0.6260869565217392,
+      "f1": 0.5977640885238421,
+      "precision": 0.5673451710697271,
+      "recall": 0.6316297010607522,
+      "mcc": 0.251578498933768,
+      "auc": 0.6771353155510408
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T00:57:13.238852+00:00",
+    "mode": "embedding",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6621593242146253,
+    "best_params": {
+      "clf__solver": "sag",
+      "clf__penalty": "l2",
+      "clf__max_iter": 100,
+      "clf__C": 0.1
+    },
+    "time_seconds": 368.3663082122803,
+    "test_metrics": {
+      "accuracy": 0.6655355249204666,
+      "f1": 0.6200915442062154,
+      "precision": 0.6196437168993741,
+      "recall": 0.6205400192864031,
+      "mcc": 0.3213612705068563,
+      "auc": 0.7235933833251118
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T01:50:40.849797+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.806536650759821,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        1,
+        2
+      ],
+      "vect__num__min_df": 5,
+      "prep__stopwords": true,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.1,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 12961.091747522354,
+    "test_metrics": {
+      "accuracy": 0.8113713570534596,
+      "f1": 0.7980088071989279,
+      "precision": 0.8112105877773452,
+      "recall": 0.7852298417483045,
+      "mcc": 0.6214618568346177,
+      "auc": 0.89243184643901
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T02:03:52.140271+00:00",
+    "mode": "sparse",
+    "algo": "LogisticRegression",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.7507711976137929,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        3,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__solver": "sag",
+      "clf__penalty": null,
+      "clf__max_iter": 250,
+      "clf__C": 100
+    },
+    "time_seconds": 6333.235505580902,
+    "test_metrics": {
+      "accuracy": 0.7582184517497349,
+      "f1": 0.727663640707119,
+      "precision": 0.7211174242424242,
+      "recall": 0.7343297974927676,
+      "mcc": 0.5103725473309415,
+      "auc": 0.837682571802782
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T02:22:27.413718+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6404655303660555,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 258.6638147830963,
+    "test_metrics": {
+      "accuracy": 0.6869300911854104,
+      "f1": 0.6537472809966384,
+      "precision": 0.6878901373283396,
+      "recall": 0.6228334589299171,
+      "mcc": 0.37085679387114723,
+      "auc": 0.7521519579349305
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T02:25:13.776260+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6489424834977479,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 377.68388199806213,
+    "test_metrics": {
+      "accuracy": 0.6942606829966029,
+      "f1": 0.6643109540636042,
+      "precision": 0.6934426229508197,
+      "recall": 0.6375282592313489,
+      "mcc": 0.38566898818710194,
+      "auc": 0.7613847811811787
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T02:57:06.515440+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.670111620992074,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.1,
+      "clf__gamma": 0.1
+    },
+    "time_seconds": 379.47412848472595,
+    "test_metrics": {
+      "accuracy": 0.701233684963347,
+      "f1": 0.6725455614344503,
+      "precision": 0.7006941608819927,
+      "recall": 0.6465712132629993,
+      "mcc": 0.3997489843922951,
+      "auc": 0.7703551720963792
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T03:00:38.995771+00:00",
+    "mode": "embedding",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6771805103460337,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_depth": 6,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 427.0314362049103,
+    "test_metrics": {
+      "accuracy": 0.711424995530127,
+      "f1": 0.6839012925969448,
+      "precision": 0.7120717781402937,
+      "recall": 0.6578749058025621,
+      "mcc": 0.42031604240606507,
+      "auc": 0.7839390259568266
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T04:34:30.653593+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.7688602341610653,
+    "best_params": {
+      "vect__num__use_idf": false,
+      "vect__num__norm": null,
+      "vect__num__ngram_range": [
+        2,
+        4
+      ],
+      "vect__num__min_df": 5,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 200,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": null
+    },
+    "time_seconds": 7387.259040355682,
+    "test_metrics": {
+      "accuracy": 0.7817603393425239,
+      "f1": 0.7404791929382093,
+      "precision": 0.7763088313061872,
+      "recall": 0.7078109932497589,
+      "mcc": 0.5546373458634782,
+      "auc": 0.8663178780428938
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T05:26:54.456328+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Law2Vec",
+    "embedding": "law2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6418251356521375,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 1473.4508271217346,
+    "test_metrics": {
+      "accuracy": 0.6769883351007423,
+      "f1": 0.6236718556955769,
+      "precision": 0.639635073492144,
+      "recall": 0.6084860173577628,
+      "mcc": 0.3413787832259686,
+      "auc": 0.7433767344344085
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T05:32:23.532000+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Word2Vec",
+    "embedding": "word2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6395521763816849,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 1758.4871716499329,
+    "test_metrics": {
+      "accuracy": 0.6757158006362672,
+      "f1": 0.6128133704735376,
+      "precision": 0.6453333333333333,
+      "recall": 0.583413693346191,
+      "mcc": 0.3363280664549065,
+      "auc": 0.7369484506796431
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T06:25:13.714491+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Patent2Vec",
+    "embedding": "patent2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6464904970371602,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 1757.9638121128082,
+    "test_metrics": {
+      "accuracy": 0.6837751855779427,
+      "f1": 0.619545802500638,
+      "precision": 0.6579945799457995,
+      "recall": 0.5853423336547734,
+      "mcc": 0.35232989691430683,
+      "auc": 0.7516664737539512
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T06:27:33.151015+00:00",
+    "mode": "embedding",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "Doc2Vec",
+    "embedding": "doc2vec",
+    "preprocess": {},
+    "best_score_cv": 0.6945051263195609,
+    "best_params": {
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 50
+    },
+    "time_seconds": 1597.575944185257,
+    "test_metrics": {
+      "accuracy": 0.687592788971368,
+      "f1": 0.6508651339179901,
+      "precision": 0.6400932400932401,
+      "recall": 0.6620057859209257,
+      "mcc": 0.36850953933798075,
+      "auc": 0.7607007222725094
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T07:28:45.694069+00:00",
+    "mode": "sparse",
+    "algo": "RandomForestClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.7755198598762306,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        2,
+        3
+      ],
+      "vect__num__min_df": 10,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 300,
+      "clf__max_features": "sqrt",
+      "clf__max_depth": 100
+    },
+    "time_seconds": 8812.70408987999,
+    "test_metrics": {
+      "accuracy": 0.7887592788971368,
+      "f1": 0.7473363774733638,
+      "precision": 0.788543897216274,
+      "recall": 0.710221793635487,
+      "mcc": 0.5689889572036391,
+      "auc": 0.8717218683054876
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-09T08:30:40.084829+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": true,
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.8062276012411562,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        1,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 22356.596869707108,
+    "test_metrics": {
+      "accuracy": 0.8101197925978902,
+      "f1": 0.7932242990654206,
+      "precision": 0.8207091055600322,
+      "recall": 0.7675207234363225,
+      "mcc": 0.6192366956192573,
+      "auc": 0.8910223784138318
+    }
+  }
+]

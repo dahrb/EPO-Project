@@ -3,7 +3,7 @@ name = "epo-project"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11, <3.14"
 dependencies = [
     "gensim>=4.4.0",
     "ipykernel>=7.0.1",
@@ -15,6 +15,9 @@ dependencies = [
     "seaborn>=0.13.2",
     "setuptools>=80.9.0",
     "spacy[cuda12x]>=3.8.7",
+    "torch>=2.11.0",
+    "torchvision>=0.26.0",
+    "transformers>=5.5.0",
     "wheel>=0.45.1",
     "xgboost>=3.1.1",
 ]
@@ -23,3 +26,12 @@ dependencies = [
 dev = [
     "ipykernel>=7.0.1",
 ]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
+torchvision = { index = "pytorch-cu128" }

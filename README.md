@@ -99,6 +99,36 @@ python Experiments/PatentEmbeddings.py --config configs/embedding_config.yaml
 
 You can adjust hyperparameters and model settings in the config file or via command-line arguments.
 
+## Experiment Runners
+
+The project includes lightweight CLI entrypoints for experiment execution.
+
+### Flat CV experiments
+
+Use `Experiments/run_experiment.py` to run the new flat experiment workflow on
+pre-generated train/test pickle files.
+
+```bash
+python Experiments/run_experiment.py \
+	linear 1 false N-Gram \
+	Data/Final_Processed/X_Train_1_pf.pkl \
+	Data/Final_Processed/y_Train_1_pf.pkl \
+	Data/Final_Processed/X_test_1_pf.pkl \
+	Data/Final_Processed/y_test_1_pf.pkl \
+	false
+```
+
+- `model`: `linear`, `logistic`, `forest`, or `xgboost`
+- `experiment`: usually `1` or `2`
+- `opposition`: `true` or `false`
+- `input_representation`: e.g. `N-Gram`, `TF-IDF`, `Word2Vec`
+- final boolean: `true` runs the embedding path, `false` runs the sparse path
+
+### Nested CV experiments
+
+The older nested runner remains available via `run_nested.py` and follows the
+same minimal positional-argument style.
+
 ## Reproducibility
 
 - All experiments are designed to be reproducible with fixed random seeds.

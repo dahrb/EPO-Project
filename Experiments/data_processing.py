@@ -19,7 +19,7 @@ Pipeline:
 Outputs (saved to ../Data/):
     - EPO_Data.pkl                          : full cleaned dataset (all case types)
     - Train&TestData_1.0_PatentRefusal.pkl  : Patent Refusal cases with Outcome
-    - Train&TestData_2.0_OppositionDivision : Opposition Division cases with Outcome
+    - Train&TestData_1.0_OppositionDivision.pkl : Opposition Division cases with Outcome
 
 Last Updated: 02.04.26
 
@@ -490,12 +490,14 @@ def _get_opposition_subclass(doc, matcher, nlp):
     return "Other"
 
 
-def classify_opposition_subcases(df: pd.DataFrame, nlp) -> pd.DataFrame:
+def classify_opposition_subcases(df: pd.DataFrame, nlp) -> pd.Series:
     """
     Sub-classify Opposition Division cases by appellant type.
-    Overwrites the 'Matches' column for OD rows only:
-      '1' = Patentee, '2' = Opponent, '3' = Both, 'Other' = unclassified.
-    Uses the existing 'nlp' column (spaCy docs from step 4).
+        Returns a Series indexed by the original DataFrame index for OD rows only:
+            '1' = Patentee, '2' = Opponent, '3' = Both, 'Other' = unclassified.
+        This keeps the full EPO_Data 'Matches' labels unchanged (i.e. stays
+        'Opposition Division' in the full dataset), while still enabling subclass
+        labels in the dedicated OppositionDivision output file.
     """
     print("[6/8] Sub-classifying Opposition Division cases …")
 
@@ -509,12 +511,12 @@ def classify_opposition_subcases(df: pd.DataFrame, nlp) -> pd.DataFrame:
         doc = df.at[idx, "nlp"]
         subcats.append(_get_opposition_subclass(doc, matcher, nlp))
 
-    df.loc[od_idx, "Matches"] = subcats
+    od_subcats = pd.Series(subcats, index=od_idx, name="Matches")
 
     print("       Opposition Division sub-classification:")
-    for k, v in df.loc[od_idx, "Matches"].value_counts().items():
+    for k, v in od_subcats.value_counts().items():
         print(f"         {k:25s} {v:>6,}")
-    return df
+    return od_subcats
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -581,7 +583,7 @@ def _extract_outcomes_for_subset(df_subset: pd.DataFrame, nlp, matcher, label: s
     return subset
 
 
-def extract_outcomes(df: pd.DataFrame, nlp, od_indices) -> tuple:
+def extract_outcomes(df: pd.DataFrame, nlp, od_indices, od_subcats: pd.Series) -> tuple:
     """
     Extract outcomes separately for Patent Refusal and Opposition Division.
     
@@ -589,8 +591,9 @@ def extract_outcomes(df: pd.DataFrame, nlp, od_indices) -> tuple:
     ----------
     df : full DataFrame (Matches already sub-classified for OD)
     nlp : spaCy Language model
-    od_indices : pandas Index of rows that were originally Opposition Division
-                 (captured before sub-classification overwrote Matches)
+    od_indices : pandas Index of rows that were originally Opposition Division.
+    od_subcats : pandas Series of OD sub-class labels ('1'/'2'/'3'/'Other')
+                 indexed by original row index.
 
     Returns (pr_subset, od_subset).
     """
@@ -604,6 +607,7 @@ def extract_outcomes(df: pd.DataFrame, nlp, od_indices) -> tuple:
 
     # Opposition Division subset
     od_df = _extract_outcomes_for_subset(df.loc[od_indices], nlp, matcher, "Opposition Division")
+    od_df.loc[od_subcats.index, "Matches"] = od_subcats
 
     return pr_df, od_df
 
@@ -617,7 +621,7 @@ def save_outputs(df: pd.DataFrame, pr_df: pd.DataFrame, od_df: pd.DataFrame) -> 
     Save:
       1. EPO_Data.pkl — full cleaned dataset (nlp column dropped to save memory)
       2. Train&TestData_1.0_PatentRefusal.pkl — Patent Refusal with known Outcome
-      3. Train&TestData_1.0_OppositionDivision — Opposition Division with Outcome
+      3. Train&TestData_1.0_OppositionDivision.pkl — Opposition Division with Outcome
     """
     print("[8/8] Saving outputs …")
 
@@ -639,9 +643,9 @@ def save_outputs(df: pd.DataFrame, pr_df: pd.DataFrame, od_df: pd.DataFrame) -> 
 
     # ── Opposition Division with Outcome ──
     od_save = od_df.drop(columns=["nlp"], errors="ignore")
-    od_path = os.path.join(DATA_DIR, "Train&TestData_1.0_OppositionDivision")
+    od_path = os.path.join(DATA_DIR, "Train&TestData_1.0_OppositionDivision.pkl")
     od_save.to_pickle(od_path)
-    print(f"       Saved Train&TestData_1.0_OppositionDivision  ({len(od_save):,} rows)")
+    print(f"       Saved Train&TestData_1.0_OppositionDivision.pkl  ({len(od_save):,} rows)")
     od_binary = od_save[od_save["Outcome"] != "Unknown"]
     print(f"         With known outcome: {len(od_binary):,}")
     print(f"         Affirmed: {(od_binary['Outcome'] == 'Affirmed').sum():,}")
@@ -676,12 +680,12 @@ def main():
     df = preprocess_text(df)
 
     #6. Sub-classify Opposition Division by appellant type
-    #keep track of opposition division cases 
+    # keep track of opposition division cases
     od_indices = df.index[df["Matches"] == "Opposition Division"]
-    df = classify_opposition_subcases(df, nlp)
+    od_subcats = classify_opposition_subcases(df, nlp)
 
     #7. Extract outcomes (per subset: PR and OD separately)
-    pr_df, od_df = extract_outcomes(df, nlp, od_indices)
+    pr_df, od_df = extract_outcomes(df, nlp, od_indices, od_subcats)
 
     #8. Save
     save_outputs(df, pr_df, od_df)

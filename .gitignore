@@ -3,6 +3,7 @@
 *.sh
 *.pkl
 *.out
+*.zip
 Models/Patent2Vec_1.0
 Models/Patent2Vec_1.0.syn1neg.npy
 Models/Patent2Vec_1.0.wv.vectors.npy
@@ -12,3 +13,6 @@ Models/Doc2Vec_1.0.wv.vectors.npy
 Models/Law2Vec.200d.txt
 Models/Word2Vec-google-300d
 Models/Word2Vec-google-300d.vectors.npy
+Results/grid_logs
+Experiments/__pycache__
+Utilities/__pycache__

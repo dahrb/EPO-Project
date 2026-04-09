@@ -9,6 +9,8 @@ Status: Done
 import spacy
 import pandas as pd
 import numpy as np
+import os
+from pathlib import Path
 
 from gensim.models import KeyedVectors
 from gensim.models.doc2vec import Doc2Vec
@@ -17,6 +19,114 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
+
+
+_EMBEDDING_MODEL_CACHE = {}
+_EMBEDDING_WORDS_CACHE = {}
+_SPACY_NLP_CACHE = None
+_SPACY_RULER_CONFIGURED = False
+
+
+def _load_text_embeddings_robust(path: Path):
+    """Load text-format embeddings while skipping malformed rows.
+
+    Expected format: first line '<vocab_size> <vector_dim>', then one token per line
+    with exactly vector_dim float values.
+    """
+    with path.open("r", encoding="utf-8", errors="ignore") as file_handle:
+        header = file_handle.readline().strip().split()
+        if len(header) != 2:
+            raise ValueError(f"Invalid embedding header in {path}")
+
+        try:
+            vector_dim = int(header[1])
+        except ValueError as exc:
+            raise ValueError(f"Invalid vector dimension in header for {path}") from exc
+
+        words = []
+        vectors = []
+
+        for line_number, raw_line in enumerate(file_handle, start=2):
+            parts = raw_line.strip().split()
+            if not parts:
+                continue
+
+            if len(parts) != vector_dim + 1:
+                continue
+
+            token = parts[0]
+            try:
+                values = np.asarray(parts[1:], dtype=np.float32)
+            except ValueError:
+                continue
+
+            if values.shape[0] != vector_dim:
+                continue
+
+            words.append(token)
+            vectors.append(values)
+
+    if not vectors:
+        raise ValueError(f"No valid vectors found in {path}")
+
+    keyed_vectors = KeyedVectors(vector_size=vector_dim)
+    keyed_vectors.add_vectors(words, np.vstack(vectors))
+    return keyed_vectors
+
+
+def _get_cached_embedding(embedding: str):
+    """Load embedding model once per process and reuse it across instances."""
+    if embedding in _EMBEDDING_MODEL_CACHE:
+        return _EMBEDDING_MODEL_CACHE[embedding], _EMBEDDING_WORDS_CACHE.get(embedding)
+
+    # Determine model directory (works from any working directory)
+    model_dir = Path(__file__).parent.parent / "Models"
+
+    def _load_kv_safe(path: Path):
+        try:
+            return KeyedVectors.load(str(path), mmap='r')
+        except ValueError:
+            return KeyedVectors.load(str(path), mmap=None)
+
+    if embedding == 'word2vec':
+        path = model_dir / "Word2Vec-google-300d"
+        model = _load_kv_safe(path)
+        words = set(model.index_to_key)
+    elif embedding == 'law2vec':
+        path = model_dir / "Law2Vec.200d.txt"
+        model = _load_text_embeddings_robust(path)
+        words = set(model.index_to_key)
+    elif embedding == 'patent2vec':
+        path = model_dir / "Patent2Vec_1.0"
+        model = _load_kv_safe(path)
+        words = set(model.wv.index_to_key)
+    elif embedding == 'doc2vec':
+        path = model_dir / "Doc2Vec_1.0"
+        model = Doc2Vec.load(str(path))
+        words = None
+    else:
+        raise ValueError(f"Unsupported embedding: {embedding}")
+
+    _EMBEDDING_MODEL_CACHE[embedding] = model
+    _EMBEDDING_WORDS_CACHE[embedding] = words
+    return model, words
+
+
+def _get_cached_spacy_nlp():
+    """Load spaCy model once per process and reuse it across TextProcess instances."""
+    global _SPACY_NLP_CACHE, _SPACY_RULER_CONFIGURED
+
+    if _SPACY_NLP_CACHE is None:
+        _SPACY_NLP_CACHE = spacy.load('en_core_web_sm', disable=["parser", "ner"])
+
+    if not _SPACY_RULER_CONFIGURED:
+        ruler = _SPACY_NLP_CACHE.get_pipe("attribute_ruler")
+        patterns = [[{"TAG": {"IN": ["NNP", "NNPS"]}}]]
+        attrs = {"POS": "NOUN"}
+        ruler.add(patterns=patterns, attrs=attrs)
+        _SPACY_RULER_CONFIGURED = True
+
+    return _SPACY_NLP_CACHE
 
 class PatentExtract:
     """
@@ -242,14 +352,7 @@ class TextProcess(BaseEstimator, TransformerMixin):
     """  
     
     def __init__(self, stopwords=False, numbers=False, lemmatisation=False):
-        
-        self.nlp = spacy.load('en_core_web_sm',disable=["parser", "ner"])
-
-        #lemma for proper nouns
-        ruler = self.nlp.get_pipe("attribute_ruler")
-        patterns = [[{"TAG": {"IN": ["NNP", "NNPS"]}}]]
-        attrs = {"POS": "NOUN"}
-        ruler.add(patterns=patterns, attrs=attrs)
+        self.nlp = _get_cached_spacy_nlp()
         
         self.stopwords = stopwords
         self.numbers = numbers
@@ -284,21 +387,7 @@ class Word2VecTransform(BaseEstimator, TransformerMixin):
 
         self.embedding = embedding
         self.opposition = opposition
-
-        if self.embedding == 'word2vec':
-            self.word2vec = KeyedVectors.load("Word2Vec-google-300d", mmap='r')
-            self.words = set(self.word2vec.index_to_key)
-
-        elif self.embedding == 'law2vec':
-            self.word2vec = KeyedVectors.load_word2vec_format('Law2Vec.200d.txt', binary=False)
-            self.words = set(self.word2vec.index_to_key)
-
-        elif self.embedding == 'patent2vec':
-            self.word2vec = KeyedVectors.load("Patent2Vec_1.0", mmap='r')
-            self.words = set(self.word2vec.wv.index_to_key)
-
-        elif self.embedding == 'doc2vec':
-            self.word2vec = Doc2Vec.load('Doc2Vec_1.0')
+        self.word2vec, self.words = _get_cached_embedding(self.embedding)
 
     def fit(self, X, y=None):
         return self
@@ -318,3 +407,27 @@ class Word2VecTransform(BaseEstimator, TransformerMixin):
             return pd.DataFrame(vecs)
         else:
             return vecs 
+
+
+# ---------------------------------------------------------------------------
+# Shared CLI helpers (used by run_experiment.py and run_deep_learning_experiment.py)
+# ---------------------------------------------------------------------------
+
+def parse_bool(value):
+    """Parse a boolean from a string argument.
+
+    Accepts: true, 1, yes, y, t  →  True
+             anything else       →  False
+    """
+    if isinstance(value, bool):
+        return value
+    return str(value).strip().lower() in {"true", "1", "yes", "y", "t"}
+
+
+def to_numpy_labels(y):
+    """Convert a label array-like to a 1-D NumPy array."""
+    if isinstance(y, pd.DataFrame):
+        return y.iloc[:, 0].to_numpy()
+    if isinstance(y, pd.Series):
+        return y.to_numpy()
+    return np.asarray(y).reshape(-1)
