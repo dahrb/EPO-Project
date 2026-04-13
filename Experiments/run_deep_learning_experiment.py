@@ -1,13 +1,12 @@
 """CLI runner for EPO experiments (DL)
 
-One model per invocation — the shell script loops over models, mirroring how
-run_experiment.py is called once per word embedding.
+Runs the DL experiments for each model
 
 Usage
 -----
 python run_deep_learning_experiment.py MODEL EXPERIMENT OPPOSITION \
         X_TRAIN Y_TRAIN X_TEST Y_TEST \
-        [--cv_num 3] [--repeat 1] \
+        [--n_trials 10] [--timeout SECONDS] \
         [--results_path path/to/results.json]
 
 Arguments
@@ -15,9 +14,6 @@ Arguments
 - `MODEL`: transformer model identifier:
     legalbert        — nlpaueb/legal-bert-base-uncased   (512 tokens)
     longformer_base  — lexlms/legal-longformer-base      (4096 tokens)
-    longformer_large — lexlms/legal-longformer-large     (4096 tokens)
-    roberta_base     — lexlms/legal-roberta-base         (512 tokens)
-    roberta_large    — lexlms/legal-roberta-large        (512 tokens)
 - `EXPERIMENT`: experiment identifier, `1` or `2`
 - `OPPOSITION`: boolean string such as `true` or `false`; enables structured
   auxiliary feature fusion (encoder CLS token + one-hot encoded columns)
@@ -25,21 +21,20 @@ Arguments
 
 Optional
 --------
-- `--cv_num`: number of CV splits (default: 3)
-- `--repeat`: number of CV repeats, Exp 1 only (default: 1)
-- `--n_iter`: number of random hyperparameter combos to sample (default: 10)
+- `--n_trials`: number of Optuna trials (default: 10)
+- `--timeout`: wall-clock budget in seconds (default: None)
 - `--results_path`: path to output JSON; default:
   <project_root>/Results/results_deep_learning.json
 
-Last Updated: 09.04.26
+Last Updated: 13.04.26
 
 Status: Done
 """
 
 import argparse
+import re
 import sys
 from pathlib import Path
-
 import pandas as pd
 import torch
 
@@ -54,11 +49,13 @@ DEFAULT_RESULTS_PATH = PROJECT_ROOT / "Results" / "results_deep_learning.json"
 ALL_MODELS = [
     "legalbert",
     "longformer_base",
-    "longformer_large",
-    "roberta_base",
-    "roberta_large",
 ]
 
+def infer_case_mode(path: str) -> str:
+    """Infer dataset case mode (pf/op/both) from input filename."""
+    name = Path(path).name.lower()
+    match = re.search(r"_(pf|op|both)\.pkl$", name)
+    return match.group(1) if match else "unknown"
 
 def build_parser():
     """Build argument parser."""
@@ -77,22 +74,16 @@ def build_parser():
     parser.add_argument("y_test", help="Path to y_test pickle file")
     # Optional args
     parser.add_argument(
-        "--cv_num",
-        type=int,
-        default=3,
-        help="Number of CV splits (default: 3)",
-    )
-    parser.add_argument(
-        "--repeat",
-        type=int,
-        default=1,
-        help="CV repeats for Exp 1 RepeatedStratifiedKFold (default: 1)",
-    )
-    parser.add_argument(
-        "--n_iter",
+        "--n_trials",
         type=int,
         default=10,
-        help="Number of random hyperparameter combos to sample (default: 10)",
+        help="Number of Optuna trials (default: 10)",
+    )
+    parser.add_argument(
+        "--timeout",
+        type=int,
+        default=None,
+        help="Wall-clock budget in seconds; study stops at n_trials or timeout, whichever comes first (default: None)",
     )
     parser.add_argument(
         "--results_path",
@@ -102,37 +93,34 @@ def build_parser():
     )
     return parser
 
-
 def main():
     """Main entry point."""
     args = build_parser().parse_args()
+    case_mode = infer_case_mode(args.x_train)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
     print(f"Model: {args.model}")
-    print(f"CV: cv_num={args.cv_num}, repeat={args.repeat}, n_iter={args.n_iter}")
+    print(f"Case mode: {case_mode}")
+    print(f"Optuna: n_trials={args.n_trials}, timeout={args.timeout}")
     print(f"Results → {args.results_path}")
 
     exp = DeepLearningExperiments(
         model_name=args.model,
         experiment=args.experiment,
         opposition=parse_bool(args.opposition),
+        case_mode=case_mode,
         device=device,
-        cv_num=args.cv_num,
-        repeat=args.repeat,
-        n_iter=args.n_iter,
+        n_trials=args.n_trials,
+        timeout=args.timeout,
         results_json_path=str(args.results_path),
     )
 
     X_train = pd.read_pickle(args.x_train)
     y_train = pd.read_pickle(args.y_train)
-    X_test = pd.read_pickle(args.x_test)
-    y_test = pd.read_pickle(args.y_test)
 
     y_train = to_numpy_labels(y_train)
-    y_test = to_numpy_labels(y_test)
-
-    results = exp.training_loop(X_train, y_train, X_test=X_test, y_test=y_test)
+    results = exp.training_loop(X_train, y_train)
 
     print(f"\n{'='*60}")
     print(f"Completed {len(results)} run(s)")
@@ -142,4 +130,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

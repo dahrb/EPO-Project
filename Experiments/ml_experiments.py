@@ -78,6 +78,7 @@ class Experiments:
         models=None,
         experiment="1",
         opposition=False,
+        case_mode=None,
         cv_num=3,
         num_iter=50,
         use_embeddings=False,
@@ -89,6 +90,7 @@ class Experiments:
         self.models = models or []
         self.experiment = experiment
         self.opposition = opposition
+        self.case_mode = (case_mode or "unknown").lower()
         self.num_iter = num_iter
         self.use_embeddings = use_embeddings
         self.no_grid = no_grid
@@ -326,6 +328,7 @@ class Experiments:
             "algo": clf_name,
             "experiment": self.experiment,
             "opposition": self.opposition,
+            "case_mode": self.case_mode,
             "input_representation": self.input_name,
             "preprocess": preprocess,
             "best_score_cv": search.best_score_,
@@ -456,6 +459,7 @@ class Experiments:
                 "algo": clf_name,
                 "experiment": self.experiment,
                 "opposition": self.opposition,
+                "case_mode": self.case_mode,
                 "input_representation": self.input_representation,
                 "embedding": embedding,
                 "preprocess": {},

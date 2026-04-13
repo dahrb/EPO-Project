@@ -20,6 +20,7 @@ Status: Done
 """
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -31,6 +32,13 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from Experiments.ml_experiments import Experiments
 from Utilities.utils import parse_bool, to_numpy_labels
+
+
+def infer_case_mode(path: str) -> str:
+    """Infer dataset case mode (pf/op/both) from input filename."""
+    name = Path(path).name.lower()
+    match = re.search(r"_(pf|op|both)\.pkl$", name)
+    return match.group(1) if match else "unknown"
 
 
 def build_parser():
@@ -57,11 +65,13 @@ def main():
     args = build_parser().parse_args()
 
     results_json_path = str(PROJECT_ROOT / "Results" / "results_main.json")
+    case_mode = infer_case_mode(args.x_train)
 
     exp = Experiments(
         [args.model],
         experiment=args.experiment,
         opposition=parse_bool(args.opposition),
+        case_mode=case_mode,
         input_representation=args.input_representation,
         results_json_path=results_json_path,
     )

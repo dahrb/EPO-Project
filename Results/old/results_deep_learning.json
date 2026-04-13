@@ -1,0 +1,31 @@
+[
+  {
+    "timestamp_utc": "2026-04-11T21:15:11.294976+00:00",
+    "mode": "deep_learning",
+    "algo": "legalbert",
+    "model_name": "nlpaueb/legal-bert-base-uncased",
+    "experiment": "1",
+    "cv_strategy": "RepeatedStratifiedKFold",
+    "opposition": false,
+    "input_representation": "legalbert",
+    "best_score_cv": 0.8431901774057783,
+    "best_params": {
+      "learning_rate": 2.4282165869782152e-05,
+      "batch_size": 16.0,
+      "epochs": 10.0,
+      "dropout": 0.1,
+      "weight_decay": 0.0,
+      "warmup_steps": 500.0
+    },
+    "time_seconds": 28871.5584127903,
+    "test_metrics": {
+      "accuracy": 0.8417699115044248,
+      "f1": 0.8867494299467951,
+      "precision": 0.9449244060475162,
+      "recall": 0.8353221957040573,
+      "mcc": 0.6408165410505754,
+      "auc": 0.9184895543858502
+    },
+    "max_context_length": 512
+  }
+]

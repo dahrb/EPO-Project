@@ -1,0 +1,28 @@
+[
+  {
+    "timestamp_utc": "2026-04-13T10:16:46.057966+00:00",
+    "mode": "deep_learning",
+    "algo": "hbert",
+    "model_name": "nlpaueb/legal-bert-base-uncased",
+    "experiment": "1",
+    "val_strategy": "stratified_random",
+    "val_ratio": 0.2,
+    "opposition": false,
+    "case_mode": "pf",
+    "input_representation": "hbert",
+    "best_score_val": 0.6662468513853904,
+    "best_epoch": 1,
+    "best_params": {
+      "learning_rate": 1.827226177606625e-05,
+      "batch_size": 8.0,
+      "epochs": 1.0,
+      "dropout": 0.2,
+      "weight_decay": 0.0
+    },
+    "time_seconds": 4435.192707061768,
+    "test_metrics": null,
+    "architecture": "hierarchical_bert",
+    "chunk_size": 128,
+    "max_chunks": 64
+  }
+]

@@ -1,0 +1,66 @@
+[
+  {
+    "timestamp_utc": "2026-04-12T03:07:00.932097+00:00",
+    "mode": "deep_learning",
+    "algo": "hbert",
+    "model_name": "nlpaueb/legal-bert-base-uncased",
+    "experiment": "1",
+    "cv_strategy": "RepeatedStratifiedKFold",
+    "opposition": false,
+    "input_representation": "hbert",
+    "best_score_cv": 0.6465790577777457,
+    "best_params": {
+      "learning_rate": 1.827226177606625e-05,
+      "batch_size": 8.0,
+      "epochs": 10.0,
+      "dropout": 0.2,
+      "weight_decay": 0.01,
+      "warmup_steps": 0.0
+    },
+    "time_seconds": 9154.095234155655,
+    "test_metrics": {
+      "accuracy": 0.6145132743362832,
+      "f1": 0.6929799830842965,
+      "precision": 0.8464187327823691,
+      "recall": 0.5866348448687351,
+      "mcc": 0.24625286105860544,
+      "auc": 0.6966819236930721
+    },
+    "architecture": "hierarchical_bert",
+    "chunk_size": 128,
+    "max_chunks": 64,
+    "accum_steps": 4
+  },
+  {
+    "timestamp_utc": "2026-04-12T07:50:37.909307+00:00",
+    "mode": "deep_learning",
+    "algo": "hbert",
+    "model_name": "nlpaueb/legal-bert-base-uncased",
+    "experiment": "1",
+    "cv_strategy": "RepeatedStratifiedKFold",
+    "opposition": true,
+    "input_representation": "hbert",
+    "best_score_cv": 0.6179599196668002,
+    "best_params": {
+      "learning_rate": 1.827226177606625e-05,
+      "batch_size": 8.0,
+      "epochs": 10.0,
+      "dropout": 0.2,
+      "weight_decay": 0.01,
+      "warmup_steps": 0.0
+    },
+    "time_seconds": 15658.134127378464,
+    "test_metrics": {
+      "accuracy": 0.6458895705521472,
+      "f1": 0.4160259004451639,
+      "precision": 0.36714285714285716,
+      "recall": 0.47992530345471524,
+      "mcc": 0.1714572395496454,
+      "auc": 0.6494529236461563
+    },
+    "architecture": "hierarchical_bert",
+    "chunk_size": 128,
+    "max_chunks": 64,
+    "accum_steps": 4
+  }
+]

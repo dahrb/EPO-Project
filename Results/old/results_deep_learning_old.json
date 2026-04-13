@@ -1,0 +1,89 @@
+[
+  {
+    "timestamp_utc": "2026-04-09T18:37:42.170480+00:00",
+    "mode": "deep_learning",
+    "algo": "legalbert",
+    "model_name": "nlpaueb/legal-bert-base-uncased",
+    "max_context_length": 512,
+    "experiment": "1",
+    "cv_strategy": "RepeatedStratifiedKFold",
+    "opposition": false,
+    "input_representation": "legalbert",
+    "best_score_cv": 0.8396269588600855,
+    "best_params": {
+      "weight_decay": 0.01,
+      "warmup_steps": 500.0,
+      "learning_rate": 2e-05,
+      "epochs": 10.0,
+      "dropout": 0.2,
+      "batch_size": 32.0
+    },
+    "time_seconds": 18998.14326286316,
+    "test_metrics": {
+      "accuracy": 0.855929203539823,
+      "f1": 0.8995805576116457,
+      "precision": 0.9310520939734422,
+      "recall": 0.8701670644391408,
+      "mcc": 0.6503953717197066,
+      "auc": 0.9235897603557067
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-10T00:49:09.341419+00:00",
+    "mode": "deep_learning",
+    "algo": "legalbert",
+    "model_name": "nlpaueb/legal-bert-base-uncased",
+    "max_context_length": 512,
+    "experiment": "2",
+    "cv_strategy": "TimeSeriesSplit",
+    "opposition": false,
+    "input_representation": "legalbert",
+    "best_score_cv": 0.8286293827875978,
+    "best_params": {
+      "weight_decay": 0.0,
+      "warmup_steps": 500.0,
+      "learning_rate": 1e-05,
+      "epochs": 10.0,
+      "dropout": 0.2,
+      "batch_size": 8.0
+    },
+    "time_seconds": 12701.580950975418,
+    "test_metrics": {
+      "accuracy": 0.8515881708652793,
+      "f1": 0.8858947368421053,
+      "precision": 0.8937977909940527,
+      "recall": 0.8781302170283807,
+      "mcc": 0.6739414877114454,
+      "auc": 0.923162143912891
+    }
+  },
+  {
+    "timestamp_utc": "2026-04-10T01:59:42.376776+00:00",
+    "mode": "deep_learning",
+    "algo": "legalbert",
+    "model_name": "nlpaueb/legal-bert-base-uncased",
+    "max_context_length": 512,
+    "experiment": "1",
+    "cv_strategy": "RepeatedStratifiedKFold",
+    "opposition": false,
+    "input_representation": "legalbert",
+    "best_score_cv": 0.8399978891709176,
+    "best_params": {
+      "weight_decay": 0.0,
+      "warmup_steps": 500.0,
+      "learning_rate": 3e-05,
+      "epochs": 10.0,
+      "dropout": 0.2,
+      "batch_size": 16.0
+    },
+    "time_seconds": 16516.76304125786,
+    "test_metrics": {
+      "accuracy": 0.8084955752212389,
+      "f1": 0.858783607413208,
+      "precision": 0.9475806451612904,
+      "recall": 0.7852028639618138,
+      "mcc": 0.5941105571398589,
+      "auc": 0.9097485860005884
+    }
+  }
+]

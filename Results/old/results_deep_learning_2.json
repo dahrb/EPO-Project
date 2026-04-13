@@ -1,0 +1,60 @@
+[
+  {
+    "timestamp_utc": "2026-04-12T02:49:40.176221+00:00",
+    "mode": "deep_learning",
+    "algo": "legalbert",
+    "model_name": "nlpaueb/legal-bert-base-uncased",
+    "experiment": "1",
+    "cv_strategy": "RepeatedStratifiedKFold",
+    "opposition": false,
+    "input_representation": "legalbert",
+    "best_score_cv": 0.841002529910947,
+    "best_params": {
+      "learning_rate": 2.594657353877965e-05,
+      "batch_size": 16.0,
+      "epochs": 5.0,
+      "dropout": 0.1,
+      "weight_decay": 0.0,
+      "warmup_steps": 500.0
+    },
+    "time_seconds": 8175.179711341858,
+    "test_metrics": {
+      "accuracy": 0.8513274336283185,
+      "f1": 0.8954703832752613,
+      "precision": 0.9355174206968279,
+      "recall": 0.8587112171837709,
+      "mcc": 0.6468209276926004,
+      "auc": 0.9272252917906301
+    },
+    "max_context_length": 512
+  },
+  {
+    "timestamp_utc": "2026-04-12T06:09:02.377686+00:00",
+    "mode": "deep_learning",
+    "algo": "legalbert",
+    "model_name": "nlpaueb/legal-bert-base-uncased",
+    "experiment": "1",
+    "cv_strategy": "RepeatedStratifiedKFold",
+    "opposition": true,
+    "input_representation": "legalbert",
+    "best_score_cv": 0.739216086065361,
+    "best_params": {
+      "learning_rate": 2.594657353877965e-05,
+      "batch_size": 16.0,
+      "epochs": 5.0,
+      "dropout": 0.1,
+      "weight_decay": 0.0,
+      "warmup_steps": 500.0
+    },
+    "time_seconds": 10671.642749071121,
+    "test_metrics": {
+      "accuracy": 0.7705521472392638,
+      "f1": 0.6499438412579558,
+      "precision": 0.5425,
+      "recall": 0.8104575163398693,
+      "mcc": 0.5108736170874361,
+      "auc": 0.8711630679790779
+    },
+    "max_context_length": 512
+  }
+]
