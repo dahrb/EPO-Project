@@ -1,10 +1,6 @@
+# EPO Patent Appeal Outcome Prediction
 
-<div align="center">
-	<h1>EPO Project: Patent Data Processing & Embedding Training</h1>
-	<p>
-		<strong>End-to-end pipeline for processing patent data and training PatentEmbeddings</strong>
-	</p>
-</div>
+A research pipeline for predicting the outcomes of European Patent Office (EPO) Board of Appeals decisions using classical ML, embedding-based models, and transformer-based deep learning.
 
 ---
 
@@ -12,39 +8,76 @@
 - [Project Overview](#project-overview)
 - [Project Structure](#project-structure)
 - [Setup & Installation](#setup--installation)
-- [Data Processing Pipeline](#data-processing-pipeline)
-- [PatentEmbedding Training](#patentembedding-training)
-- [Reproducibility](#reproducibility)
-- [Citing & License](#citing--license)
+- [Reproducing Experiments](#reproducing-experiments)
+  - [Step 1: Data Processing](#step-1-data-processing)
+  - [Step 2: Train Patent Embeddings](#step-2-train-patent-embeddings)
+  - [Step 3: Generate Train/Test Splits](#step-3-generate-traintest-splits)
+  - [Step 4: Classical ML & Embedding Experiments](#step-4-classical-ml--embedding-experiments)
+  - [Step 5: Deep Learning Experiments](#step-5-deep-learning-experiments)
+    - [LegalBERT](#legalbert)
+    - [Longformer](#longformer)
+- [Results](#results)
+- [Configuration & Key Parameters](#configuration--key-parameters)
 
 ---
 
 ## Project Overview
-This repository provides a complete workflow for processing European Patent Office (EPO) data and training custom PatentEmbeddings. The pipeline includes:
-- Parsing and cleaning raw XML patent data
-- Feature engineering and data transformation
-- Training Doc2Vec/Word2Vec-based PatentEmbeddings
-- Utilities for downstream ML experiments
+
+This project classifies the outcome of EPO patent appeal decisions (grant/refuse for *ex parte* cases; upheld/overturned for *inter partes* / opposition cases) across two experimental splits:
+
+| Split | Description |
+|-------|-------------|
+| **Exp 1** | Earlier decisions used for training, recent for test |
+| **Exp 2** | Stratified random split |
+
+Each split is run in three **modes**: `pf` (ex parte), `op` (opposition), `both` (combined).
+
+The full pipeline is:
+1. Parse raw XML → processed CSV  
+2. Train domain-specific embeddings (Patent2Vec, PatentDoc2Vec)  
+3. Generate train/test pickle files  
+4. Run classical ML / embedding experiments  
+5. Run deep learning (LegalBERT / Longformer) experiments with Optuna HPO
+
+---
 
 ## Project Structure
+
 ```
 EPO-Project/
-├── Data/                # Raw and processed data
-│   ├── EPDecisions_March2025.xml
-│   └── ...
-├── Experiments/         # Data processing scripts, embedding training, experiments
-│   ├── data_processing.py
-│   ├── PatentEmbeddings.py
-│   └── ...
-├── Models/              # Saved embedding models
-├── Utilities/           # Utility scripts (e.g., TableCreator)
-├── main.py              # Main entry point (if applicable)
-├── run_data_processing.sh
-├── run_hyperparameter_search.py
-├── pyproject.toml       # Python project metadata
-├── README.md
-└── ...
+├── Data/
+│   ├── EPDecisions_March2025.xml       # Raw EPO XML data
+│   ├── Final_Processed/                # Train/test splits (generated)
+│   └── Matching/                       # Intermediate processed files
+├── Experiments/
+│   ├── data_processing.py              # Step 1: XML → processed data
+│   ├── experiment_processing.py        # Step 3: generate train/test splits
+│   ├── PatentEmbeddings.py             # Step 2: train Patent2Vec / Doc2Vec
+│   ├── ml_experiments.py               # Step 4: classical ML models
+│   ├── run_experiment.py               # CLI runner for classical experiments
+│   ├── deep_learning_experiments.py    # Step 5: Optuna HPO loop for DL models
+│   ├── run_deep_learning_experiment.py # CLI runner for LegalBERT / Longformer
+│   └── sliding_window.py               # Sliding-window tokenisation utility
+├── Models/                             # Pre-trained / trained embeddings
+│   ├── Patent2Vec_1.0                  # Word2Vec patent embeddings
+│   ├── Doc2Vec_1.0                     # Doc2Vec patent embeddings
+│   ├── Word2Vec-google-300d            # Google News Word2Vec
+│   └── Law2Vec.200d.txt                # Law2Vec embeddings
+├── Results/
+│   ├── results_main.json               # All classical / embedding results
+│   └── results.ipynb                   # Results analysis notebook
+├── Utilities/
+│   └── utils.py
+├── run_data_processing.sh              # SLURM: data processing
+├── run_experiment_grids.sh             # SLURM: classical ML grid
+├── run_deep_learning_grids.sh          # SLURM: DL grid (LegalBERT / Longformer)
+├── run_dl_legalbert.sh                 # SLURM: LegalBERT single run
+├── run_dl_longformer_base.sh           # SLURM: Longformer pf
+├── run_missing_xgb_tfidf.sh            # SLURM: fill missing XGB/TF-IDF runs
+└── pyproject.toml
 ```
+
+---
 
 ## Setup & Installation
 
@@ -54,90 +87,189 @@ git clone https://github.com/<your-org>/EPO-Project.git
 cd EPO-Project
 ```
 
-### 2. Create and Activate a Virtual Environment (Recommended: `uv`)
-We recommend using [uv](https://github.com/astral-sh/uv) for fast, reproducible Python environments:
+### 2. Create Environment
 ```bash
-# Install uv if not already installed
+# Using uv (recommended)
 pip install uv
-
-# Create a virtual environment
 uv venv .venv
-
-# Activate the environment
 source .venv/bin/activate
-```
-
-### 3. Install Dependencies
-```bash
 uv pip install .
+
+# Or with pip
+python -m venv .venv
+source .venv/bin/activate
+pip install .
 ```
 
-## Data Processing Pipeline
+---
 
-The main data processing scripts are in `Experiments/data_processing.py` and related files. To process the raw XML data and generate feature tables:
+## Reproducing Experiments
+
+All steps below assume you are in the project root. On an HPC cluster with SLURM, use the provided `.sh` scripts. Locally, call the Python scripts directly.
+
+---
+
+### Step 1: Data Processing
+
+Parses `Data/EPDecisions_March2025.xml` and produces cleaned, feature-engineered CSV files in `Data/Matching/`.
 
 ```bash
-# Run the data processing pipeline
-bash run_data_processing.sh
-# or
+# On SLURM:
+sbatch run_data_processing.sh
+
+# Locally:
 python Experiments/data_processing.py
 ```
 
-- **Input:** Raw XML files in `Data/`
-- **Output:** Processed data tables (CSV/Parquet) in `Data/` or `Experiments/`
+**What it does (8-step pipeline):**
+1. Parse raw XML decisions
+2. Filter to relevant decision types
+3. Extract cited legal provisions
+4. Classify outcomes (grant/refuse/upheld/overturned)
+5. Sub-classify by technical field
+6. Engineer features (text length, IPC codes, etc.)
+7. Produce `pf` (ex parte) and `op` (opposition) datasets
+8. Save processed CSVs to `Data/Matching/`
 
-## PatentEmbedding Training
+---
 
-To train PatentEmbeddings (e.g., Doc2Vec, Word2Vec):
+### Step 2: Train Patent Embeddings
+
+Trains domain-specific Word2Vec and Doc2Vec models on the processed patent text.
 
 ```bash
-python Experiments/PatentEmbeddings.py --config configs/embedding_config.yaml
+python Experiments/PatentEmbeddings.py
 ```
 
-- **Input:** Processed data from previous step
-- **Output:** Trained embedding models in `Models/`
+**Output models saved to `Models/`:**
+- `Patent2Vec_1.0` — Word2Vec trained on patent claims/descriptions
+- `Doc2Vec_1.0` — Doc2Vec trained on patent documents
 
-You can adjust hyperparameters and model settings in the config file or via command-line arguments.
+Pre-trained models (Word2Vec-google-300d, Law2Vec) are already provided in `Models/`.
 
-## Experiment Runners
+---
 
-The project includes lightweight CLI entrypoints for experiment execution.
+### Step 3: Generate Train/Test Splits
 
-### Flat CV experiments
-
-Use `Experiments/run_experiment.py` to run the new flat experiment workflow on
-pre-generated train/test pickle files.
+Produces pickle files for each experiment × mode combination used by all downstream runners.
 
 ```bash
+python Experiments/experiment_processing.py
+```
+
+**Output** (written to `Data/Final_Processed/`):
+```
+X_Train_1_pf.pkl  y_Train_1_pf.pkl  X_test_1_pf.pkl  y_test_1_pf.pkl
+X_Train_1_op.pkl  y_Train_1_op.pkl  X_test_1_op.pkl  y_test_1_op.pkl
+X_Train_1_both.pkl ...
+X_Train_2_pf.pkl  ...  (Exp 2 stratified split)
+```
+
+---
+
+### Step 4: Classical ML & Embedding Experiments
+
+Runs Logistic Regression, Random Forest, and XGBoost with sparse (N-Gram, TF-IDF) and dense embedding inputs (Word2Vec, Law2Vec, Patent2Vec, Doc2Vec).
+
+```bash
+# On SLURM — runs the full grid:
+bash run_experiment_grids.sh
+
+# Single run example:
 python Experiments/run_experiment.py \
-	linear 1 false N-Gram \
-	Data/Final_Processed/X_Train_1_pf.pkl \
-	Data/Final_Processed/y_Train_1_pf.pkl \
-	Data/Final_Processed/X_test_1_pf.pkl \
-	Data/Final_Processed/y_test_1_pf.pkl \
-	false
+    xgboost 1 pf TF-IDF \
+    Data/Final_Processed/X_Train_1_pf.pkl \
+    Data/Final_Processed/y_Train_1_pf.pkl \
+    Data/Final_Processed/X_test_1_pf.pkl \
+    Data/Final_Processed/y_test_1_pf.pkl
 ```
 
-- `model`: `linear`, `logistic`, `forest`, or `xgboost`
-- `experiment`: usually `1` or `2`
-- `opposition`: `true` or `false`
-- `input_representation`: e.g. `N-Gram`, `TF-IDF`, `Word2Vec`
-- final boolean: `true` runs the embedding path, `false` runs the sparse path
+**Grid dimensions:**
+- Models: `logistic`, `forest`, `xgboost`
+- Sparse inputs: `N-Gram`, `TF-IDF`
+- Embedding inputs: `Word2Vec`, `Law2Vec`, `Patent2Vec`, `Doc2Vec`
+- Experiments: `1`, `2`
+- Modes: `pf`, `op`, `both`
 
-### Nested CV experiments
+Results are appended to `Results/results_main.json`.
 
-The older nested runner remains available via `run_nested.py` and follows the
-same minimal positional-argument style.
+---
 
-## Reproducibility
+### Step 5: Deep Learning Experiments
 
-- All experiments are designed to be reproducible with fixed random seeds.
-- Use the provided `pyproject.toml` and/or `requirements.txt` for consistent environments.
-- For SLURM/HPC users, adapt the provided shell scripts (e.g., `epo_2_xgb_pf_l2v.sh`) for batch processing.
-- For Jupyter-based exploration, see `Experiments/patentJudgements.ipynb` and `visualisations.ipynb`.
+All DL experiments use **Optuna** (TPE sampler) for hyperparameter optimisation and early stopping. Results are saved as JSON in `Results/`.
 
-## Citing & License
+#### Common Hyperparameters (all models)
+| Parameter | Values searched |
+|-----------|----------------|
+| `lr` | log-uniform [1e-5, 5e-5] |
+| `weight_decay` | categorical [0.0, 0.01, 0.001] |
+| `batch_size` | categorical [8, 16] |
+| `epochs` | **fixed at 30** |
 
-If you use this code or data, please cite appropriately (add citation instructions here).
+#### LegalBERT
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+Model: `nlpaueb/legal-bert-base-uncased`. Encodes full decision text via sliding window + mean pooling.
+
+```bash
+# SLURM grid (all experiments × modes):
+bash run_deep_learning_grids.sh
+
+# Single run:
+python Experiments/run_deep_learning_experiment.py \
+    --model_name nlpaueb/legal-bert-base-uncased \
+    --experiment 1 \
+    --mode pf \
+    --n_trials 10 \
+    --results_file Results/results_legalbert_pf_exp1.json
+```
+
+Additional HPO params for LegalBERT: `dropout` [0.1, 0.2, 0.3]  
+Patience: **3 epochs**
+
+#### Longformer
+
+Model: `allenai/longformer-base-4096`. Handles long sequences natively (global attention on CLS token).
+
+```bash
+# SLURM — pf split:
+sbatch run_dl_longformer_base.sh
+
+# SLURM — op/both splits:
+sbatch run_dl_longformer_op.sh
+
+# Single run:
+python Experiments/run_deep_learning_experiment.py \
+    --model_name allenai/longformer-base-4096 \
+    --experiment 1 \
+    --mode pf \
+    --n_trials 3 \
+    --results_file Results/results_longformer_pf_exp1.json
+```
+
+Additional HPO params: `dropout` [0.1, 0.2, 0.3]  
+Patience: **3 epochs** | Trials: **3**
+
+> **Note:** Longformer does not have a pooler layer. CLS representation is taken from `last_hidden_state[:, 0, :]`.
+
+---
+
+## Results
+
+Results are stored as JSON files in `Results/`. Use `Results/results.ipynb` to load, aggregate, and visualise them.
+
+| Model | Exp | Mode | Best F1 |
+|-------|-----|------|---------|
+| LegalBERT | 2 | pf | 0.8971 |
+| LegalBERT | 2 | op | 0.7699 |
+
+---
+
+## Configuration & Key Parameters
+
+| Setting | Location | Default |
+|---------|----------|---------|
+| Epochs | `deep_learning_experiments.py` | 30 (fixed) |
+| Patience (DL) | `deep_learning_experiments.py` | 3 |
+| Optuna trials (Longformer) | `run_dl_longformer_base.sh` | 3 |
+| Random seed | All experiment runners | 42 |

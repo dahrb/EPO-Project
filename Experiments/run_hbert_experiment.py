@@ -70,8 +70,8 @@ def build_parser():
     parser.add_argument(
         "--n_trials",
         type=int,
-        default=10,
-        help="Number of Optuna trials (default: 10)",
+        default=20,
+        help="Number of Optuna trials (default: 20)",
     )
     parser.add_argument(
         "--timeout",

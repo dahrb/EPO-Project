@@ -4326,5 +4326,45 @@
       "auc": 0.7751123975204448
     },
     "case_mode": "both"
+  },
+  {
+    "timestamp_utc": "2026-04-14T02:47:34.452519+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "1",
+    "opposition": true,
+    "case_mode": "both",
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.8163056453655626,
+    "best_params": {
+      "vect__num__use_idf": true,
+      "vect__num__norm": "l2",
+      "vect__num__ngram_range": [
+        1,
+        4
+      ],
+      "vect__num__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 63235.0402071476,
+    "test_metrics": {
+      "accuracy": 0.8216330858960763,
+      "f1": 0.798562874251497,
+      "precision": 0.7934316991908615,
+      "recall": 0.8037608486017358,
+      "mcc": 0.6385798253026443,
+      "auc": 0.9020373408424456
+    }
   }
 ]

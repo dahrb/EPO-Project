@@ -445,7 +445,7 @@ class DeepLearningExperiments:
 
                 if self.opposition:
                     outputs = self._get_encoder(model)(input_ids=input_ids, attention_mask=attention_mask)
-                    text_embedding = outputs.pooler_output
+                    text_embedding = outputs.pooler_output if outputs.pooler_output is not None else outputs.last_hidden_state[:, 0, :]
                     auxiliary_features = batch["auxiliary_features"].to(self.device)
                     logits = self.custom_head(text_embedding, auxiliary_features)
                 else:
@@ -502,7 +502,7 @@ class DeepLearningExperiments:
 
                     if self.opposition:
                         outputs = self._get_encoder(model)(input_ids=input_ids, attention_mask=attention_mask)
-                        text_embedding = outputs.pooler_output
+                        text_embedding = outputs.pooler_output if outputs.pooler_output is not None else outputs.last_hidden_state[:, 0, :]
                         auxiliary_features = batch["auxiliary_features"].to(self.device)
                         logits = self.custom_head(text_embedding, auxiliary_features)
                     else:
@@ -609,13 +609,14 @@ class DeepLearningExperiments:
 
         def objective(trial):
             # ── Sample hyperparameters ─────────────────────────────────────
-            epoch_choices = [10, 20, 30]
             lr = trial.suggest_float("learning_rate", 1e-5, 5e-5, log=True)
             batch_size   = trial.suggest_categorical("batch_size", [2] if is_longformer else [8, 16, 32])
-            epochs       = trial.suggest_categorical("epochs", epoch_choices)
+            epochs       = 30
             dropout      = trial.suggest_categorical("dropout", [0.1, 0.2, 0.3])
             weight_decay = trial.suggest_categorical("weight_decay", [0.0, 0.01])
-            n_layers     = trial.suggest_categorical("n_layers", [2, 4, 6]) if self.is_hbert else None
+            n_layers      = trial.suggest_categorical("n_layers", [1]) if self.is_hbert else None
+            lr_multiplier = trial.suggest_int("lr_multiplier", 10, 100) if self.is_hbert else None
+            warmup_ratio  = trial.suggest_categorical("warmup_ratio", [0.05, 0.10, 0.20]) if self.is_hbert else None
 
             params = {
                 "learning_rate": lr,
@@ -626,6 +627,10 @@ class DeepLearningExperiments:
             }
             if n_layers is not None:
                 params["n_layers"] = n_layers
+            if lr_multiplier is not None:
+                params["lr_multiplier"] = lr_multiplier
+            if warmup_ratio is not None:
+                params["warmup_ratio"] = warmup_ratio
 
             self.aux_encoder = None
 
@@ -644,13 +649,16 @@ class DeepLearningExperiments:
             else:
                 model = self._build_model(params["dropout"])
                 self._fix_opposition_head(model, train_loader)
-            optimizer = self._build_optimizer(model, params["learning_rate"], params["weight_decay"])
+            optimizer = self._build_optimizer(
+                model, params["learning_rate"], params["weight_decay"],
+                lr_multiplier=params.get("lr_multiplier"),
+            )
             criterion = torch.nn.CrossEntropyLoss()
 
             accum_steps = 8 if is_longformer else 1
             steps_per_epoch = -(-len(train_loader) // accum_steps)  # ceil division
             total_steps = steps_per_epoch * params["epochs"]
-            warmup_steps = int(0.10 * total_steps)
+            warmup_steps = int(params.get("warmup_ratio", 0.10) * total_steps)
             if is_longformer:
                 print(f"  Gradient accumulation: {accum_steps} steps → effective batch {params['batch_size'] * accum_steps}")
             scheduler = get_linear_schedule_with_warmup(
@@ -662,8 +670,8 @@ class DeepLearningExperiments:
             best_val_f1 = 0.0
             best_epoch = 0
             patience_counter = 0
-            patience = 5
-            min_epochs = 10
+            patience = 8 if self.is_hbert else 3
+            min_epochs = 10 if self.is_hbert else 0
             print(f"  Early stopping enabled (patience={patience}, min_epochs={min_epochs})")
             for epoch in range(params["epochs"]):
                 train_loss = self._train_epoch(model, optimizer, train_loader, criterion, scheduler)
@@ -788,7 +796,7 @@ class DeepLearningExperiments:
 
         return model
 
-    def _build_optimizer(self, model, lr, weight_decay=0.0):
+    def _build_optimizer(self, model, lr, weight_decay=0.0, lr_multiplier=None):
         """Build AdamW optimizer over the correct parameter set.
 
         For H-BERT: all model params (encoder + context_transformer + classifier).
@@ -796,12 +804,13 @@ class DeepLearningExperiments:
         """
         if self.is_hbert:
             # Base encoder gets the small Optuna LR
-            # Randomly initialized upper layers get a 10x larger LR to actually learn
+            # Randomly initialized upper layers get lr_multiplier× larger LR to actually learn
+            mult = lr_multiplier if lr_multiplier is not None else 50
             optimizer_grouped_parameters = [
                 {"params": model.encoder.parameters(), "lr": lr},
-                {"params": model.context_transformer.parameters(), "lr": lr * 10},
-                {"params": model.position_embeddings.parameters(), "lr": lr * 10},
-                {"params": model.classifier.parameters(), "lr": lr * 10},
+                {"params": model.context_transformer.parameters(), "lr": lr * mult},
+                {"params": model.position_embeddings.parameters(), "lr": lr * mult},
+                {"params": model.classifier.parameters(), "lr": lr * mult},
             ]
             return AdamW(optimizer_grouped_parameters, weight_decay=weight_decay)
         elif self.opposition:
@@ -874,7 +883,7 @@ class DeepLearningExperiments:
 
                     if self.opposition:
                         outputs = self._get_encoder(model)(input_ids=input_ids, attention_mask=attention_mask)
-                        text_embedding = outputs.pooler_output
+                        text_embedding = outputs.pooler_output if outputs.pooler_output is not None else outputs.last_hidden_state[:, 0, :]
                         auxiliary_features = batch["auxiliary_features"].to(self.device)
                         logits = self.custom_head(text_embedding, auxiliary_features)
                     else:
