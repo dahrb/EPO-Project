@@ -1,6 +1,6 @@
 # EPO Patent Appeal Outcome Prediction
 
-A research pipeline for predicting the outcomes of European Patent Office (EPO) Board of Appeals decisions using classical ML, embedding-based models, and transformer-based deep learning.
+A research pipeline for predicting the outcomes of European Patent Office (EPO) Board of Appeals decisions using classical ML and transformer-based deep learning (LegalBERT, PatentBERT, Legal-Longformer).
 
 ---
 
@@ -12,32 +12,34 @@ A research pipeline for predicting the outcomes of European Patent Office (EPO) 
   - [Step 1: Data Processing](#step-1-data-processing)
   - [Step 2: Train Patent Embeddings](#step-2-train-patent-embeddings)
   - [Step 3: Generate Train/Test Splits](#step-3-generate-traintest-splits)
-  - [Step 4: Classical ML & Embedding Experiments](#step-4-classical-ml--embedding-experiments)
-  - [Step 5: Deep Learning Experiments](#step-5-deep-learning-experiments)
-    - [LegalBERT](#legalbert)
-    - [Longformer](#longformer)
-- [Results](#results)
+  - [Step 4: Classical ML Experiments](#step-4-classical-ml-experiments)
+  - [Step 5: DL Hyperparameter Tuning (Optuna)](#step-5-dl-hyperparameter-tuning-optuna)
+  - [Step 6: DL Full-Test Evaluation](#step-6-dl-full-test-evaluation)
+  - [Step 7: Sliding-Window Temporal Evaluation](#step-7-sliding-window-temporal-evaluation)
+- [Results Summary](#results-summary)
 - [Configuration & Key Parameters](#configuration--key-parameters)
 
 ---
 
 ## Project Overview
 
-This project classifies the outcome of EPO patent appeal decisions (grant/refuse for *ex parte* cases; upheld/overturned for *inter partes* / opposition cases) across two experimental splits:
+This project classifies the outcome of EPO patent appeal decisions — grant/refuse for *ex parte* cases and upheld/overturned for *inter partes* (opposition) cases — across two experimental splits:
 
 | Split | Description |
 |-------|-------------|
-| **Exp 1** | Earlier decisions used for training, recent for test |
+| **Exp 1** | Temporal split — earlier decisions for training, recent for test |
 | **Exp 2** | Stratified random split |
 
-Each split is run in three **modes**: `pf` (ex parte), `op` (opposition), `both` (combined).
+Each split is evaluated in three **modes**: `pf` (ex parte), `op` (opposition), `both` (combined).
 
 The full pipeline is:
-1. Parse raw XML → processed CSV  
-2. Train domain-specific embeddings (Patent2Vec, PatentDoc2Vec)  
-3. Generate train/test pickle files  
-4. Run classical ML / embedding experiments  
-5. Run deep learning (LegalBERT / Longformer) experiments with Optuna HPO
+1. Parse raw XML → processed CSV
+2. Train domain-specific embeddings (Patent2Vec, PatentDoc2Vec)
+3. Generate train/test pickle files per experiment × mode
+4. Classical ML experiments (grid search)
+5. DL hyperparameter tuning via Optuna (persistent SQLite, resumable)
+6. DL full-test evaluation (loads saved HP checkpoint, no retraining)
+7. Sliding-window temporal evaluation (test years 2021–2024)
 
 ---
 
@@ -46,34 +48,40 @@ The full pipeline is:
 ```
 EPO-Project/
 ├── Data/
-│   ├── EPDecisions_March2025.xml       # Raw EPO XML data
-│   ├── Final_Processed/                # Train/test splits (generated)
-│   └── Matching/                       # Intermediate processed files
+│   ├── EPDecisions_March2025.xml            # Raw EPO XML data
+│   ├── Final_Processed/                     # Train/test splits (generated, *.pkl)
+│   └── Matching/                            # Intermediate processed CSVs
 ├── Experiments/
-│   ├── data_processing.py              # Step 1: XML → processed data
-│   ├── experiment_processing.py        # Step 3: generate train/test splits
-│   ├── PatentEmbeddings.py             # Step 2: train Patent2Vec / Doc2Vec
-│   ├── ml_experiments.py               # Step 4: classical ML models
-│   ├── run_experiment.py               # CLI runner for classical experiments
-│   ├── deep_learning_experiments.py    # Step 5: Optuna HPO loop for DL models
-│   ├── run_deep_learning_experiment.py # CLI runner for LegalBERT / Longformer
-│   └── sliding_window.py               # Sliding-window tokenisation utility
-├── Models/                             # Pre-trained / trained embeddings
-│   ├── Patent2Vec_1.0                  # Word2Vec patent embeddings
-│   ├── Doc2Vec_1.0                     # Doc2Vec patent embeddings
-│   ├── Word2Vec-google-300d            # Google News Word2Vec
-│   └── Law2Vec.200d.txt                # Law2Vec embeddings
+│   ├── data_processing.py                   # Step 1: XML → processed data
+│   ├── experiment_processing.py             # Step 3: generate train/test splits
+│   ├── PatentEmbeddings.py                  # Step 2: Patent2Vec / Doc2Vec training
+│   ├── ml_experiments.py                    # Classical ML model logic
+│   ├── run_experiment.py                    # CLI runner for ML experiments
+│   ├── deep_learning_experiments.py         # Optuna HPO loop for all DL models
+│   ├── run_deep_learning_experiment.py      # CLI runner for DL HP tuning
+│   └── evaluation.py                        # CLI runner for full-test & SW eval
+├── Models/
+│   ├── Patent2Vec_1.0                       # Word2Vec trained on patent text
+│   ├── Doc2Vec_1.0                          # Doc2Vec trained on patent documents
+│   ├── Word2Vec-google-300d                 # Google News Word2Vec (pre-trained)
+│   └── Law2Vec.200d.txt                     # Law2Vec embeddings (pre-trained)
 ├── Results/
-│   ├── results_main.json               # All classical / embedding results
-│   └── results.ipynb                   # Results analysis notebook
-├── Utilities/
-│   └── utils.py
-├── run_data_processing.sh              # SLURM: data processing
-├── run_experiment_grids.sh             # SLURM: classical ML grid
-├── run_deep_learning_grids.sh          # SLURM: DL grid (LegalBERT / Longformer)
-├── run_dl_legalbert.sh                 # SLURM: LegalBERT single run
-├── run_dl_longformer_base.sh           # SLURM: Longformer pf
-├── run_missing_xgb_tfidf.sh            # SLURM: fill missing XGB/TF-IDF runs
+│   ├── results_main.json                    # ML full-test results (144 records)
+│   ├── results_ml_sliding_window.json       # ML sliding-window results (288 records)
+│   ├── results_deep_learning.json           # DL HP tuning best-trial records
+│   ├── results_dl_full_test.json            # DL full-test evaluation results
+│   ├── results_dl_sliding_window.json       # DL sliding-window evaluation results
+│   ├── optuna/
+│   │   ├── *.db                             # Persistent Optuna SQLite studies
+│   │   └── best_{model}_{case}_exp{N}.pt    # Best HP checkpoint per model/case/exp
+│   ├── grid_logs/                           # SLURM stdout logs
+│   ├── experiment_report_skeleton.md        # Detailed results report
+│   └── experiment_report.html              # Rendered HTML version of the report
+├── run_data_processing.sh
+├── run_hp_{legalbert,patentbert,longformer}_exp{1,2}_{pf,op,both}.sh   # HP tuning
+├── run_eval_{lb,pb,lf}_ft_exp{1,2}_{pf,op,both}.sh                     # Full-test
+├── run_eval_{lb,pb,lf}_sw_exp2_{pf,op,both}.sh                         # SW eval
+├── run_eval_ml_sw_{pf,op,both}_balanced.sh                             # ML SW eval
 └── pyproject.toml
 ```
 
@@ -83,53 +91,50 @@ EPO-Project/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/<your-org>/EPO-Project.git
+git clone https://github.com/dahrb/EPO-Project.git
 cd EPO-Project
 ```
 
 ### 2. Create Environment
+
+Requires Python ≥ 3.11. A CUDA-capable GPU is required for DL experiments (tested on A100 with CUDA 12.8).
+
 ```bash
-# Using uv (recommended)
+# Recommended — uv
 pip install uv
 uv venv .venv
 source .venv/bin/activate
-uv pip install .
+uv sync                       # installs from pyproject.toml lock
 
-# Or with pip
+# Alternative — pip
 python -m venv .venv
 source .venv/bin/activate
-pip install .
+pip install -e .
 ```
+
+Key dependencies (see `pyproject.toml`): `torch`, `transformers`, `optuna`, `scikit-learn`, `xgboost`, `gensim`, `spacy[cuda12x]`, `pandas`.
 
 ---
 
 ## Reproducing Experiments
 
-All steps below assume you are in the project root. On an HPC cluster with SLURM, use the provided `.sh` scripts. Locally, call the Python scripts directly.
+All steps assume you are in the project root. On an HPC cluster with SLURM use the provided `.sh` scripts; locally call the Python modules directly.
 
 ---
 
 ### Step 1: Data Processing
 
-Parses `Data/EPDecisions_March2025.xml` and produces cleaned, feature-engineered CSV files in `Data/Matching/`.
+Parses `Data/EPDecisions_March2025.xml` and produces cleaned, feature-engineered CSV files.
 
 ```bash
-# On SLURM:
+# SLURM:
 sbatch run_data_processing.sh
 
 # Locally:
-python Experiments/data_processing.py
+python -m Experiments.data_processing
 ```
 
-**What it does (8-step pipeline):**
-1. Parse raw XML decisions
-2. Filter to relevant decision types
-3. Extract cited legal provisions
-4. Classify outcomes (grant/refuse/upheld/overturned)
-5. Sub-classify by technical field
-6. Engineer features (text length, IPC codes, etc.)
-7. Produce `pf` (ex parte) and `op` (opposition) datasets
-8. Save processed CSVs to `Data/Matching/`
+**8-step pipeline:** XML parse → decision-type filter → legal-provision extraction → outcome classification → technical-field sub-classification → feature engineering → `pf`/`op` dataset split → save to `Data/Matching/`.
 
 ---
 
@@ -138,138 +143,265 @@ python Experiments/data_processing.py
 Trains domain-specific Word2Vec and Doc2Vec models on the processed patent text.
 
 ```bash
-python Experiments/PatentEmbeddings.py
+python -m Experiments.PatentEmbeddings
 ```
 
-**Output models saved to `Models/`:**
-- `Patent2Vec_1.0` — Word2Vec trained on patent claims/descriptions
-- `Doc2Vec_1.0` — Doc2Vec trained on patent documents
-
-Pre-trained models (Word2Vec-google-300d, Law2Vec) are already provided in `Models/`.
+Output saved to `Models/Patent2Vec_1.0` and `Models/Doc2Vec_1.0`. Pre-trained `Word2Vec-google-300d` and `Law2Vec.200d.txt` are already provided.
 
 ---
 
 ### Step 3: Generate Train/Test Splits
 
-Produces pickle files for each experiment × mode combination used by all downstream runners.
+Produces one pickle file per dataset component per experiment × mode combination.
 
 ```bash
-python Experiments/experiment_processing.py
+python -m Experiments.experiment_processing
 ```
 
-**Output** (written to `Data/Final_Processed/`):
+**Output** (`Data/Final_Processed/`):
 ```
-X_Train_1_pf.pkl  y_Train_1_pf.pkl  X_test_1_pf.pkl  y_test_1_pf.pkl
-X_Train_1_op.pkl  y_Train_1_op.pkl  X_test_1_op.pkl  y_test_1_op.pkl
-X_Train_1_both.pkl ...
-X_Train_2_pf.pkl  ...  (Exp 2 stratified split)
+X_Train_{1,2}_{pf,op,both}.pkl    y_Train_{1,2}_{pf,op,both}.pkl
+X_test_{1,2}_{pf,op,both}.pkl     y_test_{1,2}_{pf,op,both}.pkl
 ```
 
 ---
 
-### Step 4: Classical ML & Embedding Experiments
+### Step 4: Classical ML Experiments
 
-Runs Logistic Regression, Random Forest, and XGBoost with sparse (N-Gram, TF-IDF) and dense embedding inputs (Word2Vec, Law2Vec, Patent2Vec, Doc2Vec).
+Runs Logistic Regression, LinearSVC, Random Forest, and XGBoost with sparse (N-Gram, TF-IDF) and dense embedding inputs across all experiment × mode combinations.
 
 ```bash
-# On SLURM — runs the full grid:
-bash run_experiment_grids.sh
+# SLURM — full grid (submits one job per combination):
+bash run_deep_learning_grids.sh
 
 # Single run example:
-python Experiments/run_experiment.py \
-    xgboost 1 pf TF-IDF \
+python -m Experiments.run_experiment \
+    xgboost 1 false TF-IDF \
     Data/Final_Processed/X_Train_1_pf.pkl \
     Data/Final_Processed/y_Train_1_pf.pkl \
     Data/Final_Processed/X_test_1_pf.pkl \
-    Data/Final_Processed/y_test_1_pf.pkl
+    Data/Final_Processed/y_test_1_pf.pkl \
+    false
 ```
 
-**Grid dimensions:**
-- Models: `logistic`, `forest`, `xgboost`
-- Sparse inputs: `N-Gram`, `TF-IDF`
-- Embedding inputs: `Word2Vec`, `Law2Vec`, `Patent2Vec`, `Doc2Vec`
-- Experiments: `1`, `2`
-- Modes: `pf`, `op`, `both`
-
-Results are appended to `Results/results_main.json`.
+**Grid:** 4 models × 2 sparse inputs × 4 embedding inputs × 2 experiments × 3 modes = 144 records appended to `Results/results_main.json`.
 
 ---
 
-### Step 5: Deep Learning Experiments
+### Step 5: DL Hyperparameter Tuning (Optuna)
 
-All DL experiments use **Optuna** (TPE sampler) for hyperparameter optimisation and early stopping. Results are saved as JSON in `Results/`.
+Runs 10-trial TPE Optuna studies for each model × experiment × mode combination. Each trial uses **step-level early stopping** (`eval_every = spe//4`, `patience = 8` steps, `min_global_steps = 3 × spe`). Studies are stored in persistent SQLite databases and resume automatically if a job is interrupted.
 
-#### Common Hyperparameters (all models)
-| Parameter | Values searched |
-|-----------|----------------|
+The globally best checkpoint across all trials is saved to `Results/optuna/best_{model}_{case}_exp{N}.pt`.
+
+#### Supported models
+
+| CLI identifier | HuggingFace model |
+|---|---|
+| `legalbert` | `nlpaueb/legal-bert-base-uncased` |
+| `patentbert` | `anferico/bert-for-patents` |
+| `longformer_base` | `allenai/longformer-base-4096` |
+
+#### HP search space (all models)
+
+| Parameter | Range / choices |
+|---|---|
 | `lr` | log-uniform [1e-5, 5e-5] |
-| `weight_decay` | categorical [0.0, 0.01, 0.001] |
-| `batch_size` | categorical [8, 16] |
-| `epochs` | **fixed at 30** |
+| `batch_size` | {8, 16, 32} |
+| `dropout` | {0.1, 0.2, 0.3} |
+| `weight_decay` | {0.0, 0.01, 0.05, 0.1} |
 
-#### LegalBERT
+Longformer additionally uses gradient accumulation of 8 steps (effective batch = `batch_size × 8`, fixed `batch_size = 2`).
 
-Model: `nlpaueb/legal-bert-base-uncased`. Encodes full decision text via sliding window + mean pooling.
+#### SLURM scripts (one per model × exp × case)
 
 ```bash
-# SLURM grid (all experiments × modes):
-bash run_deep_learning_grids.sh
+# LegalBERT — submit all 6:
+for exp in 1 2; do for case in pf op both; do
+    sbatch run_hp_legalbert_exp${exp}_${case}.sh
+done; done
 
-# Single run:
-python Experiments/run_deep_learning_experiment.py \
-    --model_name nlpaueb/legal-bert-base-uncased \
-    --experiment 1 \
-    --mode pf \
+# PatentBERT:
+for exp in 1 2; do for case in pf op both; do
+    sbatch run_hp_patentbert_exp${exp}_${case}.sh
+done; done
+
+# Longformer:
+for exp in 1 2; do for case in pf op both; do
+    sbatch run_hp_longformer_exp${exp}_${case}.sh
+done; done
+```
+
+#### Direct Python call (single run)
+
+```bash
+python -m Experiments.run_deep_learning_experiment \
+    legalbert 1 false \
+    Data/Final_Processed/X_Train_1_pf.pkl \
+    Data/Final_Processed/y_Train_1_pf.pkl \
+    Data/Final_Processed/X_test_1_pf.pkl \
+    Data/Final_Processed/y_test_1_pf.pkl \
     --n_trials 10 \
-    --results_file Results/results_legalbert_pf_exp1.json
+    --optuna_storage "sqlite:///Results/optuna/legalbert_exp1_pf.db" \
+    --study_name    "legalbert_exp1_pf" \
+    --results_path  Results/results_deep_learning.json
 ```
 
-Additional HPO params for LegalBERT: `dropout` [0.1, 0.2, 0.3]  
-Patience: **3 epochs**
+Set `opposition` (`true`/`false`) to `true` for `op` and `both` modes; `false` for `pf`.
 
-#### Longformer
-
-Model: `allenai/longformer-base-4096`. Handles long sequences natively (global attention on CLS token).
-
-```bash
-# SLURM — pf split:
-sbatch run_dl_longformer_base.sh
-
-# SLURM — op/both splits:
-sbatch run_dl_longformer_op.sh
-
-# Single run:
-python Experiments/run_deep_learning_experiment.py \
-    --model_name allenai/longformer-base-4096 \
-    --experiment 1 \
-    --mode pf \
-    --n_trials 3 \
-    --results_file Results/results_longformer_pf_exp1.json
-```
-
-Additional HPO params: `dropout` [0.1, 0.2, 0.3]  
-Patience: **3 epochs** | Trials: **3**
-
-> **Note:** Longformer does not have a pooler layer. CLS representation is taken from `last_hidden_state[:, 0, :]`.
+Results are appended to `Results/results_deep_learning.json`.
 
 ---
 
-## Results
+### Step 6: DL Full-Test Evaluation
 
-Results are stored as JSON files in `Results/`. Use `Results/results.ipynb` to load, aggregate, and visualise them.
+Loads the saved `best_*.pt` checkpoint from Step 5 and evaluates on the held-out test set — **no retraining is performed**. Requires Step 5 to be complete for the target model/exp/case.
 
-| Model | Exp | Mode | Best F1 |
-|-------|-----|------|---------|
-| LegalBERT | 2 | pf | 0.8971 |
-| LegalBERT | 2 | op | 0.7699 |
+#### SLURM scripts
+
+```bash
+# LegalBERT full-test — all 6:
+for exp in 1 2; do for case in pf op both; do
+    sbatch run_eval_lb_ft_exp${exp}_${case}.sh
+done; done
+
+# PatentBERT:
+for exp in 1 2; do for case in pf op both; do
+    sbatch run_eval_pb_ft_exp${exp}_${case}.sh
+done; done
+
+# Longformer (after HP complete):
+for exp in 1 2; do for case in pf op both; do
+    sbatch run_eval_lf_ft_exp${exp}_${case}.sh
+done; done
+```
+
+#### Direct Python call
+
+```bash
+python -m Experiments.evaluation \
+    --skip_ml \
+    --skip_sliding_window \
+    --experiments 1 \
+    --only_algos legalbert \
+    --only_cases pf \
+    --dl_results Results/results_deep_learning.json \
+    --output     Results/results_dl_full_test.json
+```
+
+Results are appended to `Results/results_dl_full_test.json`.
+
+---
+
+### Step 7: Sliding-Window Temporal Evaluation
+
+Trains a fresh model on all data up to year `T−1` (with the year `T−1` held out as a validation set) and tests on year `T`, for `T` in 2021–2024. Runs for **Exp 2** only.
+
+#### ML sliding window
+
+```bash
+# SLURM (one script per case):
+sbatch run_eval_ml_sw_pf_balanced.sh
+sbatch run_eval_ml_sw_op_balanced.sh
+sbatch run_eval_ml_sw_both_balanced.sh
+
+# Direct Python call:
+python -m Experiments.evaluation \
+    --skip_dl \
+    --skip_full_test \
+    --experiments 2 \
+    --only_cases pf \
+    --output Results/results_ml_sliding_window.json
+```
+
+#### DL sliding window
+
+```bash
+# SLURM — LegalBERT (one script per case):
+for case in pf op both; do sbatch run_eval_lb_sw_exp2_${case}.sh; done
+
+# PatentBERT:
+for case in pf op both; do sbatch run_eval_pb_sw_exp2_${case}.sh; done
+
+# Longformer (after HP complete):
+for case in pf op both; do sbatch run_eval_lf_sw_exp2_${case}.sh; done
+
+# Direct Python call:
+python -m Experiments.evaluation \
+    --skip_ml \
+    --skip_full_test \
+    --experiments 2 \
+    --only_algos legalbert \
+    --only_cases pf \
+    --dl_results Results/results_deep_learning.json \
+    --output     Results/results_dl_sliding_window.json
+```
+
+ML results → `Results/results_ml_sliding_window.json`  
+DL results → `Results/results_dl_sliding_window.json`
+
+---
+
+## Results Summary
+
+Full results, methodology notes, and cross-model comparisons are in `Results/experiment_report_skeleton.md` (rendered as `Results/experiment_report.html`).
+
+### ML Full-Test (best model per exp × case)
+
+| Exp | Case | Model | Input | Test F1 | MCC |
+|-----|------|-------|-------|---------|-----|
+| 1 | pf | XGBoost | TF-IDF | **0.9026** | 0.6891 |
+| 1 | op | XGBoost | N-Grams | 0.6734 | 0.5450 |
+| 1 | both | XGBoost | N-Grams | **0.8067** | 0.6526 |
+| 2 | pf | Logistic Regression | TF-IDF | **0.8895** | 0.6877 |
+| 2 | op | XGBoost | N-Grams | 0.7447 | 0.5810 |
+| 2 | both | XGBoost | N-Grams | 0.7980 | 0.6215 |
+
+### DL Full-Test (HP checkpoint, retrained=False)
+
+| Model | Exp | Case | Test F1 | MCC |
+|-------|-----|------|---------|-----|
+| LegalBERT | 1 | pf | **0.8949** | 0.6431 |
+| LegalBERT | 1 | op | 0.5874 | 0.4232 |
+| LegalBERT | 1 | both | 0.7663 | 0.5565 |
+| LegalBERT | 2 | pf | **0.8868** | 0.6811 |
+| LegalBERT | 2 | op | 0.7111 | 0.4994 |
+| LegalBERT | 2 | both | 0.7762 | 0.5989 |
+| PatentBERT | 1 | pf | **0.8899** | 0.6198 |
+| PatentBERT | 1 | op | 0.5840 | 0.4107 |
+| PatentBERT | 2 | pf | **0.8816** | 0.6551 |
+| PatentBERT | 2 | op | 0.6841 | 0.4444 |
+| PatentBERT | 2 | both | 0.7789 | 0.5581 |
+| Longformer | all | all | *(HP in progress)* | — |
+
+### DL Sliding Window (Exp 2, mean F1 across 2021–2024)
+
+| Model | pf | op | both |
+|-------|----|----|------|
+| LegalBERT | 0.899 | 0.707 | 0.815 |
+| PatentBERT | 0.891 | 0.706 | 0.799 |
+| ML best | 0.910 | 0.752 | 0.810 |
+| Longformer | *(pending)* | *(pending)* | *(pending)* |
 
 ---
 
 ## Configuration & Key Parameters
 
-| Setting | Location | Default |
-|---------|----------|---------|
-| Epochs | `deep_learning_experiments.py` | 30 (fixed) |
-| Patience (DL) | `deep_learning_experiments.py` | 3 |
-| Optuna trials (Longformer) | `run_dl_longformer_base.sh` | 3 |
-| Random seed | All experiment runners | 42 |
+| Parameter | Location | Value |
+|-----------|----------|-------|
+| Optuna trials | `run_hp_*.sh` | 10 (BERT), 10 (Longformer) |
+| Optuna sampler | `deep_learning_experiments.py` | TPE, seed=42 |
+| Max epochs | `deep_learning_experiments.py` | 30 |
+| Early-stop eval frequency | `deep_learning_experiments.py` | `spe // 4` steps |
+| Early-stop patience | `deep_learning_experiments.py` | 8 evaluation steps |
+| Min training steps | `deep_learning_experiments.py` | `3 × spe` |
+| Gradient accumulation (Longformer) | `deep_learning_experiments.py` | 8 steps |
+| Max sequence length (BERT) | `deep_learning_experiments.py` | 512 tokens (sliding-window mean pool) |
+| Max sequence length (Longformer) | `deep_learning_experiments.py` | 4096 tokens |
+| CLS pooling (PatentBERT) | `deep_learning_experiments.py` | `last_hidden_state[:, 0, :]` (no pooler) |
+| Random seed | all runners | 42 |
+| SLURM partition (DL) | all `run_hp_*.sh` / `run_eval_*.sh` | `gpu-a100-lowbig` |
+| SLURM wall time (DL HP) | `run_hp_*.sh` | 24 h |
+| SLURM wall time (DL eval) | `run_eval_*_ft_*.sh` | 12 h |
+| SLURM wall time (DL SW) | `run_eval_*_sw_*.sh` | 24 h |
+| SLURM excluded nodes | all DL scripts | `gpu07`, `gpu08` |

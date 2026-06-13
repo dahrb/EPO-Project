@@ -11,6 +11,8 @@ import pandas as pd
 import numpy as np
 import os
 from pathlib import Path
+import fcntl
+import json
 
 from gensim.models import KeyedVectors
 from gensim.models.doc2vec import Doc2Vec
@@ -431,3 +433,38 @@ def to_numpy_labels(y):
     if isinstance(y, pd.Series):
         return y.to_numpy()
     return np.asarray(y).reshape(-1)
+
+
+def jsonable(value):
+    """Recursively convert a value to a JSON-serialisable type."""
+    if isinstance(value, dict):
+        return {k: jsonable(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [jsonable(v) for v in value]
+    if isinstance(value, np.ndarray):
+        return value.tolist()
+    if isinstance(value, np.integer):
+        return int(value)
+    if isinstance(value, np.floating):
+        return float(value)
+    return value
+
+
+def append_json_result(record, path):
+    """Append a single JSON record to a JSON array file (atomic, file-locked)."""
+    path = str(path)
+    if path == "/dev/null":
+        return
+    os.makedirs(os.path.dirname(path) if os.path.dirname(path) else ".", exist_ok=True)
+    with open(path, "a+", encoding="utf-8") as fh:
+        fcntl.flock(fh, fcntl.LOCK_EX)
+        try:
+            fh.seek(0)
+            content = fh.read().strip()
+            data = json.loads(content) if content else []
+            data.append(jsonable(record))
+            fh.seek(0)
+            fh.truncate()
+            json.dump(data, fh, indent=2, ensure_ascii=False)
+        finally:
+            fcntl.flock(fh, fcntl.LOCK_UN)

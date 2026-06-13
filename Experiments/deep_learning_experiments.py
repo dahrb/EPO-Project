@@ -1,7 +1,7 @@
 """Patent Experiments - Deep Learning.
 
 Transformer-based experiment runner patent experiments.
-Supports LegalBERT, Longformer, and Hierarchical BERT (H-BERT).
+Supports LegalBERT and Longformer.
 
 Key behaviour
 -------------
@@ -35,6 +35,7 @@ import re
 import time
 import warnings
 from datetime import datetime, timezone
+from pathlib import Path
 import fcntl
 import numpy as np
 import pandas as pd
@@ -44,15 +45,16 @@ from torch.optim import AdamW
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score, matthews_corrcoef
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import StratifiedShuffleSplit
+from torch.nn import CrossEntropyLoss
+import copy
 
 import optuna
 optuna.logging.set_verbosity(optuna.logging.WARNING)
 
-from transformers import AutoTokenizer, AutoModel, AutoModelForSequenceClassification, get_linear_schedule_with_warmup
+from transformers import AutoTokenizer, AutoModel, AutoModelForSequenceClassification, get_linear_schedule_with_warmup, BertForSequenceClassification, BertConfig
 from torch.utils.data import TensorDataset, DataLoader
 
-from Experiments.hierarchical_bert import HierarchicalPatentDataset, HierBertModel
-from Utilities.utils import TextProcess
+from Utilities.utils import TextProcess, append_json_result, jsonable
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -141,14 +143,11 @@ class DeepLearningExperiments:
         n_trials=10,
         timeout=None,
         sampler=None,
-        # ── H-BERT settings ────────────
-        chunk_size=128,
-        max_chunks=64,
+        min_epochs=3,
     ):
         """
         Args:
-            model_name: Model identifier ('legalbert', 'longformer_base',
-                'hbert')
+            model_name: Model identifier ('legalbert', 'longformer_base')
             experiment: Experiment number ('1' or '2')
             opposition: Whether to include structured auxiliary features
             input_representation: Name of embedding model (e.g. 'LegalBERT')
@@ -166,9 +165,6 @@ class DeepLearningExperiments:
                 TPESampler(seed=42) — Bayesian optimisation via Tree-structured
                 Parzen Estimator.
 
-            --- H-BERT settings---
-            chunk_size (int): Tokens per chunk including special tokens (default 128).
-            max_chunks (int): Maximum chunks per document (default 64).
         """
         
         self.model_name = model_name
@@ -178,17 +174,15 @@ class DeepLearningExperiments:
         self.input_representation = input_representation if input_representation is not None else model_name
         self.results_json_path = results_json_path
         self.results = []
-        self.is_hbert = model_name.lower() == "hbert"
         self.is_longformer = "longformer" in model_name.lower()
-
-        # ── H-BERT settings ────────────────────────────────────────────────
-        self.chunk_size = chunk_size
-        self.max_chunks = max_chunks
 
         # ── Optuna settings ────────────────────────────────────────────────
         self.n_trials = n_trials
+        self.optuna_storage = None   # set externally or via run_deep_learning_experiment
+        self.study_name = None       # set externally or via run_deep_learning_experiment
         self.timeout = timeout
         self.sampler = sampler if sampler is not None else optuna.samplers.TPESampler(seed=42)
+        self.min_epochs = min_epochs
 
         #validation split ratio
         #   Exp 1: random stratified split (StratifiedShuffleSplit)
@@ -202,28 +196,24 @@ class DeepLearningExperiments:
             self.device = device
 
         #model mapping with context lengths (tokens)
+        # Each entry: (hf_model_id, max_length, tokenizer_override_or_None)
         self.model_mapping = {
-            "legalbert":       ("nlpaueb/legal-bert-base-uncased",   512),
-            "longformer_base": ("lexlms/legal-longformer-base",      4096),
-            "hbert":           ("nlpaueb/legal-bert-base-uncased",   512),
+            "legalbert":       ("nlpaueb/legal-bert-base-uncased",  512,  None),
+            "longformer_base": ("lexlms/legal-longformer-base",     4096, None),
+            # bert-for-patents ships no tokenizer files; use bert-base-uncased vocab
+            "patentbert":      ("anferico/bert-for-patents",        512,  "bert-base-uncased"),
         }
 
         if model_name.lower() not in self.model_mapping:
             raise ValueError(f"Unknown model: {model_name}. Available: {list(self.model_mapping.keys())}")
 
-        self.hf_model_name, self.max_length = self.model_mapping[model_name.lower()]
+        self.hf_model_name, self.max_length, _tok_override = self.model_mapping[model_name.lower()]
 
-        #initialize tokenizer
-        self.tokenizer = AutoTokenizer.from_pretrained(self.hf_model_name)
+        #initialize tokenizer (use override if specified)
+        tok_source = _tok_override if _tok_override else self.hf_model_name
+        self.tokenizer = AutoTokenizer.from_pretrained(tok_source)
 
-        #log model and context length information
-        if self.is_hbert:
-            print(
-                f"[Model Info] Using H-BERT ({self.hf_model_name}) with "
-                f"chunk_size={self.chunk_size}, max_chunks={self.max_chunks}"
-            )
-        else:
-            print(f"[Model Info] Using {model_name} ({self.hf_model_name}) with max_length={self.max_length}")
+        print(f"[Model Info] Using {model_name} ({self.hf_model_name}) with max_length={self.max_length}")
 
         self.aux_encoder = None
 
@@ -333,10 +323,10 @@ class DeepLearningExperiments:
         return encodings["input_ids"], encodings["attention_mask"]
 
     def _prepare_full(self, X_train, y_train):
-        """Preprocess full training and test sets (no splitting — folds handle that).
+        """Preprocess full training set ahead of the Optuna HPO loop.
 
-        Mirrors ml_experiments: preprocessing is applied once up front; the CV
-        splitter then partitions indices into train/val folds per param combo.
+        Preprocessing is applied once up front; the static train/val split is
+        performed inside _run_model (no cross-validation).
         """
         y_train_1d = self._to_1d(y_train)
 
@@ -362,26 +352,12 @@ class DeepLearningExperiments:
         """
         texts = X["New Summary Facts"].tolist()
 
-        if self.is_hbert:
-            # H-BERT: chunked hierarchical dataset
-            if self.opposition:
-                aux_features = self._encode_opposition_features(X, fit=(is_train and self.aux_encoder is None))
-            else:
-                aux_features = None
-            
-            dataset = HierarchicalPatentDataset(
-                texts, y, self.tokenizer,
-                chunk_size=self.chunk_size,
-                max_chunks=self.max_chunks,
-                auxiliary_features=aux_features,
-            )
+        input_ids, attention_masks = self._tokenize_batch(texts)
+        if self.opposition:
+            aux_features = self._encode_opposition_features(X, fit=(is_train and self.aux_encoder is None))
+            dataset = PatentTextDataset(input_ids, attention_masks, y, auxiliary_features=aux_features)
         else:
-            input_ids, attention_masks = self._tokenize_batch(texts)
-            if self.opposition:
-                aux_features = self._encode_opposition_features(X, fit=(is_train and self.aux_encoder is None))
-                dataset = PatentTextDataset(input_ids, attention_masks, y, auxiliary_features=aux_features)
-            else:
-                dataset = PatentTextDataset(input_ids, attention_masks, y)
+            dataset = PatentTextDataset(input_ids, attention_masks, y)
 
         dataloader = DataLoader(
             dataset,
@@ -390,89 +366,71 @@ class DeepLearningExperiments:
         )
         return dataloader
 
-    def _train_epoch(self, model, optimizer, train_loader, criterion, scheduler=None):
-        """Run one epoch of training.
-        
-        For H-BERT: uses fp16 mixed-precision.
-        For flat models: standard single-step backprop.
-        
-        Args:
-            model: Transformer model (or HierBertModel for H-BERT)
-            optimizer: PyTorch optimizer
-            train_loader: DataLoader for training
-            criterion: Loss function
-            scheduler: Optional learning-rate scheduler (stepped per batch)
-        
-        Returns:
-            Average loss for the epoch
+    def _iter_train_steps(self, model, optimizer, train_loader, criterion, scheduler=None):
+        """Iterate one training epoch, yielding (eff_step, avg_loss_so_far) after each optimizer step.
+
+        eff_step is 1-indexed within the epoch.  The value yielded on the final
+        step equals what _train_epoch would return.  Gradient accumulation and
+        clipping are applied identically.  Used by _train_epoch (thin wrapper),
+        the HP tuning objective, and _run_dl_window / _run_dl_full_test.
         """
         model.train()
-        total_loss = 0.0
+        accum_steps = 8 if self.is_longformer else 1
+        total_loss  = 0.0
+        eff_step    = 0
+        n_batches   = len(train_loader)
 
-        if self.is_hbert:
-            scaler = torch.amp.GradScaler("cuda", enabled=self.device.type == "cuda")
+        for step, batch in enumerate(train_loader):
+            input_ids      = batch["input_ids"].to(self.device)
+            attention_mask = batch["attention_mask"].to(self.device)
+            labels         = batch["labels"].to(self.device)
 
-            for batch in train_loader:
-                ids = batch["input_ids"].to(self.device)
-                mask = batch["attention_mask"].to(self.device)
-                cmask = batch["chunk_mask"].to(self.device)
-                labels = batch["labels"].to(self.device)
-                aux = batch.get("auxiliary_features")
-                if aux is not None:
-                    aux = aux.to(self.device)
-
-                optimizer.zero_grad()
-                with torch.amp.autocast("cuda", enabled=self.device.type == "cuda"):
-                    logits = model(ids, mask, cmask, auxiliary_features=aux)
-                    loss = criterion(logits, labels)
-
-                scaler.scale(loss).backward()
-                scaler.step(optimizer)
-                scaler.update()
-                if scheduler is not None:
-                    scheduler.step()
-
-                total_loss += loss.item()
-        else:
-            # Flat models training
-            # Longformer: physical batch=2, accumulate 8 steps → effective batch=16
-            accum_steps = 8 if self.is_longformer else 1
-
-            for step, batch in enumerate(train_loader):
-                input_ids = batch["input_ids"].to(self.device)
-                attention_mask = batch["attention_mask"].to(self.device)
-                labels = batch["labels"].to(self.device)
-
-                if self.opposition:
+            if self.opposition:
+                outputs = self._get_encoder(model)(input_ids=input_ids, attention_mask=attention_mask)
+                if self.model_name == "patentbert":
+                    text_embedding = outputs.last_hidden_state[:, 0, :]
+                else:
+                    text_embedding = outputs.pooler_output if outputs.pooler_output is not None                                      else outputs.last_hidden_state[:, 0, :]
+                auxiliary_features = batch["auxiliary_features"].to(self.device)
+                logits = self.custom_head(text_embedding, auxiliary_features)
+            else:
+                if self.model_name == "patentbert":
                     outputs = self._get_encoder(model)(input_ids=input_ids, attention_mask=attention_mask)
-                    text_embedding = outputs.pooler_output if outputs.pooler_output is not None else outputs.last_hidden_state[:, 0, :]
-                    auxiliary_features = batch["auxiliary_features"].to(self.device)
-                    logits = self.custom_head(text_embedding, auxiliary_features)
+                    text_embedding = outputs.last_hidden_state[:, 0, :]
+                    logits = model.classifier(text_embedding)
                 else:
                     outputs = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)
-                    logits = outputs.logits
+                    logits  = outputs.logits
 
-                loss = criterion(logits, labels) / accum_steps
-                loss.backward()
+            loss = criterion(logits, labels) / accum_steps
+            loss.backward()
+            total_loss += loss.item() * accum_steps
 
-                if (step + 1) % accum_steps == 0 or (step + 1) == len(train_loader):
-                    optimizer.step()
-                    optimizer.zero_grad()
-                    if scheduler is not None:
-                        scheduler.step()
+            if (step + 1) % accum_steps == 0 or (step + 1) == n_batches:
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                optimizer.step()
+                optimizer.zero_grad()
+                if scheduler is not None:
+                    scheduler.step()
+                eff_step += 1
+                yield eff_step, total_loss / (step + 1)
 
-                total_loss += loss.item() * accum_steps 
-
-        return total_loss / len(train_loader)
+    def _train_epoch(self, model, optimizer, train_loader, criterion, scheduler=None):
+        """Run one training epoch.  Returns average loss over all batches.
+        Thin wrapper around _iter_train_steps for backwards compatibility."""
+        avg_loss = 0.0
+        for _, avg_loss in self._iter_train_steps(model, optimizer, train_loader, criterion, scheduler):
+            pass
+        return avg_loss
 
     def _validate_epoch(self, model, val_loader, criterion):
         """Run validation epoch.
-        
+
         Args:
-            model: BERT model or HierBertModel
+            model: Transformer model
             val_loader: DataLoader for validation
             criterion: Loss function
-        
+
         Returns:
             (average_loss, f1_score)
         """
@@ -484,32 +442,27 @@ class DeepLearningExperiments:
         with torch.no_grad():
             for batch in val_loader:
                 labels = batch["labels"].to(self.device)
+                input_ids = batch["input_ids"].to(self.device)
+                attention_mask = batch["attention_mask"].to(self.device)
 
-                if self.is_hbert:
-                    ids = batch["input_ids"].to(self.device)
-                    mask = batch["attention_mask"].to(self.device)
-                    cmask = batch["chunk_mask"].to(self.device)
-                    aux = batch.get("auxiliary_features")
-                    if aux is not None:
-                        aux = aux.to(self.device)
-
-                    with torch.amp.autocast("cuda", enabled=self.device.type == "cuda"):
-                        logits = model(ids, mask, cmask, auxiliary_features=aux)
-                        loss = criterion(logits, labels)
-                else:
-                    input_ids = batch["input_ids"].to(self.device)
-                    attention_mask = batch["attention_mask"].to(self.device)
-
-                    if self.opposition:
-                        outputs = self._get_encoder(model)(input_ids=input_ids, attention_mask=attention_mask)
+                if self.opposition:
+                    outputs = self._get_encoder(model)(input_ids=input_ids, attention_mask=attention_mask)
+                    if self.model_name == "patentbert":
+                        text_embedding = outputs.last_hidden_state[:, 0, :]
+                    else:
                         text_embedding = outputs.pooler_output if outputs.pooler_output is not None else outputs.last_hidden_state[:, 0, :]
-                        auxiliary_features = batch["auxiliary_features"].to(self.device)
-                        logits = self.custom_head(text_embedding, auxiliary_features)
+                    auxiliary_features = batch["auxiliary_features"].to(self.device)
+                    logits = self.custom_head(text_embedding, auxiliary_features)
+                else:
+                    if self.model_name == "patentbert":
+                        outputs = self._get_encoder(model)(input_ids=input_ids, attention_mask=attention_mask)
+                        text_embedding = outputs.last_hidden_state[:, 0, :]
+                        logits = model.classifier(text_embedding)
                     else:
                         outputs = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)
                         logits = outputs.logits
 
-                    loss = criterion(logits, labels)
+                loss = criterion(logits, labels)
 
                 total_loss += loss.item()
                 preds = torch.argmax(logits, dim=1)
@@ -561,6 +514,7 @@ class DeepLearningExperiments:
             torch.cuda.manual_seed(42)
 
         is_longformer = "longformer" in self.model_name.lower()
+        is_patentbert = self.model_name.lower() == "patentbert"
 
         # ── Create static train/val split indices ─────────────────────────
         n = len(X_train_proc)
@@ -607,30 +561,46 @@ class DeepLearningExperiments:
         y_split_train = y_train_1d[train_idx]
         y_split_val   = y_train_1d[val_idx]
 
+        # Best model across ALL trials in this study (mutable closure dict)
+        _best_across = {"val_f1": -1.0}
+        _model_save_dir = str(Path(self.results_json_path).parent / "optuna")
+        os.makedirs(_model_save_dir, exist_ok=True)
+        _model_save_path = os.path.join(
+            _model_save_dir,
+            f"best_{self.model_name}_{self.case_mode}_exp{self.experiment}.pt",
+        )
+
         def objective(trial):
             # ── Sample hyperparameters ─────────────────────────────────────
-            lr = trial.suggest_float("learning_rate", 1e-5, 5e-5, log=True)
-            batch_size   = trial.suggest_categorical("batch_size", [2] if is_longformer else [8, 16, 32])
+            # 1. Dynamically bound learning rate based on architecture scale
+            if is_patentbert:
+                # BERT-Large requires a gentler, lower learning rate range to prevent gradient explosion
+                lr = trial.suggest_float("learning_rate", 1e-6, 2e-5, log=True)
+            else:
+                # BERT-Base (LegalBERT) and Longformer scale well with traditional ranges
+                lr = trial.suggest_float("learning_rate", 1e-5, 5e-5, log=True)
+            
+            if is_longformer:
+                # Longformer uses massive attention windows; strict memory limits apply
+                batch_size = trial.suggest_categorical("batch_size", [2])
+            elif is_patentbert:
+                # BERT-Large needs stable batch sizes (avoiding noisy micro-batches like 8)
+                batch_size = trial.suggest_categorical("batch_size", [16, 32])
+            else:
+                # LegalBERT (BERT-Base) is highly flexible
+                batch_size = trial.suggest_categorical("batch_size", [8, 16, 32])
+                    
+            #batch_size   = trial.suggest_categorical("batch_size", [2] if is_longformer else [8, 16, 32])
             epochs       = 30
             dropout      = trial.suggest_categorical("dropout", [0.1, 0.2, 0.3])
-            weight_decay = trial.suggest_categorical("weight_decay", [0.0, 0.01])
-            n_layers      = trial.suggest_categorical("n_layers", [1]) if self.is_hbert else None
-            lr_multiplier = trial.suggest_int("lr_multiplier", 10, 100) if self.is_hbert else None
-            warmup_ratio  = trial.suggest_categorical("warmup_ratio", [0.05, 0.10, 0.20]) if self.is_hbert else None
-
+            weight_decay = trial.suggest_categorical("weight_decay", [0.0, 0.01, 0.05, 0.1])
             params = {
-                "learning_rate": lr,
-                "batch_size":    batch_size,
-                "epochs":        epochs,
-                "dropout":       dropout,
-                "weight_decay":  weight_decay,
+                "learning_rate":  lr,
+                "batch_size":     batch_size,
+                "epochs":         epochs,
+                "dropout":        dropout,
+                "weight_decay":   weight_decay,
             }
-            if n_layers is not None:
-                params["n_layers"] = n_layers
-            if lr_multiplier is not None:
-                params["lr_multiplier"] = lr_multiplier
-            if warmup_ratio is not None:
-                params["warmup_ratio"] = warmup_ratio
 
             self.aux_encoder = None
 
@@ -643,16 +613,14 @@ class DeepLearningExperiments:
                 batch_size=params["batch_size"]
             )
 
-            if self.is_hbert:
-                aux_dim = {"op": 6, "both": 12}.get(self.case_mode) if self.opposition else None
-                model = self._build_model(params["dropout"], aux_dim=aux_dim, n_layers=params["n_layers"])
-            else:
-                model = self._build_model(params["dropout"])
-                self._fix_opposition_head(model, train_loader)
+            model = self._build_model(params["dropout"])
+            self._fix_opposition_head(model, train_loader)
             optimizer = self._build_optimizer(
-                model, params["learning_rate"], params["weight_decay"],
-                lr_multiplier=params.get("lr_multiplier"),
+                model,
+                params["learning_rate"],
+                params["weight_decay"],
             )
+            
             criterion = torch.nn.CrossEntropyLoss()
 
             accum_steps = 8 if is_longformer else 1
@@ -667,30 +635,71 @@ class DeepLearningExperiments:
                 num_training_steps=total_steps,
             )
 
-            best_val_f1 = 0.0
-            best_epoch = 0
-            patience_counter = 0
-            patience = 8 if self.is_hbert else 3
-            min_epochs = 10 if self.is_hbert else 0
-            print(f"  Early stopping enabled (patience={patience}, min_epochs={min_epochs})")
+            # ── Step-level patience (uniform across HP tuning, SW, full-test) ──
+            _eval_every       = max(1, steps_per_epoch // 4)  # ~4 evals / epoch
+            _patience         = 8
+            _min_global_steps = 3 * steps_per_epoch           # hard min: 3 full epochs
+            best_val_f1       = 0.0
+            best_epoch        = 0
+            patience_counter  = 0
+            eval_count        = 0
+            global_step       = 0
+            epoch_history     = []
+            _done             = False
+            print(
+                f"  Step-level patience: eval_every={_eval_every}, "
+                f"patience={_patience}, min_global_steps={_min_global_steps}"
+            )
             for epoch in range(params["epochs"]):
-                train_loss = self._train_epoch(model, optimizer, train_loader, criterion, scheduler)
-                val_loss, val_f1 = self._validate_epoch(model, val_loader, criterion)
-                print(
-                    f"  Epoch {epoch + 1}/{params['epochs']}: "
-                    f"train_loss={train_loss:.4f} val_loss={val_loss:.4f} val_f1={val_f1:.4f}"
-                )
-                if val_f1 > best_val_f1:
-                    best_val_f1 = val_f1
-                    best_epoch = epoch + 1
-                    patience_counter = 0
-                else:
-                    patience_counter += 1
-                    if (epoch + 1) >= min_epochs and patience_counter >= patience:
-                        print(f"  Early stopping at epoch {epoch + 1}")
-                        break
+                if _done:
+                    break
+                for eff_step, avg_loss in self._iter_train_steps(
+                    model, optimizer, train_loader, criterion, scheduler
+                ):
+                    global_step += 1
+                    should_eval = (global_step % _eval_every == 0) or (eff_step == steps_per_epoch)
+                    if should_eval:
+                        val_loss, val_f1 = self._validate_epoch(model, val_loader, criterion)
+                        eval_count += 1
+                        epoch_history.append({
+                            "epoch":       epoch + 1,
+                            "global_step": global_step,
+                            "eval_index":  eval_count,
+                            "train_loss":  round(float(avg_loss), 6),
+                            "val_loss":    round(float(val_loss), 6),
+                            "val_f1":      round(float(val_f1), 6),
+                        })
+                        print(
+                            f"  Epoch {epoch+1} step {global_step} eval {eval_count}: "
+                            f"train_loss={avg_loss:.4f} val_loss={val_loss:.4f} val_f1={val_f1:.4f}"
+                        )
+                        if val_f1 > best_val_f1:
+                            best_val_f1 = val_f1
+                            best_epoch  = epoch + 1
+                            patience_counter = 0
+                            # Persist globally best model across all trials in this study
+                            if val_f1 > _best_across["val_f1"]:
+                                _best_across["val_f1"] = val_f1
+                                torch.save({
+                                    "model_state":       model.state_dict(),
+                                    "custom_head_state": self.custom_head.state_dict() if self.opposition else None,
+                                    "hp_params":         params,
+                                    "best_epoch":        epoch + 1,
+                                    "eval_index":        eval_count,
+                                    "val_f1":            val_f1,
+                                }, _model_save_path)
+                        else:
+                            patience_counter += 1
+                            if global_step >= _min_global_steps and patience_counter >= _patience:
+                                print(
+                                    f"  Early stopping at epoch {epoch+1} step {global_step} "
+                                    f"(best_epoch={best_epoch} val_f1={best_val_f1:.4f})"
+                                )
+                                _done = True
+                                break
 
             trial.set_user_attr("best_epoch", int(best_epoch))
+            trial.set_user_attr("epoch_history", epoch_history)
 
             del model
             if torch.cuda.is_available():
@@ -708,18 +717,29 @@ class DeepLearningExperiments:
         study = optuna.create_study(
             direction="maximize",
             sampler=self.sampler,
+            storage=self.optuna_storage,    # None → in-memory; sqlite:///... → persistent
+            study_name=self.study_name,
+            load_if_exists=True,            # resume if DB + study_name already exist
         )
-        study.optimize(
-            objective,
-            n_trials=self.n_trials,
-            timeout=self.timeout,
-            show_progress_bar=False,
-        )
+        completed = len([t for t in study.trials if t.state == optuna.trial.TrialState.COMPLETE])
+        remaining = max(0, self.n_trials - completed)
+        if completed > 0:
+            print(f"[Optuna] Resuming study '{self.study_name}': {completed} trials already complete, {remaining} remaining.")
+        if remaining == 0:
+            print("[Optuna] All trials already complete – nothing to run.")
+        else:
+            study.optimize(
+                objective,
+                n_trials=remaining,
+                timeout=self.timeout,
+                show_progress_bar=False,
+            )
 
         best_trial = study.best_trial
         best_params = best_trial.params
         best_val_f1 = best_trial.value
         best_epoch = int(best_trial.user_attrs.get("best_epoch", best_params.get("epochs", 0)))
+        best_epoch_history = best_trial.user_attrs.get("epoch_history", [])
         best_params["epochs"] = best_epoch
         print(f"\nBest params: {best_params} | Val F1: {best_val_f1:.4f} | best_epoch={best_epoch}")
         print(f"Completed {len(study.trials)} trials")
@@ -742,45 +762,41 @@ class DeepLearningExperiments:
             "best_params": {k: float(v) if isinstance(v, (int, float)) else v for k, v in best_params.items()},
             "time_seconds": elapsed,
             "test_metrics": None,
+            "epoch_history":   best_epoch_history,
+            "best_model_path": _model_save_path if os.path.exists(_model_save_path) else None,
         }
-        # Add architecture-specific metadata
-        if self.is_hbert:
-            record["architecture"] = "hierarchical_bert"
-            record["chunk_size"] = self.chunk_size
-            record["max_chunks"] = self.max_chunks
-        else:
-            record["max_context_length"] = self.max_length
+        record["max_context_length"] = self.max_length
 
         self.results.append(record)
         self._append_json_result(record)
         return [record]
 
-    def _build_model(self, dropout, aux_dim=None, n_layers=4):
-        """Load a fresh model instance with the given dropout, sent to device.
-
-        For H-BERT: creates HierBertModel with trainable encoder + context transformer.
-        For flat models: loads AutoModelForSequenceClassification from HuggingFace.
-        """
-        if self.is_hbert:
-            model = HierBertModel(
-                hf_model_name=self.hf_model_name,
-                chunk_size=self.chunk_size,
-                max_chunks=self.max_chunks,
-                num_labels=2,
-                dropout=dropout,
-                opposition=self.opposition,
-                aux_dim=aux_dim,
-                n_layers=n_layers,
-            )
-            return model.to(self.device)
-
+    def _build_model(self, dropout):
+        """Load a fresh AutoModelForSequenceClassification from HuggingFace."""
         print(f"  Loading model {self.hf_model_name} (max_length={self.max_length})...")
-        model = AutoModelForSequenceClassification.from_pretrained(
-            self.hf_model_name,
-            num_labels=2,
-            hidden_dropout_prob=dropout,
-            attention_probs_dropout_prob=dropout,
-        )
+        try:
+            model = AutoModelForSequenceClassification.from_pretrained(
+                self.hf_model_name,
+                num_labels=2,
+                hidden_dropout_prob=dropout,
+                attention_probs_dropout_prob=dropout,
+            )
+        except ValueError:
+            # Some models (e.g. anferico/bert-for-patents) lack a model_type in
+            # their config.json so AutoModel cannot resolve them. Fall back to
+            # loading the config as BertConfig and using BertForSequenceClassification.
+            print(f"  AutoModel failed; falling back to BertForSequenceClassification for {self.hf_model_name}")
+            cfg = BertConfig.from_pretrained(
+                self.hf_model_name,
+                num_labels=2,
+                hidden_dropout_prob=dropout,
+                attention_probs_dropout_prob=dropout,
+            )
+            model = BertForSequenceClassification.from_pretrained(
+                self.hf_model_name,
+                config=cfg,
+                ignore_mismatched_sizes=True,
+            )
         model.to(self.device)
 
         if self.opposition:
@@ -796,46 +812,17 @@ class DeepLearningExperiments:
 
         return model
 
-    def _build_optimizer(self, model, lr, weight_decay=0.0, lr_multiplier=None):
-        """Build AdamW optimizer over the correct parameter set.
-
-        For H-BERT: all model params (encoder + context_transformer + classifier).
-        For flat models: all model params (+ custom_head for opposition mode).
-        """
-        if self.is_hbert:
-            # Base encoder gets the small Optuna LR
-            # Randomly initialized upper layers get lr_multiplier× larger LR to actually learn
-            mult = lr_multiplier if lr_multiplier is not None else 50
-            optimizer_grouped_parameters = [
-                {"params": model.encoder.parameters(), "lr": lr},
-                {"params": model.context_transformer.parameters(), "lr": lr * mult},
-                {"params": model.position_embeddings.parameters(), "lr": lr * mult},
-                {"params": model.classifier.parameters(), "lr": lr * mult},
-            ]
-            return AdamW(optimizer_grouped_parameters, weight_decay=weight_decay)
-        elif self.opposition:
-            params = list(self._get_encoder(model).parameters()) + list(self.custom_head.parameters())
-            return AdamW(params, lr=lr, weight_decay=weight_decay)
-        else:
-            return AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
+    def _build_optimizer(self, model, lr, weight_decay=0.0):
+        """Build AdamW optimizer over all model parameters with a uniform LR."""
+        return AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
 
     def _fix_opposition_head(self, model, train_loader):
-        """Set opposition head fusion width using hardcoded aux dims, validating against data."""
+        """Set opposition head fusion width by reading aux dims from data."""
         if not self.opposition:
             return
-        expected = {"op": 6, "both": 12}
-        if self.case_mode not in expected:
-            raise ValueError(
-                f"Unsupported opposition case_mode '{self.case_mode}' for hardcoded aux dims. "
-                "Expected one of: op, both."
-            )
-        aux_dim = expected[self.case_mode]
+        aux_dim = None
         for batch in train_loader:
-            observed = batch["auxiliary_features"].shape[1]
-            if observed != aux_dim:
-                raise ValueError(
-                    f"Hardcoded aux_dim={aux_dim} but observed {observed} for case_mode='{self.case_mode}'."
-                )
+            aux_dim = batch["auxiliary_features"].shape[1]
             self.custom_head.aux_feature_dim = aux_dim
             self.custom_head.fused_dim = model.config.hidden_size + aux_dim
             new_layer = torch.nn.Linear(self.custom_head.fused_dim, 256).to(self.device)
@@ -846,17 +833,16 @@ class DeepLearningExperiments:
 
     def _compute_test_metrics(self, model, X_test, y_test):
         """Compute metrics on test set.
-        
+
         Args:
-            model: Trained model (BERT-based or HierBertModel)
+            model: Trained model
             X_test: Test features
             y_test: Test labels
-        
+
         Returns:
             Dictionary with accuracy, f1, precision, recall, mcc, auc
         """
-        test_batch = 4 if self.is_hbert else 32
-        test_loader = self._create_dataloader(X_test, y_test, is_train=False, batch_size=test_batch)
+        test_loader = self._create_dataloader(X_test, y_test, is_train=False, batch_size=32)
 
         model.eval()
         all_preds = []
@@ -866,26 +852,22 @@ class DeepLearningExperiments:
         with torch.no_grad():
             for batch in test_loader:
                 labels = batch["labels"].to(self.device)
+                input_ids = batch["input_ids"].to(self.device)
+                attention_mask = batch["attention_mask"].to(self.device)
 
-                if self.is_hbert:
-                    ids = batch["input_ids"].to(self.device)
-                    mask = batch["attention_mask"].to(self.device)
-                    cmask = batch["chunk_mask"].to(self.device)
-                    aux = batch.get("auxiliary_features")
-                    if aux is not None:
-                        aux = aux.to(self.device)
-
-                    with torch.amp.autocast("cuda", enabled=self.device.type == "cuda"):
-                        logits = model(ids, mask, cmask, auxiliary_features=aux)
-                else:
-                    input_ids = batch["input_ids"].to(self.device)
-                    attention_mask = batch["attention_mask"].to(self.device)
-
-                    if self.opposition:
-                        outputs = self._get_encoder(model)(input_ids=input_ids, attention_mask=attention_mask)
+                if self.opposition:
+                    outputs = self._get_encoder(model)(input_ids=input_ids, attention_mask=attention_mask)
+                    if self.model_name == "patentbert":
+                        text_embedding = outputs.last_hidden_state[:, 0, :]
+                    else:
                         text_embedding = outputs.pooler_output if outputs.pooler_output is not None else outputs.last_hidden_state[:, 0, :]
-                        auxiliary_features = batch["auxiliary_features"].to(self.device)
-                        logits = self.custom_head(text_embedding, auxiliary_features)
+                    auxiliary_features = batch["auxiliary_features"].to(self.device)
+                    logits = self.custom_head(text_embedding, auxiliary_features)
+                else:
+                    if self.model_name == "patentbert":
+                        outputs = self._get_encoder(model)(input_ids=input_ids, attention_mask=attention_mask)
+                        text_embedding = outputs.last_hidden_state[:, 0, :]
+                        logits = model.classifier(text_embedding)
                     else:
                         outputs = model(input_ids=input_ids, attention_mask=attention_mask)
                         logits = outputs.logits
@@ -919,31 +901,4 @@ class DeepLearningExperiments:
 
     def _append_json_result(self, record):
         """Append result to JSON file with file locking."""
-        path = self.results_json_path
-        parent = os.path.dirname(path)
-        if parent:
-            os.makedirs(parent, exist_ok=True)
-
-        with open(path, "a+", encoding="utf-8") as f:
-            fcntl.flock(f, fcntl.LOCK_EX)
-            f.seek(0)
-            content = f.read().strip()
-
-            if content:
-                try:
-                    data = json.loads(content)
-                    if not isinstance(data, list):
-                        data = [data]
-                except json.JSONDecodeError:
-                    data = []
-            else:
-                data = []
-
-            data.append(record)
-
-            f.seek(0)
-            f.truncate()
-            json.dump(data, f, indent=2)
-            f.flush()
-            os.fsync(f.fileno())
-            fcntl.flock(f, fcntl.LOCK_UN)
+        append_json_result(jsonable(record), self.results_json_path)

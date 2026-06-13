@@ -14,6 +14,7 @@ Arguments
 - `MODEL`: transformer model identifier:
     legalbert        — nlpaueb/legal-bert-base-uncased   (512 tokens)
     longformer_base  — lexlms/legal-longformer-base      (4096 tokens)
+    patentbert       — anferico/bert-for-patents         (512 tokens, bert-large)
 - `EXPERIMENT`: experiment identifier, `1` or `2`
 - `OPPOSITION`: boolean string such as `true` or `false`; enables structured
   auxiliary feature fusion (encoder CLS token + one-hot encoded columns)
@@ -49,6 +50,7 @@ DEFAULT_RESULTS_PATH = PROJECT_ROOT / "Results" / "results_deep_learning.json"
 ALL_MODELS = [
     "legalbert",
     "longformer_base",
+    "patentbert",
 ]
 
 def infer_case_mode(path: str) -> str:
@@ -86,10 +88,28 @@ def build_parser():
         help="Wall-clock budget in seconds; study stops at n_trials or timeout, whichever comes first (default: None)",
     )
     parser.add_argument(
+        "--optuna_storage",
+        type=str,
+        default=None,
+        help="Optuna storage URL, e.g. sqlite:///Results/optuna/study.db (default: None = in-memory)",
+    )
+    parser.add_argument(
+        "--study_name",
+        type=str,
+        default=None,
+        help="Optuna study name; must be set when using --optuna_storage to enable resume (default: None)",
+    )
+    parser.add_argument(
         "--results_path",
         type=Path,
         default=DEFAULT_RESULTS_PATH,
         help=f"Output JSON path (default: {DEFAULT_RESULTS_PATH})",
+    )
+    parser.add_argument(
+        "--min_epochs",
+        type=int,
+        default=3,
+        help="Minimum epochs before early stopping can fire in Optuna trials (default: 3)",
     )
     return parser
 
@@ -114,7 +134,10 @@ def main():
         n_trials=args.n_trials,
         timeout=args.timeout,
         results_json_path=str(args.results_path),
+        min_epochs=args.min_epochs,
     )
+    exp.optuna_storage = args.optuna_storage
+    exp.study_name = args.study_name
 
     X_train = pd.read_pickle(args.x_train)
     y_train = pd.read_pickle(args.y_train)

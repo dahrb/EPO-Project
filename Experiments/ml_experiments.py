@@ -40,7 +40,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import Binarizer, StandardScaler
 from sklearn.svm import LinearSVC
 
-from Utilities.utils import TextProcess, Word2VecTransform
+from Utilities.utils import TextProcess, Word2VecTransform, append_json_result, jsonable
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -64,9 +64,21 @@ class PreprocessTransformer(BaseEstimator, TransformerMixin):
         )
 
         if self.opposition:
+            texts = X["New Summary Facts"]
+            # If raw strings, parse through spaCy first
+            if len(texts) > 0 and isinstance(
+                texts.iloc[0] if hasattr(texts, "iloc") else texts[0], str
+            ):
+                texts = list(tp.nlp.pipe(texts.tolist() if hasattr(texts, "tolist") else list(texts)))
             output = X.copy()
-            output["New Summary Facts"] = tp.fit_transform(output["New Summary Facts"])
+            output["New Summary Facts"] = tp.fit_transform(texts)
             return output
+
+        # If raw strings, parse through spaCy first
+        if len(X) > 0 and isinstance(
+            X.iloc[0] if hasattr(X, "iloc") else X[0], str
+        ):
+            X = list(tp.nlp.pipe(X.tolist() if hasattr(X, "tolist") else list(X)))
 
         return tp.fit_transform(X)
 
@@ -503,51 +515,10 @@ class Experiments:
 
     def _append_json_result(self, record):
         """Append one record to the shared JSON file using an exclusive file lock."""
-        path = self.results_json_path
-        parent = os.path.dirname(path)
-        if parent:
-            os.makedirs(parent, exist_ok=True)
-
-        with open(path, "a+", encoding="utf-8") as file_handle:
-            fcntl.flock(file_handle, fcntl.LOCK_EX)
-            file_handle.seek(0)
-            content = file_handle.read().strip()
-
-            if content:
-                try:
-                    data = json.loads(content)
-                    if not isinstance(data, list):
-                        data = [data]
-                except json.JSONDecodeError:
-                    data = []
-            else:
-                data = []
-
-            data.append(self._jsonable(record))
-
-            file_handle.seek(0)
-            file_handle.truncate()
-            json.dump(data, file_handle, indent=2)
-            file_handle.flush()
-            os.fsync(file_handle.fileno())
-            fcntl.flock(file_handle, fcntl.LOCK_UN)
+        append_json_result(record, self.results_json_path)
 
     def _jsonable(self, value):
-        if isinstance(value, dict):
-            return {k: self._jsonable(v) for k, v in value.items()}
-        if isinstance(value, list):
-            return [self._jsonable(v) for v in value]
-        if isinstance(value, tuple):
-            return [self._jsonable(v) for v in value]
-        if isinstance(value, np.ndarray):
-            return value.tolist()
-        if isinstance(value, (np.integer,)):
-            return int(value)
-        if isinstance(value, (np.floating,)):
-            return float(value)
-        if isinstance(value, (np.bool_,)):
-            return bool(value)
-        return value
+        return jsonable(value)
 
     def _to_1d(self, y):
         if isinstance(y, pd.DataFrame):
