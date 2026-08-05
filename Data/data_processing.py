@@ -26,6 +26,7 @@ Last Updated: 02.04.26
 Status: Done
 """
 
+import glob
 import os
 import re
 import sys
@@ -43,8 +44,23 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
 DATA_DIR = os.path.join(PROJECT_DIR, "Data")
 
-#insert your EPO XML here - note this has only been tested with EPDecisions_March2025.xml
-XML_PATH = os.path.join(DATA_DIR, "EPDecisions_March2025.xml")
+# ── Raw EPO XML input ────────────────────────────────────────────────────────
+# The EPO "Decisions of the Boards of Appeal" raw-data product is refreshed
+# periodically (see README for the download link). Newer snapshots simply contain
+# *more recent* decisions; because processing is capped at DECISION_YEAR_MAX below,
+# any snapshot from March 2025 onward reproduces the exact same processed dataset.
+#
+# We auto-detect the snapshot: the first Data/EPDecisions_*.xml file is used, so you
+# do not need to rename your download. (Originally developed on EPDecisions_March2025.xml.)
+_XML_CANDIDATES = sorted(glob.glob(os.path.join(DATA_DIR, "EPDecisions_*.xml")))
+XML_PATH = _XML_CANDIDATES[0] if _XML_CANDIDATES else os.path.join(DATA_DIR, "EPDecisions_March2025.xml")
+
+# ── Reproducibility cutoff ───────────────────────────────────────────────────
+# All experiments were run on decisions from calendar years 2000–2024 (inclusive).
+# These bounds are the reproducibility anchor: decisions from 2025 onward that appear
+# in later snapshots are deliberately excluded so results remain identical.
+DECISION_YEAR_MIN = 2000
+DECISION_YEAR_MAX = 2024
 
 #add project root so we can import Utilities
 sys.path.insert(0, PROJECT_DIR)
@@ -220,15 +236,17 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     df["Year"] = df["Date"].dt.year
 
-    #5. Filter: Technical Board (T), English, Year 2000-2024, Order present
+    #5. Filter: Technical Board (T), English, Year within reproducibility cutoff, Order present.
+    #   The DECISION_YEAR_MAX bound excludes decisions newer than the original snapshot so that
+    #   later EPO raw-data downloads reproduce the identical processed dataset.
     df = df[
         (df["Court Type"] == "T")
         & (df["Procedure Language"] == "en")
-        & (df["Year"] >= 2000)
-        & (df["Year"] < 2025)
+        & (df["Year"] >= DECISION_YEAR_MIN)
+        & (df["Year"] <= DECISION_YEAR_MAX)
         & (df["Order"].notna())
     ].copy()
-    print(f"{len(df):,} T-court English records (2000-2024) with Order")
+    print(f"{len(df):,} T-court English records ({DECISION_YEAR_MIN}-{DECISION_YEAR_MAX}) with Order")
 
     #6. De-duplicate by ECLI (notebook approach)
     dups = df[df.duplicated(subset=["ECLI"], keep=False)]

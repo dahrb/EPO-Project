@@ -10,8 +10,8 @@ Two independent analyses, each runnable via CLI:
     1. A grouped bar chart of the top-N overlapping features across modes.
     2. A Spearman rank-correlation heatmap of the feature importance
        rankings between modes.
-  Output: Results/shap/cross_mode_bar.png
-           Results/shap/cross_mode_spearman.png
+  Output: Figs/shap/cross_mode_bar.png
+           Figs/shap/cross_mode_spearman.png
 
   Part B — Sliding-window SHAP trajectory (pf only)
   --------------------------------------------------
@@ -21,19 +21,19 @@ Two independent analyses, each runnable via CLI:
     1. A heatmap of feature importance over time (top-N features by mean
        importance across all windows).
     2. A line plot of the top-K individual feature trajectories.
-  Output: Results/shap/sw_heatmap.png
-           Results/shap/sw_lineplot.png
+  Output: Figs/shap/sw_heatmap.png
+           Figs/shap/sw_lineplot.png
 
 Usage
 -----
   # Part A only:
-  python -m Experiments.shap_analysis cross_mode [--top_n 20] [--out_dir Results/shap]
+  python -m Experiments.shap_analysis cross_mode [--top_n 20] [--out_dir Figs/shap]
 
   # Part B only:
   python -m Experiments.shap_analysis sliding_window [--top_n 20] [--top_k 8]
                                                       [--first_year 2021]
                                                       [--last_year 2024]
-                                                      [--out_dir Results/shap]
+                                                      [--out_dir Figs/shap]
 
   # Both:
   python -m Experiments.shap_analysis all [options]
@@ -502,7 +502,7 @@ def run_cross_mode(top_n: int, out_dir: Path):
             columns=feat_names_c,
         )
 
-        # -- Beeswarm (dot summary plot, mirrors original shap_xgboost_run.py) --
+        # -- Beeswarm (dot summary plot) --
         print(f"\n[Cross-mode] Beeswarm for case='{case}' ({mode_label})...")
         shap.summary_plot(
             shap_vals_c,
@@ -704,8 +704,8 @@ def _parse_args():
         help="Last sliding-window test year (default: 2024).",
     )
     parser.add_argument(
-        "--out_dir", type=str, default=str(PROJECT_ROOT / "Results" / "shap"),
-        help="Output directory for plots (default: Results/shap).",
+        "--out_dir", type=str, default=str(PROJECT_ROOT / "Figs" / "shap"),
+        help="Output directory for plots (default: Figs/shap).",
     )
     return parser.parse_args()
 

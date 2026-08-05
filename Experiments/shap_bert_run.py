@@ -5,7 +5,7 @@ Uses shap.PartitionExplainer (auto-selected) with a word-level Text masker.
 Each explanation requires many masked forward passes through BERT, so this is
 much slower than TreeSHAP — set --n_samples to a manageable number (50–150).
 
-Mirrors shap_xgboost_run.py structure across the same experiment setups:
+Mirrors shap_analysis.py structure across the same experiment setups:
   - Loads the best-checkpoint from Results/results_deep_learning.json
   - Uses Data/Final_Processed/ train/test splits
   - Produces (all saved to --out_dir):
@@ -14,9 +14,9 @@ Mirrors shap_xgboost_run.py structure across the same experiment setups:
       3. Text highlight plots (HTML) for the same 3 cases
 
 Usage examples:
-  python Results/shap_bert_run.py --model legalbert  --experiment 2 --case pf
-  python Results/shap_bert_run.py --model patentbert --experiment 2 --case op --n_samples 50
-  python Results/shap_bert_run.py --model legalbert  --experiment 1 --case both --n_samples 75
+  python Experiments/shap_bert_run.py --model legalbert  --experiment 2 --case pf
+  python Experiments/shap_bert_run.py --model patentbert --experiment 2 --case op --n_samples 50
+  python Experiments/shap_bert_run.py --model legalbert  --experiment 1 --case both --n_samples 75
 """
 
 import sys
@@ -76,7 +76,7 @@ def parse_args():
     p.add_argument("--n_samples",   type=int, default=100,
                    help="Test samples for global SHAP (stratified 50/50 by label). "
                         "Set to -1 to use the full test set.")
-    p.add_argument("--out_dir",     default="Results/shap_bert",
+    p.add_argument("--out_dir",     default="Figs/shap_bert",
                    help="Output directory")
     p.add_argument("--dl_results",  default="Results/results_deep_learning.json")
     p.add_argument("--data_dir",    default="Data/Final_Processed")
@@ -321,7 +321,7 @@ def main():
     f1 = f1_score(y_test_1d, y_pred, zero_division=0)
     print(f"[Results] Accuracy={acc:.4f}  F1={f1:.4f}")
 
-    # Identify cases of interest (same logic as shap_xgboost_run.py)
+    # Identify cases of interest (same logic as shap_analysis.py)
     misclassified    = np.where(y_test_1d != y_pred)[0]
     correct_reversed = np.where((y_test_1d == y_pred) & (y_test_1d == 0))[0]
     correct_affirmed = np.where((y_test_1d == y_pred) & (y_test_1d == 1))[0]
