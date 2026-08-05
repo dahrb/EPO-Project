@@ -35,9 +35,25 @@ Status: Done
 import argparse
 import re
 import sys
+import types
 from pathlib import Path
 import pandas as pd
 import torch
+
+# numpy 2.0 / cupy compatibility fix (must run before any spacy import)
+import numpy as np
+if not hasattr(np, "float_"):
+    np.float_ = np.float64
+if not hasattr(np, "complex_"):
+    np.complex_ = np.complex128
+if not hasattr(np, "AxisError"):
+    np.AxisError = np.exceptions.AxisError
+_cupy_stub = types.ModuleType("cupy")
+_cupy_stub.ndarray = np.ndarray
+for _sub in ["cuda", "cuda.stream", "testing", "_core", "_core.core"]:
+    sys.modules[f"cupy.{_sub}"] = types.ModuleType(f"cupy.{_sub}")
+sys.modules["cupy"] = _cupy_stub
+del _cupy_stub, _sub
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:

@@ -40,11 +40,28 @@ import json
 import os
 import random
 import sys
+import types
 import warnings
 from datetime import datetime, timezone
 from pathlib import Path
 
+# numpy 2.0 removed np.float_ / np.complex_ etc.; cupy (spacy[cuda12x] dep)
+# still references them, crashing before spacy's own try/except can catch it.
 import numpy as np
+if not hasattr(np, "float_"):
+    np.float_ = np.float64
+if not hasattr(np, "complex_"):
+    np.complex_ = np.complex128
+if not hasattr(np, "AxisError"):
+    np.AxisError = np.exceptions.AxisError
+
+# Stub out cupy entirely so spacy falls back to CPU cleanly.
+_cupy_stub = types.ModuleType("cupy")
+_cupy_stub.ndarray = np.ndarray
+for _sub in ["cuda", "cuda.stream", "testing", "_core", "_core.core"]:
+    sys.modules[f"cupy.{_sub}"] = types.ModuleType(f"cupy.{_sub}")
+sys.modules["cupy"] = _cupy_stub
+del _cupy_stub, _sub
 import pandas as pd
 import torch
 

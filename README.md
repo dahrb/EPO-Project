@@ -1,6 +1,6 @@
-# EPO Patent Appeal Outcome Prediction
+# Predicting Decisions of the EPO's Boards of Appeal Using Machine Learning
 
-A research pipeline for predicting the outcomes of European Patent Office (EPO) Board of Appeals decisions using classical ML and transformer-based deep learning (LegalBERT, PatentBERT, Legal-Longformer).
+This repo shows a pipeline implemented to help predict the outcome of patent application appeals at the EPO's Technical Boards of Appeals. An earlier version of these experiments can be found in --- which was submitted to the JURIX 2023 'Doctoral Consortium' and was awarded 'Best Doctoral Consortium Paper'.
 
 ---
 
@@ -23,23 +23,23 @@ A research pipeline for predicting the outcomes of European Patent Office (EPO) 
 
 ## Project Overview
 
-This project classifies the outcome of EPO patent appeal decisions — grant/refuse for *ex parte* cases and upheld/overturned for *inter partes* (opposition) cases — across two experimental splits:
+This project classifies the outcome of EPO patent appeal decisions — grant/refuse for *ex parte* (examining division) cases and for *inter partes* (opposition division) cases — across two experimental splits:
 
 | Split | Description |
 |-------|-------------|
-| **Exp 1** | Temporal split — earlier decisions for training, recent for test |
-| **Exp 2** | Stratified random split |
+| **Exp 1** | Stratified random split |
+| **Exp 2** | Temporal split — earlier decisions for training, recent for test. This includes a Sliding Window temporal evaluation to measure how the performance changes over time.|
 
 Each split is evaluated in three **modes**: `pf` (ex parte), `op` (opposition), `both` (combined).
 
 The full pipeline is:
 1. Parse raw XML → processed CSV
 2. Train domain-specific embeddings (Patent2Vec, PatentDoc2Vec)
-3. Generate train/test pickle files per experiment × mode
-4. Classical ML experiments (grid search)
-5. DL hyperparameter tuning via Optuna (persistent SQLite, resumable)
-6. DL full-test evaluation (loads saved HP checkpoint, no retraining)
-7. Sliding-window temporal evaluation (test years 2021–2024)
+3. Generate train/test files per experiment × mode
+4. ML experiments and hyperparameter tuning
+5. DL hyperparameter tuning via Optuna
+6. DL full-test evaluation
+7. Sliding-window temporal evaluation 
 
 ---
 
@@ -59,7 +59,8 @@ EPO-Project/
 │   ├── run_experiment.py                    # CLI runner for ML experiments
 │   ├── deep_learning_experiments.py         # Optuna HPO loop for all DL models
 │   ├── run_deep_learning_experiment.py      # CLI runner for DL HP tuning
-│   └── evaluation.py                        # CLI runner for full-test & SW eval
+│   ├── evaluation.py                        # CLI runner for full-test & SW eval
+│   └── shap_analysis.py                     # SHAP explainability analysis (XGBoost)
 ├── Models/
 │   ├── Patent2Vec_1.0                       # Word2Vec trained on patent text
 │   ├── Doc2Vec_1.0                          # Doc2Vec trained on patent documents
@@ -118,7 +119,7 @@ Key dependencies (see `pyproject.toml`): `torch`, `transformers`, `optuna`, `sci
 
 ## Reproducing Experiments
 
-All steps assume you are in the project root. On an HPC cluster with SLURM use the provided `.sh` scripts; locally call the Python modules directly.
+All steps assume you are in the project root.
 
 ---
 
@@ -127,9 +128,6 @@ All steps assume you are in the project root. On an HPC cluster with SLURM use t
 Parses `Data/EPDecisions_March2025.xml` and produces cleaned, feature-engineered CSV files.
 
 ```bash
-# SLURM:
-sbatch run_data_processing.sh
-
 # Locally:
 python -m Experiments.data_processing
 ```
@@ -140,7 +138,7 @@ python -m Experiments.data_processing
 
 ### Step 2: Train Patent Embeddings
 
-Trains domain-specific Word2Vec and Doc2Vec models on the processed patent text.
+Trains domain-specific Word2Vec and Doc2Vec models on the processed patent text. Data not included to reproduce the original embeddings trained for this work. The Patent2Vec and PatentDoc2Vec embeddings themselves are included, so it is recommend to use those for reproducibility. Feel free to use this script to train your own patent embeddings using similar data.
 
 ```bash
 python -m Experiments.PatentEmbeddings
@@ -170,11 +168,27 @@ X_test_{1,2}_{pf,op,both}.pkl     y_test_{1,2}_{pf,op,both}.pkl
 
 Runs Logistic Regression, LinearSVC, Random Forest, and XGBoost with sparse (N-Gram, TF-IDF) and dense embedding inputs across all experiment × mode combinations.
 
-```bash
-# SLURM — full grid (submits one job per combination):
-bash run_deep_learning_grids.sh
+Hyperparameter search uses **`RandomizedSearchCV`** (50 iterations). Cross-validation strategy follows the experiment type: `RepeatedStratifiedKFold` (3 splits) for Exp 1, `TimeSeriesSplit` (3 splits) for Exp 2. All models share a text pre-processing search space (`stopwords`, `numbers`, `lemmatisation` ∈ {True, False}) and vectoriser tuning (`ngram_range`, `norm`, `min_df`, `use_idf`).
 
-# Single run example:
+#### Model-specific hyperparameters
+
+| Model | Parameter | Values |
+|-------|-----------|--------|
+| **LinearSVC** | `C` | {0.1, 1, 10, 100} |
+| **Logistic Regression** | `C` | {0.1, 1, 10, 100} |
+| | `solver` | {lbfgs, sag} |
+| | `penalty` | {None, l2} |
+| | `max_iter` | {100, 250, 500} |
+| **Random Forest** | `n_estimators` | {100, 200, 300} |
+| | `max_features` | {sqrt, log2} |
+| | `max_depth` | {10, 50, 100, None} |
+| **XGBoost** | `n_estimators` | {100, 200, 300} |
+| | `learning_rate` | {0.01, 0.02, 0.05, 0.1, 0.2} |
+| | `gamma` | {0.0, 0.1, 0.2} |
+| | `max_depth` | {3, 6, 9} |
+
+```bash
+# Single run example (xgboost, exp 1, pf, TF-IDF, no embeddings):
 python -m Experiments.run_experiment \
     xgboost 1 false TF-IDF \
     Data/Final_Processed/X_Train_1_pf.pkl \
@@ -184,13 +198,13 @@ python -m Experiments.run_experiment \
     false
 ```
 
-**Grid:** 4 models × 2 sparse inputs × 4 embedding inputs × 2 experiments × 3 modes = 144 records appended to `Results/results_main.json`.
+**Grid:** 4 models × 2 sparse inputs × 4 embedding inputs × 2 experiments × 3 modes = 144 records appended to `Results/results_main.json`. Original results for this work can also be found in the results folder.
 
 ---
 
 ### Step 5: DL Hyperparameter Tuning (Optuna)
 
-Runs 10-trial TPE Optuna studies for each model × experiment × mode combination. Each trial uses **step-level early stopping** (`eval_every = spe//4`, `patience = 8` steps, `min_global_steps = 3 × spe`). Studies are stored in persistent SQLite databases and resume automatically if a job is interrupted.
+Runs TPE Optuna studies for each model × experiment × mode combination (10 trials for LegalBERT and PatentBERT; 3 trials for Longformer due to the much longer per-trial wall time). Each trial uses **step-level early stopping** (`eval_every = spe//4`, `patience = 8` steps, `min_global_steps = 3 × spe`). Studies are stored in persistent SQLite databases and resume automatically if a job is interrupted.
 
 The globally best checkpoint across all trials is saved to `Results/optuna/best_{model}_{case}_exp{N}.pt`.
 
@@ -202,37 +216,20 @@ The globally best checkpoint across all trials is saved to `Results/optuna/best_
 | `patentbert` | `anferico/bert-for-patents` |
 | `longformer_base` | `allenai/longformer-base-4096` |
 
-#### HP search space (all models)
+#### HP search space
 
-| Parameter | Range / choices |
-|---|---|
-| `lr` | log-uniform [1e-5, 5e-5] |
-| `batch_size` | {8, 16, 32} |
-| `dropout` | {0.1, 0.2, 0.3} |
-| `weight_decay` | {0.0, 0.01, 0.05, 0.1} |
+Search spaces differ slightly by model architecture:
 
-Longformer additionally uses gradient accumulation of 8 steps (effective batch = `batch_size × 8`, fixed `batch_size = 2`).
+| Parameter | LegalBERT | PatentBERT | Longformer |
+|---|---|---|---|
+| `lr` | log-uniform [1e-5, 5e-5] | log-uniform [1e-6, 2e-5] | log-uniform [1e-5, 5e-5] |
+| `batch_size` | {8, 16, 32} | {16, 32} | fixed {2} |
+| `dropout` | {0.1, 0.2, 0.3} | {0.1, 0.2, 0.3} | {0.1, 0.2, 0.3} |
+| `weight_decay` | {0.0, 0.01, 0.05, 0.1} | {0.0, 0.01, 0.05, 0.1} | {0.0, 0.01, 0.05, 0.1} |
+
+PatentBERT uses a lower LR range (`[1e-6, 2e-5]`) to prevent gradient explosion (BERT-Large scale). Longformer `batch_size` is fixed at 2 with gradient accumulation of 8 steps, giving an effective batch size of 16.
 
 #### SLURM scripts (one per model × exp × case)
-
-```bash
-# LegalBERT — submit all 6:
-for exp in 1 2; do for case in pf op both; do
-    sbatch run_hp_legalbert_exp${exp}_${case}.sh
-done; done
-
-# PatentBERT:
-for exp in 1 2; do for case in pf op both; do
-    sbatch run_hp_patentbert_exp${exp}_${case}.sh
-done; done
-
-# Longformer:
-for exp in 1 2; do for case in pf op both; do
-    sbatch run_hp_longformer_exp${exp}_${case}.sh
-done; done
-```
-
-#### Direct Python call (single run)
 
 ```bash
 python -m Experiments.run_deep_learning_experiment \
@@ -247,36 +244,17 @@ python -m Experiments.run_deep_learning_experiment \
     --results_path  Results/results_deep_learning.json
 ```
 
+For Longformer use `--n_trials 3` (each trial takes ~6–8 h on an A100 with a 24 h wall limit).
+
 Set `opposition` (`true`/`false`) to `true` for `op` and `both` modes; `false` for `pf`.
 
-Results are appended to `Results/results_deep_learning.json`.
+Results are appended to `Results/results_deep_learning.json`. Similarly the the ML runs, the original results can also be found in the Results folder.
 
 ---
 
 ### Step 6: DL Full-Test Evaluation
 
 Loads the saved `best_*.pt` checkpoint from Step 5 and evaluates on the held-out test set — **no retraining is performed**. Requires Step 5 to be complete for the target model/exp/case.
-
-#### SLURM scripts
-
-```bash
-# LegalBERT full-test — all 6:
-for exp in 1 2; do for case in pf op both; do
-    sbatch run_eval_lb_ft_exp${exp}_${case}.sh
-done; done
-
-# PatentBERT:
-for exp in 1 2; do for case in pf op both; do
-    sbatch run_eval_pb_ft_exp${exp}_${case}.sh
-done; done
-
-# Longformer (after HP complete):
-for exp in 1 2; do for case in pf op both; do
-    sbatch run_eval_lf_ft_exp${exp}_${case}.sh
-done; done
-```
-
-#### Direct Python call
 
 ```bash
 python -m Experiments.evaluation \
@@ -295,7 +273,7 @@ Results are appended to `Results/results_dl_full_test.json`.
 
 ### Step 7: Sliding-Window Temporal Evaluation
 
-Trains a fresh model on all data up to year `T−1` (with the year `T−1` held out as a validation set) and tests on year `T`, for `T` in 2021–2024. Runs for **Exp 2** only.
+Trains a fresh model on all data up to year `T−1` (with the year `T−1` held out as a validation set) and tests on year `T`, for `T` in 2021–2024. Runs for **Exp 2** only, and uses the hyperparameters from Step 5 except for epoch as it uses early-stopping.
 
 #### ML sliding window
 
@@ -357,6 +335,14 @@ Full results, methodology notes, and cross-model comparisons are in `Results/exp
 | 2 | op | XGBoost | N-Grams | 0.7447 | 0.5810 |
 | 2 | both | XGBoost | N-Grams | 0.7980 | 0.6215 |
 
+### ML Sliding Window (Exp 2, mean F1 across 2021–2024)
+
+| Case | Best Model | Input | Mean F1 |
+|------|-----------|-------|---------|
+| pf | XGBoost | N-Grams | 0.9069 |
+| op | XGBoost | N-Grams | 0.7488 |
+| both | XGBoost | N-Grams | 0.8078 |
+
 ### DL Full-Test (HP checkpoint, retrained=False)
 
 | Model | Exp | Case | Test F1 | MCC |
@@ -369,10 +355,16 @@ Full results, methodology notes, and cross-model comparisons are in `Results/exp
 | LegalBERT | 2 | both | 0.7762 | 0.5989 |
 | PatentBERT | 1 | pf | **0.8899** | 0.6198 |
 | PatentBERT | 1 | op | 0.5840 | 0.4107 |
+| PatentBERT | 1 | both | 0.7743 | 0.5732 |
 | PatentBERT | 2 | pf | **0.8816** | 0.6551 |
 | PatentBERT | 2 | op | 0.6841 | 0.4444 |
 | PatentBERT | 2 | both | 0.7789 | 0.5581 |
-| Longformer | all | all | *(HP in progress)* | — |
+| Longformer | 1 | pf | **0.9054** | 0.6576 |
+| Longformer | 1 | op | 0.6598 | 0.5247 |
+| Longformer | 1 | both | 0.7843 | 0.6066 |
+| Longformer | 2 | pf | **0.8989** | 0.7192 |
+| Longformer | 2 | op | 0.6838 | 0.4433 |
+| Longformer | 2 | both | 0.7818 | 0.5784 |
 
 ### DL Sliding Window (Exp 2, mean F1 across 2021–2024)
 
@@ -380,28 +372,75 @@ Full results, methodology notes, and cross-model comparisons are in `Results/exp
 |-------|----|----|------|
 | LegalBERT | 0.899 | 0.707 | 0.815 |
 | PatentBERT | 0.891 | 0.706 | 0.799 |
-| ML best | 0.910 | 0.752 | 0.810 |
-| Longformer | *(pending)* | *(pending)* | *(pending)* |
+| Longformer | 0.927 | 0.722 | *(2023–2024 pending)* |
+| ML best | 0.907 | 0.749 | 0.808 |
 
 ---
 
+## Explainability Analysis
+
+SHAP (TreeExplainer) analysis of the best-tuned XGBoost models from Experiment 2 is in `Experiments/shap_analysis.py`. Two independent analyses are available, each runnable via CLI.
+
+### Part A — Cross-mode feature importance comparison
+
+Trains XGBoost on the Exp 2 train set for all three case modes (`pf`, `op`, `both`), computes global mean |SHAP| importance on the test set, and compares:
+
+1. **Grouped bar chart** — top-N features ranked by mean importance across modes (each mode normalised to its own max for scale comparability).
+2. **Spearman rank-correlation heatmap** — pairwise ρ between the full feature importance rankings of each mode pair, with p-values.
+
+```bash
+python -m Experiments.shap_analysis cross_mode --top_n 20 --out_dir Results/shap
+```
+
+Output: `Results/shap/cross_mode_bar.png`, `Results/shap/cross_mode_spearman.png`
+
+### Part B — Sliding-window SHAP trajectory (pf)
+
+Re-trains `pf` XGBoost on each sliding window (train ≤ T−1, test = T, T ∈ 2021–2024) and computes global mean |SHAP| importance per window:
+
+1. **Heatmap** — top-N features × test year, row-normalised to show relative shift in each feature's importance over time.
+2. **Line plot** — top-K feature trajectories across years.
+
+```bash
+python -m Experiments.shap_analysis sliding_window --top_n 20 --top_k 8 \
+    --first_year 2021 --last_year 2024 --out_dir Results/shap
+```
+
+Output: `Results/shap/sw_heatmap.png`, `Results/shap/sw_lineplot.png`
+
+### Run both
+
+```bash
+python -m Experiments.shap_analysis all --top_n 20 --top_k 8
+```
+
+> **Note:** The script uses the best hyperparameters identified by `RandomizedSearchCV` for each case mode (hardcoded from `Results/results_main.json`). SHAP values are computed on the **test set** to reflect importance under the held-out distribution.
+
+
 ## Configuration & Key Parameters
 
-| Parameter | Location | Value |
-|-----------|----------|-------|
-| Optuna trials | `run_hp_*.sh` | 10 (BERT), 10 (Longformer) |
-| Optuna sampler | `deep_learning_experiments.py` | TPE, seed=42 |
-| Max epochs | `deep_learning_experiments.py` | 30 |
-| Early-stop eval frequency | `deep_learning_experiments.py` | `spe // 4` steps |
-| Early-stop patience | `deep_learning_experiments.py` | 8 evaluation steps |
-| Min training steps | `deep_learning_experiments.py` | `3 × spe` |
-| Gradient accumulation (Longformer) | `deep_learning_experiments.py` | 8 steps |
-| Max sequence length (BERT) | `deep_learning_experiments.py` | 512 tokens (sliding-window mean pool) |
-| Max sequence length (Longformer) | `deep_learning_experiments.py` | 4096 tokens |
-| CLS pooling (PatentBERT) | `deep_learning_experiments.py` | `last_hidden_state[:, 0, :]` (no pooler) |
-| Random seed | all runners | 42 |
-| SLURM partition (DL) | all `run_hp_*.sh` / `run_eval_*.sh` | `gpu-a100-lowbig` |
-| SLURM wall time (DL HP) | `run_hp_*.sh` | 24 h |
-| SLURM wall time (DL eval) | `run_eval_*_ft_*.sh` | 12 h |
-| SLURM wall time (DL SW) | `run_eval_*_sw_*.sh` | 24 h |
-| SLURM excluded nodes | all DL scripts | `gpu07`, `gpu08` |
+### ML (`ml_experiments.py`)
+
+| Parameter | Value |
+|-----------|-------|
+| CV search method | `RandomizedSearchCV`, 50 iterations |
+| CV strategy (Exp 1) | `RepeatedStratifiedKFold`, 3 splits |
+| CV strategy (Exp 2) | `TimeSeriesSplit`, 3 splits |
+| Scoring metric | macro F1 |
+| Random seed | 42 |
+
+### DL (`deep_learning_experiments.py`)
+
+| Parameter | Value |
+|-----------|-------|
+| Optuna trials | 10 (LegalBERT, PatentBERT) / 3 (Longformer) |
+| Optuna sampler | TPE, seed=42 |
+| Max epochs | 30 |
+| Early-stop eval frequency | `spe // 4` steps |
+| Early-stop patience | 8 evaluation steps |
+| Min training steps | `3 × spe` |
+| Gradient accumulation (Longformer) | 8 steps |
+| Max sequence length (BERT) | 512 tokens (sliding-window mean pool) |
+| Max sequence length (Longformer) | 4096 tokens |
+| CLS pooling (PatentBERT) | `last_hidden_state[:, 0, :]` (no pooler) |
+| Random seed | 42 |
