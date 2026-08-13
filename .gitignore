@@ -22,3 +22,4 @@ Results/*.md
 Results/*.html
 Results/results_tables.tex
 Results/hyperparams_cv_tables.tex
+Results/tables

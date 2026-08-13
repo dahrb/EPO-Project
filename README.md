@@ -121,6 +121,14 @@ python -m Experiments.evaluation --skip_ml --skip_full_test \
     --output Results/results_dl_sliding_window.json
 ```
 
+**8. Per-issue prediction cache** — regenerates per-example full-test predictions for the best ML (XGBoost) and best DL (Longformer) models, tags each test case with its patentability issue (`IS-only` / `Novelty-only` / `IS+Novelty` / `Other`), and validates them against the stored aggregate metrics. Produces `Results/per_issue_predictions.pkl`, which the per-issue analysis in `Results/results.ipynb` (per-issue confusion matrices, significance tests, pooled combined-case F1) loads directly. **Run this before that notebook section**, and re-run it only when the best models or their checkpoints change. Longformer inference needs a GPU, so submit via SLURM; the run is **resumable** (skips cached combos, saves after each):
+
+```bash
+sbatch run_regen_per_issue.sh                    # → Results/per_issue_predictions.pkl
+# or directly (needs a visible GPU for the Longformer half):
+python Results/build_per_issue_predictions.py
+```
+
 ## Results
 
 Full tables and methodology are in `Results/results.ipynb`
@@ -169,7 +177,7 @@ python Experiments/shap_bert_run.py --model legalbert --experiment 2 --case pf -
 
 - `Experiments/patent2vec.ipynb` — explore trained embeddings, t-SNE projections.
 - `Experiments/visualisations.ipynb` — dataset composition figures.
-- `Results/results.ipynb` — load `results_*.json`, render summary tables and plots.
+- `Results/results.ipynb` — load `results_*.json`, render summary tables and plots. Its per-issue section additionally needs `Results/per_issue_predictions.pkl` (see Step 8 above / `Results/build_per_issue_predictions.py`).
 
 ## Key parameters
 

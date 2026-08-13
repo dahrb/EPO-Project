@@ -1,0 +1,82 @@
+[
+  {
+    "timestamp_utc": "2026-08-12T17:18:03.028293+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "case_mode": "op",
+    "input_representation": "N-Grams",
+    "preprocess": {
+      "stopwords": true,
+      "numbers": false,
+      "lemma": true
+    },
+    "best_score_cv": 0.7505868411719819,
+    "best_params": {
+      "vect__use_idf": false,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        1,
+        3
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": true,
+      "prep__numbers": false,
+      "prep__lemmatisation": true,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.2,
+      "clf__gamma": 0.2
+    },
+    "time_seconds": 5693.0921494960785,
+    "test_metrics": {
+      "accuracy": 0.7860366339262013,
+      "f1": 0.7258503401360544,
+      "precision": 0.7190026954177897,
+      "recall": 0.7328296703296703,
+      "mcc": 0.5504973436141608,
+      "auc": 0.8496847970290202
+    }
+  },
+  {
+    "timestamp_utc": "2026-08-12T23:01:23.047530+00:00",
+    "mode": "sparse",
+    "algo": "XGBClassifier",
+    "experiment": "2",
+    "opposition": false,
+    "case_mode": "op",
+    "input_representation": "TF-IDF",
+    "preprocess": {
+      "stopwords": false,
+      "numbers": true,
+      "lemma": false
+    },
+    "best_score_cv": 0.7473964624358649,
+    "best_params": {
+      "vect__use_idf": true,
+      "vect__norm": "l2",
+      "vect__ngram_range": [
+        1,
+        4
+      ],
+      "vect__min_df": 2,
+      "prep__stopwords": false,
+      "prep__numbers": true,
+      "prep__lemmatisation": false,
+      "clf__n_estimators": 300,
+      "clf__max_depth": 9,
+      "clf__learning_rate": 0.05,
+      "clf__gamma": 0.0
+    },
+    "time_seconds": 8420.894608736038,
+    "test_metrics": {
+      "accuracy": 0.7778072736925936,
+      "f1": 0.715209254848588,
+      "precision": 0.7086985839514498,
+      "recall": 0.7218406593406593,
+      "mcc": 0.5331404220386659,
+      "auc": 0.8441376883609684
+    }
+  }
+]
