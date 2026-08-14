@@ -317,9 +317,9 @@ def run_cross_mode(top_n: int, out_dir: Path):
         index=plot_features,
     )
 
-    # ── Grouped bar chart ─────────────────────────────────────────────────────
-    fig, ax = plt.subplots(figsize=(14, 7))
-    x = np.arange(len(plot_features))
+    # ── Grouped horizontal bar chart ──────────────────────────────────────────
+    fig, ax = plt.subplots(figsize=(9, 12))
+    y = np.arange(len(plot_features))
     w = 0.26
     colors = {"pf": "#2196F3", "op": "#FF9800", "both": "#4CAF50"}
     labels = {"pf": "Patent Refusal", "op": "Opposition Division", "both": "Combined"}
@@ -327,16 +327,17 @@ def run_cross_mode(top_n: int, out_dir: Path):
         vals = df_plot[case].values
         # Normalise each mode to [0,1] for comparability across different SHAP scales
         norm_vals = vals / (vals.max() + 1e-12)
-        ax.bar(x + i * w, norm_vals, width=w, label=labels[case],
-               color=colors[case], alpha=0.85, edgecolor="white")
+        ax.barh(y + i * w, norm_vals, height=w, label=labels[case],
+                color=colors[case], alpha=0.85, edgecolor="white")
 
-    ax.set_xticks(x + w)
-    ax.set_xticklabels(plot_features, rotation=45, ha="right", fontsize=8)
-    ax.set_ylabel("Normalised mean |SHAP| (per-mode max = 1)", fontsize=11)
+    ax.set_yticks(y + w)
+    ax.set_yticklabels(plot_features, fontsize=8)
+    ax.invert_yaxis()  # highest mean-importance feature at the top
+    ax.set_xlabel("Normalised mean |SHAP| (per-mode max = 1)", fontsize=11)
     ax.set_title(f"Global SHAP Feature Importance — Top {top_n} features across modes\n"
                  f"XGBoost, Experiment 2 (Temporal Split), test set", fontsize=12)
     ax.legend(fontsize=10)
-    ax.yaxis.set_major_formatter(ticker.FormatStrFormatter("%.2f"))
+    ax.xaxis.set_major_formatter(ticker.FormatStrFormatter("%.2f"))
     plt.tight_layout()
     bar_path = out_dir / "cross_mode_bar.png"
     fig.savefig(bar_path, dpi=150, bbox_inches="tight")
