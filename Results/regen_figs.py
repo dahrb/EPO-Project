@@ -40,8 +40,6 @@ mcol   = {"XGBoost": "#4C72B0", "Longformer": "#55A868"}
 f1_macro = lambda yt, yp: f1_score(yt, yp, average="macro", zero_division=0)
 
 fig, axes = plt.subplots(1, 2, figsize=(13, 4.5))
-fig.suptitle("Experiment 2 — Full-Test Performance by Patentability Issue (Combined)",
-             fontweight="bold")
 for ax, metric, fn in zip(axes, ["F1", "MCC"], [f1_macro, matthews_corrcoef]):
     x = np.arange(len(ISSUE_ORDER)); w = 0.38
     for mi, model in enumerate(MODELS):
@@ -59,7 +57,6 @@ for ax, metric, fn in zip(axes, ["F1", "MCC"], [f1_macro, matthews_corrcoef]):
     ax.set_ylabel(metric)
     ax.set_ylim(0, 1.0 if metric == "F1" else 0.85)
     ax.grid(axis="y", alpha=0.3)
-    ax.set_title(metric)
 axes[0].legend(fontsize=9)
 plt.tight_layout()
 out1_jpg = os.path.join(FIGS, "patentability_results.jpg")
@@ -132,8 +129,6 @@ ax.text(0.5,  y0, "BERT",                 ha="center", va="top", fontsize=10, st
 ax.text(3.5,  y0, "Embedding (XGBoost)",  ha="center", va="top", fontsize=10, style="italic")
 ax.set_xticks(xpos); ax.set_xticklabels(order, rotation=15)
 ax.set_ylabel("Macro-F1 (per Exp 2 condition)")
-ax.set_title("Legal vs Patent Domain-Specific Models — Exp 2 (Full Test + Sliding Window)\nmean ± 95% CI",
-             fontweight="bold")
 ax.grid(axis="y", alpha=0.3)
 ax.legend(handles=[Patch(facecolor=dcol["Legal"],   label="Legal domain"),
                    Patch(facecolor=dcol["Patent"], label="Patent domain")],
