@@ -141,32 +141,27 @@ fig.savefig(out2_png, dpi=150, bbox_inches="tight")
 print("Saved ->", out2_jpg)
 plt.close()
 
-# ── Figure 3: outcome_dist (OD outcome share by appellant type) ───────────────
-od = pd.read_pickle(f"{BASE}/../Data/Train&TestData_1.0_OppositionDivision.pkl")
-od = od[od["Matches"].isin(["1", "2", "3"]) & od["Outcome"].isin(["Affirmed", "Reversed"])].copy()
-lab = {"1": "Patentee\nappellant", "2": "Opponent\nappellant", "3": "Both\nparties"}
-od["Appellant"] = od["Matches"].map(lab)
-od_order = ["Patentee\nappellant", "Opponent\nappellant", "Both\nparties"]
-ct = pd.crosstab(od["Appellant"], od["Outcome"]).reindex(od_order)
-n_od = ct.sum(1)
-aff = 100 * ct["Affirmed"] / n_od
-rev = 100 * ct["Reversed"] / n_od
-base_aff = 100 * (od["Outcome"] == "Affirmed").mean()
+# ── Figure 3: outcome_dist (Affirmed/Reversed: Patent Refusal vs Opp. Division) ─
+binary_refusal_df2  = pd.read_pickle(f"{BASE}/../Data/Train&TestData_1.0_PatentRefusal.pkl")
+opposition_df2      = pd.read_pickle(f"{BASE}/../Data/Train&TestData_1.0_OppositionDivision.pkl")
+br_known2 = binary_refusal_df2[binary_refusal_df2["Outcome"] != "Unknown"].copy()
+op_known2 = opposition_df2[opposition_df2["Outcome"] != "Unknown"].copy()
 
-C_AFF, C_REV = "#4C72B0", "#DD8452"
-x = np.arange(len(od_order))
-fig, ax = plt.subplots(figsize=(7.5, 5.2))
-ax.bar(x, aff, color=C_AFF, label="Affirmed (OD upheld)")
-ax.bar(x, rev, bottom=aff, color=C_REV, label="Reversed (OD overturned)")
-for i in range(len(od_order)):
-    ax.text(i, aff.iloc[i] / 2, f"{aff.iloc[i]:.1f}%", ha="center", va="center", color="white", fontweight="bold")
-    ax.text(i, aff.iloc[i] + rev.iloc[i] / 2, f"{rev.iloc[i]:.1f}%", ha="center", va="center", color="white", fontweight="bold")
-    ax.text(i, 101.5, f"n={int(n_od.iloc[i]):,}", ha="center", fontsize=8.5)
-ax.axhline(base_aff, color="black", ls="--", lw=1.3)
-ax.text(len(od_order) - 0.5, base_aff + 1.2, f"overall Affirmed = {base_aff:.1f}%", ha="right", fontsize=8)
-ax.set_xticks(x); ax.set_xticklabels(od_order, fontsize=10)
-ax.set_ylabel("% of cases"); ax.set_ylim(0, 108)
-ax.legend(loc="lower center", ncol=2, fontsize=8, framealpha=0.9)
+merged = pd.concat([op_known2, br_known2], ignore_index=True)
+merged["Category"] = merged["Matches"].apply(
+    lambda x: "Patent Refusal" if x == "Patent Refusal" else "Opposition Division"
+)
+pivot = merged.pivot_table(index="Category", columns="Outcome", aggfunc="size", fill_value=0)
+pivot_pct = pivot.div(pivot.sum(axis=1), axis=0) * 100
+
+fig, ax = plt.subplots(figsize=(7, 5))
+pivot_pct.plot(kind="bar", stacked=True, ax=ax, color=["#4CAF50", "#F44336"])
+ax.set_xlabel("Case Type")
+ax.set_ylabel("Percentage (%)")
+ax.set_xticklabels(pivot_pct.index, rotation=0)
+ax.legend(title="Outcome")
+for container in ax.containers:
+    ax.bar_label(container, fmt="%.1f%%", label_type="center", color="white", fontweight="bold", fontsize=10)
 plt.tight_layout()
 out3_jpg = os.path.join(FIGS, "outcome_dist.jpg")
 out3_png = os.path.join(FIGS, "outcome_dist.png")
