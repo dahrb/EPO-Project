@@ -190,7 +190,7 @@ for ci, iss in enumerate(ISSUE3):
             ax.text(j, i, f"{cmn[i,j]:.2f}\n({cm[i,j]})", ha="center", va="center",
                     color="white" if cmn[i, j] > 0.5 else "black", fontsize=10)
     multi = g["y_true"].nunique() > 1
-    f1  = f1_score(g["y_true"], g["y_pred"], zero_division=0) if multi else float("nan")
+    f1  = f1_score(g["y_true"], g["y_pred"], average="macro", zero_division=0) if multi else float("nan")
     mcc = matthews_corrcoef(g["y_true"], g["y_pred"]) if multi else float("nan")
     ax.set_title(f"{iss}\nn={len(g)}  F1={f1:.2f}  MCC={mcc:.2f}", fontsize=10)
     ax.set_xticks([0, 1]); ax.set_xticklabels(CLASSES, fontsize=8)
