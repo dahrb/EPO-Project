@@ -39,7 +39,7 @@ mcol   = {"XGBoost": "#4C72B0", "Longformer": "#55A868"}
 
 f1_macro = lambda yt, yp: f1_score(yt, yp, average="macro", zero_division=0)
 
-fig, axes = plt.subplots(1, 2, figsize=(13, 4.5))
+fig, axes = plt.subplots(2, 1, figsize=(7, 9))
 for ax, metric, fn in zip(axes, ["F1", "MCC"], [f1_macro, matthews_corrcoef]):
     x = np.arange(len(ISSUE_ORDER)); w = 0.38
     for mi, model in enumerate(MODELS):
@@ -139,4 +139,119 @@ out2_png = os.path.join(FIGS, "patent_vs_legal.png")
 fig.savefig(out2_jpg, dpi=150, bbox_inches="tight")
 fig.savefig(out2_png, dpi=150, bbox_inches="tight")
 print("Saved ->", out2_jpg)
+plt.close()
+
+# ── Figure 3: outcome_dist (OD outcome share by appellant type) ───────────────
+od = pd.read_pickle(f"{BASE}/../Data/Train&TestData_1.0_OppositionDivision.pkl")
+od = od[od["Matches"].isin(["1", "2", "3"]) & od["Outcome"].isin(["Affirmed", "Reversed"])].copy()
+lab = {"1": "Patentee\nappellant", "2": "Opponent\nappellant", "3": "Both\nparties"}
+od["Appellant"] = od["Matches"].map(lab)
+od_order = ["Patentee\nappellant", "Opponent\nappellant", "Both\nparties"]
+ct = pd.crosstab(od["Appellant"], od["Outcome"]).reindex(od_order)
+n_od = ct.sum(1)
+aff = 100 * ct["Affirmed"] / n_od
+rev = 100 * ct["Reversed"] / n_od
+base_aff = 100 * (od["Outcome"] == "Affirmed").mean()
+
+C_AFF, C_REV = "#4C72B0", "#DD8452"
+x = np.arange(len(od_order))
+fig, ax = plt.subplots(figsize=(7.5, 5.2))
+ax.bar(x, aff, color=C_AFF, label="Affirmed (OD upheld)")
+ax.bar(x, rev, bottom=aff, color=C_REV, label="Reversed (OD overturned)")
+for i in range(len(od_order)):
+    ax.text(i, aff.iloc[i] / 2, f"{aff.iloc[i]:.1f}%", ha="center", va="center", color="white", fontweight="bold")
+    ax.text(i, aff.iloc[i] + rev.iloc[i] / 2, f"{rev.iloc[i]:.1f}%", ha="center", va="center", color="white", fontweight="bold")
+    ax.text(i, 101.5, f"n={int(n_od.iloc[i]):,}", ha="center", fontsize=8.5)
+ax.axhline(base_aff, color="black", ls="--", lw=1.3)
+ax.text(len(od_order) - 0.5, base_aff + 1.2, f"overall Affirmed = {base_aff:.1f}%", ha="right", fontsize=8)
+ax.set_xticks(x); ax.set_xticklabels(od_order, fontsize=10)
+ax.set_ylabel("% of cases"); ax.set_ylim(0, 108)
+ax.legend(loc="lower center", ncol=2, fontsize=8, framealpha=0.9)
+plt.tight_layout()
+out3_jpg = os.path.join(FIGS, "outcome_dist.jpg")
+out3_png = os.path.join(FIGS, "outcome_dist.png")
+fig.savefig(out3_jpg, dpi=150, bbox_inches="tight")
+fig.savefig(out3_png, dpi=150, bbox_inches="tight")
+print("Saved ->", out3_jpg)
+plt.close()
+
+# ── Figure 4: conf_matrices (per-issue, XGBoost, Exp 2; 2 on top, 1 on bottom) ─
+from sklearn.metrics import confusion_matrix
+ISSUE3  = ["IS-only", "Novelty-only", "IS+Novelty"]
+CLASSES = ["Reversed", "Affirmed"]
+xgb_both = pi[(pi["model"] == "XGBoost") & (pi["case"] == "both") & (pi["exp"].astype(str) == "2")]
+
+fig, axes = plt.subplots(2, 2, figsize=(9, 9))
+axes = axes.ravel()
+for ci, iss in enumerate(ISSUE3):
+    ax = axes[ci]
+    g = xgb_both[xgb_both["issue"] == iss]
+    cm = confusion_matrix(g["y_true"], g["y_pred"], labels=[0, 1])
+    rowsum = cm.sum(axis=1, keepdims=True)
+    cmn = np.divide(cm, rowsum, out=np.zeros_like(cm, dtype=float), where=rowsum > 0)
+    ax.imshow(cmn, cmap="Blues", vmin=0, vmax=1)
+    for i in range(2):
+        for j in range(2):
+            ax.text(j, i, f"{cmn[i,j]:.2f}\n({cm[i,j]})", ha="center", va="center",
+                    color="white" if cmn[i, j] > 0.5 else "black", fontsize=10)
+    multi = g["y_true"].nunique() > 1
+    f1  = f1_score(g["y_true"], g["y_pred"], zero_division=0) if multi else float("nan")
+    mcc = matthews_corrcoef(g["y_true"], g["y_pred"]) if multi else float("nan")
+    ax.set_title(f"{iss}\nn={len(g)}  F1={f1:.2f}  MCC={mcc:.2f}", fontsize=10)
+    ax.set_xticks([0, 1]); ax.set_xticklabels(CLASSES, fontsize=8)
+    ax.set_yticks([0, 1]); ax.set_yticklabels(CLASSES, fontsize=8)
+    ax.set_xlabel("Predicted", fontsize=9)
+    ax.set_ylabel("True", fontsize=9)
+axes[3].axis("off")
+plt.tight_layout()
+out4_jpg = os.path.join(FIGS, "conf_matrices.jpg")
+out4_png = os.path.join(FIGS, "conf_matrices.png")
+fig.savefig(out4_jpg, dpi=150, bbox_inches="tight")
+fig.savefig(out4_png, dpi=150, bbox_inches="tight")
+print("Saved ->", out4_jpg)
+plt.close()
+
+# ── Figure 5: pairwise_conf / stat_conf (pairwise issue-bucket significance) ──
+from scipy import stats
+from itertools import combinations
+pi["correct"] = (pi["y_true"] == pi["y_pred"]).astype(int)
+pooled = pi[(pi["exp"].astype(str) == "2") & (pi["case"] == "both")]   # both models pooled
+k = len(ISSUE_ORDER)
+pairs = list(combinations(range(k), 2))
+P = np.full((k, k), np.nan)
+for a, b in pairs:
+    two = pooled[pooled["issue"].isin([ISSUE_ORDER[a], ISSUE_ORDER[b]])]
+    cont = pd.crosstab(two["issue"].astype(str), two["correct"])
+    if cont.shape == (2, 2):
+        _, p, _, _ = stats.chi2_contingency(cont)
+        P[a, b] = P[b, a] = min(1.0, p * len(pairs))   # Bonferroni
+
+M = -np.log10(P)
+vmax = max(3.0, np.nanmax(M))
+fig, ax = plt.subplots(figsize=(6.8, 5.6))
+im = ax.imshow(M, cmap="viridis", vmin=0, vmax=vmax)
+for a in range(k):
+    for b in range(k):
+        if a == b:
+            ax.text(b, a, "—", ha="center", va="center", color="grey")
+        elif not np.isnan(P[a, b]):
+            p = P[a, b]
+            label = "*" if p < .05 else "ns"
+            ax.text(b, a, f"{p:.1e}\n{label}", ha="center", va="center", fontsize=9.5,
+                    color="white" if M[a, b] < 0.6 * vmax else "black")
+ax.set_xticks(range(k)); ax.set_xticklabels(ISSUE_ORDER, rotation=30, ha="right", fontsize=9)
+ax.set_yticks(range(k)); ax.set_yticklabels(ISSUE_ORDER, fontsize=9)
+cbar = fig.colorbar(im, ax=ax, shrink=0.85)
+cbar.set_label("$-\\log_{10}(p_{bonf})$  (higher = more significant)", fontsize=8)
+ythr = -np.log10(0.05)
+cbar.ax.plot([0, 1], [ythr, ythr], color="red", lw=1.2,
+             transform=cbar.ax.get_yaxis_transform(), clip_on=False)
+cbar.ax.text(1.6, ythr, "p = 0.05", color="red", fontsize=7, va="center",
+             transform=cbar.ax.get_yaxis_transform())
+plt.tight_layout()
+out5_jpg = os.path.join(FIGS, "pairwise_conf.jpg")
+out5_png = os.path.join(FIGS, "pairwise_conf.png")
+fig.savefig(out5_jpg, dpi=150, bbox_inches="tight")
+fig.savefig(out5_png, dpi=150, bbox_inches="tight")
+print("Saved ->", out5_jpg)
 plt.close()
