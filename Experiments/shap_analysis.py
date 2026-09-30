@@ -365,19 +365,20 @@ def run_cross_mode(top_n: int, out_dir: Path):
             corr_matrix[i, j] = rho
             p_matrix[i, j]    = p
 
-    fig, ax = plt.subplots(figsize=(5, 4))
+    fig, ax = plt.subplots(figsize=(8, 7))
     im = ax.imshow(corr_matrix, vmin=-1, vmax=1, cmap="RdYlGn")
     plt.colorbar(im, ax=ax, label="Spearman ρ")
     ax.set_xticks([0, 1, 2])
     ax.set_yticks([0, 1, 2])
-    ax.set_xticklabels(["Patent Refusal\n(pf)", "Opposition Division\n(op)", "Combined\n(both)"], fontsize=10)
-    ax.set_yticklabels(["Patent Refusal\n(pf)", "Opposition Division\n(op)", "Combined\n(both)"], fontsize=10)
+    ax.set_xticklabels(["Patent Refusal\n(pf)", "Opposition Division\n(op)", "Combined\n(both)"], fontsize=13)
+    ax.set_yticklabels(["Patent Refusal\n(pf)", "Opposition Division\n(op)", "Combined\n(both)"], fontsize=13)
     for i in range(3):
         for j in range(3):
             p_str = f"\np={p_matrix[i,j]:.3f}" if i != j else ""
             ax.text(j, i, f"ρ={corr_matrix[i,j]:.3f}{p_str}",
                     ha="center", va="center", fontsize=8.5,
-                    color="black" if abs(corr_matrix[i,j]) < 0.85 else "white")
+                    color="black" if abs(corr_matrix[i,j]) < 0.85 else "white",
+                    fontsize=12)
     plt.tight_layout()
     spear_path = out_dir / "cross_mode_spearman.png"
     fig.savefig(spear_path, dpi=150, bbox_inches="tight")
