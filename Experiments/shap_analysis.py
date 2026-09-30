@@ -378,7 +378,6 @@ def run_cross_mode(top_n: int, out_dir: Path):
             ax.text(j, i, f"ρ={corr_matrix[i,j]:.3f}{p_str}",
                     ha="center", va="center", fontsize=8.5,
                     color="black" if abs(corr_matrix[i,j]) < 0.85 else "white")
-    ax.set_title("Spearman Rank Correlation\nof SHAP Feature Importance Rankings", fontsize=11)
     plt.tight_layout()
     spear_path = out_dir / "cross_mode_spearman.png"
     fig.savefig(spear_path, dpi=150, bbox_inches="tight")
