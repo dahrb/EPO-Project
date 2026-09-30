@@ -367,7 +367,7 @@ def run_cross_mode(top_n: int, out_dir: Path):
 
     fig, ax = plt.subplots(figsize=(8, 7))
     im = ax.imshow(corr_matrix, vmin=-1, vmax=1, cmap="RdYlGn")
-    plt.colorbar(im, ax=ax, label="Spearman ρ")
+    plt.colorbar(im, ax=ax, label="Spearman ρ", shrink=0.5)
     ax.set_xticks([0, 1, 2])
     ax.set_yticks([0, 1, 2])
     ax.set_xticklabels(["Patent Refusal\n(pf)", "Opposition Division\n(op)", "Combined\n(both)"], fontsize=13)
