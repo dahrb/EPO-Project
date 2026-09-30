@@ -133,33 +133,35 @@ python Results/build_per_issue_predictions.py
 
 Full tables and methodology are in `Results/results.ipynb`
 
+All F1 values are macro-averaged (average of per-class F1).
+
 **ML full-test — best model per exp × case**
 
-| Exp | Case | Model | Input | Test F1 | MCC |
+| Exp | Case | Model | Input | Macro-F1 | MCC |
 |-----|------|-------|-------|---------|-----|
-| 1 | pf | XGBoost | TF-IDF | **0.903** | 0.689 |
-| 1 | op | XGBoost | N-Grams | 0.673 | 0.545 |
-| 1 | both | XGBoost | N-Grams | **0.807** | 0.653 |
-| 2 | pf | Logistic Regression | TF-IDF | **0.890** | 0.688 |
-| 2 | op | XGBoost | N-Grams | 0.745 | 0.581 |
-| 2 | both | XGBoost | N-Grams | 0.798 | 0.622 |
+| 1 | pf | XGBoost | TF-IDF | **0.837** | 0.689 |
+| 1 | op | XGBoost | N-Grams | **0.761** | 0.545 |
+| 1 | both | XGBoost | N-Grams | **0.826** | 0.653 |
+| 2 | pf | XGBoost | N-Grams | 0.847 | 0.698 |
+| 2 | op | XGBoost | N-Grams | **0.790** | 0.581 |
+| 2 | both | XGBoost | N-Grams | **0.811** | 0.621 |
 
 **DL full-test — best case per model (retrained=False)**
 
 | Model | Exp 2 pf | Exp 2 op | Exp 2 both |
 |-------|----|----|------|
-| LegalBERT | 0.887 | 0.711 | 0.776 |
-| PatentBERT | 0.882 | 0.684 | 0.779 |
-| Longformer | **0.899** | 0.684 | 0.782 |
+| LegalBERT | 0.840 | 0.737 | **0.797** |
+| PatentBERT | 0.828 | 0.701 | 0.776 |
+| Longformer | **0.859** | 0.699 | 0.789 |
 
-**Sliding window (Exp 2, mean F1 over 2021–2024)**
+**Sliding window (Exp 2, mean macro-F1 over 2021–2024)**
 
 | Model | pf | op | both |
 |-------|----|----|------|
-| LegalBERT | 0.899 | 0.707 | 0.815 |
-| PatentBERT | 0.891 | 0.706 | 0.799 |
-| Longformer | **0.927** | 0.722 | **0.826** |
-| ML best (XGBoost) | 0.907 | 0.749 | 0.808 |
+| LegalBERT | 0.840 | 0.739 | 0.823 |
+| PatentBERT | 0.832 | 0.739 | 0.803 |
+| Longformer | **0.880** | 0.757 | **0.834** |
+| ML best (XGBoost) | 0.862 | **0.800** | 0.825 |
 
 ## Explainability
 
@@ -183,7 +185,7 @@ python Experiments/shap_bert_run.py --model legalbert --experiment 2 --case pf -
 
 | | Value |
 |---|---|
-| ML CV search | `RandomizedSearchCV`, 50 iters; macro-F1 scoring |
+| ML CV search | `RandomizedSearchCV`, 50 iters; binary F1 scoring |
 | ML CV strategy | `RepeatedStratifiedKFold` (Exp 1) / `TimeSeriesSplit` (Exp 2), 3 splits |
 | Optuna | TPE sampler, seed 42; 10 trials (BERT) / 3 (Longformer) |
 | DL training | max 30 epochs, step-level early stopping (patience 8) |

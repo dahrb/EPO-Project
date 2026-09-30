@@ -128,7 +128,7 @@ class Experiments:
 
         self.scoring = {
             "Accuracy": "accuracy",
-            "F1": "f1",
+            "F1": "f1_macro",
             "Precision": "precision",
             "Recall": "recall",
             "MCC": make_scorer(matthews_corrcoef),
@@ -498,7 +498,7 @@ class Experiments:
 
         metrics = {
             "accuracy": accuracy_score(y_true, y_pred),
-            "f1": f1_score(y_true, y_pred, zero_division=0),
+            "f1": f1_score(y_true, y_pred, average="macro", zero_division=0),
             "precision": precision_score(y_true, y_pred, zero_division=0),
             "recall": recall_score(y_true, y_pred, zero_division=0),
             "mcc": matthews_corrcoef(y_true, y_pred),

@@ -885,7 +885,7 @@ class DeepLearningExperiments:
 
         metrics = {
             "accuracy": float(accuracy_score(all_labels, all_preds)),
-            "f1": float(f1_score(all_labels, all_preds, zero_division=0)),
+            "f1": float(f1_score(all_labels, all_preds, average="macro", zero_division=0)),
             "precision": float(precision_score(all_labels, all_preds, zero_division=0)),
             "recall": float(recall_score(all_labels, all_preds, zero_division=0)),
             "mcc": float(matthews_corrcoef(all_labels, all_preds)),

@@ -100,7 +100,7 @@ from Utilities.utils import TextProcess, Word2VecTransform, append_json_result, 
 def _compute_metrics(y_true, y_pred, y_score=None):
     metrics = {
         "accuracy":  float(accuracy_score(y_true, y_pred)),
-        "f1":        float(f1_score(y_true, y_pred, zero_division=0)),
+        "f1":        float(f1_score(y_true, y_pred, average="macro", zero_division=0)),
         "precision": float(precision_score(y_true, y_pred, zero_division=0)),
         "recall":    float(recall_score(y_true, y_pred, zero_division=0)),
         "mcc":       float(matthews_corrcoef(y_true, y_pred)),
