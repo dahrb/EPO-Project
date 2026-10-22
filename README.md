@@ -2,6 +2,8 @@
 
 A reproducible pipeline for predicting the outcome of patent appeals at the EPO's Technical Boards of Appeal. An earlier version of this work won **Best Doctoral Consortium Paper** at JURIX 2023 — see the [paper](https://davidbareham.co.uk/assets/pdf/pred_EPO.pdf) and its [supplementary material](https://davidbareham.co.uk/assets/pdf/jurix_23_supp.pdf).
 
+![Patentability issue distribution across matched EPO appeal decisions](Figs/freq_matched.png)
+
 ## Overview
 
 The task is binary classification of appeal outcomes (grant / refuse) for two case types: *ex parte* (examining division, `pf`) and *inter partes* (opposition, `op`), plus a combined mode (`both`). Two evaluation designs are used:
@@ -10,6 +12,8 @@ The task is binary classification of appeal outcomes (grant / refuse) for two ca
 - **Exp 2** — temporal split (train on earlier decisions, test on recent), including a sliding-window analysis that tests on each year 2021–2024 in turn.
 
 Models span classical ML (Logistic Regression, LinearSVC, Random Forest, XGBoost over N-Grams / TF-IDF and dense embeddings) and transformers (LegalBERT, PatentBERT, Longformer).
+
+![Outcome distribution by case type](Figs/eda/outcome_dist.png)
 
 ## Setup
 
@@ -193,6 +197,26 @@ python -m Experiments.shap_analysis all --top_n 20 --top_k 8      # → Figs/sha
 # BERT (PartitionExplainer) — word-level attributions per model × exp × case
 python Experiments/shap_bert_run.py --model legalbert --experiment 2 --case pf --n_samples 75   # → Figs/shap_bert/
 ```
+
+**Global feature importance across all case types** (XGBoost, Exp 2, top 20 features normalised per mode):
+
+![Cross-mode SHAP feature importance](Figs/shap/cross_mode_bar.png)
+
+Features such as *dismissed*, *auxiliary request*, and *filed oral* dominate across modes; Opposition Division uniquely relies on *OD_Match* metadata features absent in Patent Refusal cases.
+
+**SHAP beeswarm — Patent Refusal (pf), XGBoost, Exp 2:**
+
+![SHAP beeswarm for patent refusal](Figs/shap/pf_beeswarm.png)
+
+High *description pages* (red, left) strongly predicts refusal; high *auxiliary request* frequency (red, right) predicts grant, reflecting applicant procedural activity.
+
+**Feature importance trajectory across sliding-window test years (pf, top 20):**
+
+![SHAP heatmap over time](Figs/shap/sw_heatmap.png)
+
+**Cross-mode SHAP rank correlation** — Opposition Division and Combined share predictive structure (ρ = 0.65); Patent Refusal is largely orthogonal (ρ ≈ 0.05):
+
+![Cross-mode Spearman rank correlation of SHAP importance](Figs/shap/cross_mode_spearman.png)
 
 ## Notebooks
 
