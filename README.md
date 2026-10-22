@@ -42,7 +42,7 @@ unzip EPDecisions_March2026.zip -d Data/
 
 | Embedding | How to obtain |
 |---|---|
-| **Patent2Vec + Doc2Vec** (custom) | Download `embeddings.zip` from [GitHub Releases](https://github.com/dahrb/EPO-Project/releases) and `unzip embeddings.zip -d Models/`. Alternatively re-train via Step 2. |
+| **Patent2Vec + Doc2Vec** (custom) | `gh release download v1.0-embeddings --dir Models/`. Alternatively re-train via Step 2 (note: the original training corpus is not distributed, so re-trained embeddings will differ). |
 | **Word2Vec (Google News, 300d)** | `python -c "import gensim.downloader as api; api.load('word2vec-google-news-300').save('Models/Word2Vec-google-300d')"` |
 | **Law2Vec (200d)** | Download `Law2Vec.200d.txt` from the [Internet Archive](https://archive.org/details/Law2Vec) into `Models/`. |
 
