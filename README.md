@@ -52,6 +52,25 @@ Transformer weights (LegalBERT, PatentBERT, Longformer) download automatically v
 
 Run from the project root. Each step is a plain `python -m` module — no environment-specific wrappers are required.
 
+### Fast path — skip Steps 1–3
+
+If you only want to re-run the ML/DL experiments without reprocessing the raw XML, download the pre-built data artefacts from [GitHub Releases](https://github.com/dahrb/EPO-Project/releases/tag/v1.0-data):
+
+```bash
+# from the project root
+gh release download v1.0-data --dir Data/
+# or download the three files manually and place them in Data/:
+#   EPO_Data.pkl
+#   Train&TestData_1.0_PatentRefusal.pkl
+#   Train&TestData_1.0_OppositionDivision.pkl
+```
+
+Then regenerate `Data/Final_Processed/` (Step 3 below) and proceed from Step 4.
+
+> **Note:** `Data/Final_Processed/` is not distributed — it is derived deterministically from the two `Train&TestData` pkls via `python -m Data.experiment_processing` (Step 3). With seed 42 and the exact same pkls the output is identical to the published results.
+
+---
+
 **1. Process the raw XML** → cleaned, feature-engineered CSVs in `Data/Matching/`:
 
 ```bash
