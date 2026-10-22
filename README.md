@@ -2,7 +2,7 @@
 
 A reproducible pipeline for predicting the outcome of patent appeals at the EPO's Technical Boards of Appeal. An earlier version of this work won **Best Doctoral Consortium Paper** at JURIX 2023 — see the [paper](https://davidbareham.co.uk/assets/pdf/pred_EPO.pdf) and its [supplementary material](https://davidbareham.co.uk/assets/pdf/jurix_23_supp.pdf).
 
-![Per-issue F1 and MCC: XGBoost vs Longformer across patentability issue types](Figs/eda/patentability_results.png)
+![Macro-F1 results across experiments and case types — best ML vs best DL with model-variant range](Figs/results_overview.png)
 
 ## Overview
 
@@ -204,21 +204,11 @@ python Experiments/shap_bert_run.py --model legalbert --experiment 2 --case pf -
 
 Features such as *dismissed*, *auxiliary request*, and *filed oral* dominate across modes; Opposition Division uniquely relies on *OD_Match* metadata features absent in Patent Refusal cases.
 
-**SHAP beeswarm — Patent Refusal (ex parte):**
+**SHAP beeswarm — Patent Refusal (ex parte), XGBoost, Exp 2:**
 
 ![SHAP beeswarm — Patent Refusal](Figs/shap/pf_beeswarm.png)
 
 High *description pages* (red, left) strongly predicts refusal; *auxiliary request* frequency (red, right) predicts grant, reflecting applicant procedural activity.
-
-**SHAP beeswarm — Opposition Division (inter partes):**
-
-![SHAP beeswarm — Opposition Division](Figs/shap/op_beeswarm.png)
-
-*Dismissed* (red, right) strongly predicts affirmation of the opposition outcome; *Matches_1/2* encode prior procedural history unique to this case type.
-
-**SHAP beeswarm — Combined:**
-
-![SHAP beeswarm — Combined](Figs/shap/both_beeswarm.png)
 
 **Cross-mode SHAP rank correlation** — Opposition Division and Combined share predictive structure (ρ = 0.65); Patent Refusal is largely orthogonal (ρ ≈ 0.05), reflecting fundamentally different procedural vocabularies:
 
